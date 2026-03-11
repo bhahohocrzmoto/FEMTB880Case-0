@@ -66,7 +66,8 @@ class Geometry:
 
     @property
     def a_innerins_geom_m2(self) -> float:
-        # Includes both semicon layers if you use one FE body from conductor OD to insulation OD.
+        # Convention for this benchmark workflow: annulus from conductor OD to insulation OD.
+        # This geometric FE area may include semicon sublayers when they are part of one InnerIns FE body.
         return math.pi * ((self.d_ins_m / 2.0) ** 2 - (self.d_cond_m / 2.0) ** 2)
 
     @property
@@ -175,6 +176,23 @@ class SourceMap:
 
 
 # ----------------------------------------------------------------------
+# Explicit model assumptions / conventions used by this benchmark setup
+# ----------------------------------------------------------------------
+@dataclass(frozen=True)
+class ModelAssumptions:
+    # The InnerIns FE body is treated as one annulus from conductor OD to insulation OD.
+    # This area is used to convert dielectric W/m to W/m^3 for NS_C0x_InnerIns.
+    innerins_area_convention: str
+
+    # Informational traceability flag: in this case setup, screen FE and electrical
+    # areas are intentionally treated as equivalent for load conversion and resistance.
+    screen_fe_area_equals_electrical_area_assumed: bool
+
+    # Touching trefoil (centre spacing = cable outer diameter) is the default geometry.
+    touching_trefoil_spacing_assumed: bool
+
+
+# ----------------------------------------------------------------------
 # Master case object
 # ----------------------------------------------------------------------
 @dataclass(frozen=True)
@@ -187,6 +205,7 @@ class TB880Case0:
     installation: Installation
     benchmark: Benchmark
     sources: SourceMap
+    assumptions: ModelAssumptions
 
 
 TB880_CASE_0 = TB880Case0(
@@ -308,6 +327,11 @@ TB880_CASE_0 = TB880Case0(
             page="pp. 103-104",
             note="TB 963 explicitly reuses TB 880 Case 0 cable parameters for FEM benchmarking"
         ),
+    ),
+    assumptions=ModelAssumptions(
+        innerins_area_convention="conductor_od_to_insulation_od",
+        screen_fe_area_equals_electrical_area_assumed=True,
+        touching_trefoil_spacing_assumed=True,
     ),
 )
 

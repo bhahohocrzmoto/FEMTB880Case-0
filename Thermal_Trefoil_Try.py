@@ -64,6 +64,9 @@ CABLE_IDS = ["C01", "C02", "C03"]
 PARTS_WITH_HEAT = ["Core", "InnerIns", "Screen"]
 TEMP_REFERENCE_PARTS = ["Core", "Screen"]   # parts whose temperature we read
 
+# Electrothermal coupling option: which scalar from FE temperature results is fed back to losses.
+TEMP_READ_MODE = "average"   # supported: "average", "maximum", "minimum"
+
 # Outer iteration parameters
 T_guess_C = CASE.installation.ambient_temp_c
 max_iter  = 20
@@ -169,30 +172,35 @@ def ensure_temperature_result(solution, name, location_ns):
         tr.Name = name
     try:
         tr.ClearGeneratedData()
-    except:
-        try:
-            solution.ClearGeneratedData()
-        except:
-            pass
+    except Exception as e:
+        print("Warning: could not clear generated data for result '{0}': {1}".format(name, e))
     try:
         tr.Location = location_ns
     except:
         pass
     return tr
 
-def read_temperature_value(temp_result):
+def read_temperature_value(temp_result, mode=TEMP_READ_MODE):
+    read_map = {
+        "average": lambda r: float(r.Average.Value),
+        "maximum": lambda r: float(r.Maximum.Value),
+        "minimum": lambda r: float(r.Minimum.Value),
+    }
+    mode_key = str(mode).strip().lower()
+    if mode_key not in read_map:
+        raise Exception("Unsupported TEMP_READ_MODE='{0}'. Use average, maximum, or minimum.".format(mode))
+
+    # First honor the configured read mode; only fall back if that field is unavailable on this result.
     try:
-        return float(temp_result.Average.Value)
+        return read_map[mode_key](temp_result)
     except:
         pass
-    try:
-        return float(temp_result.Maximum.Value)
-    except:
-        pass
-    try:
-        return float(temp_result.Minimum.Value)
-    except:
-        pass
+
+    for fb in [m for m in ["average", "maximum", "minimum"] if m != mode_key]:
+        try:
+            return read_map[fb](temp_result)
+        except:
+            pass
     raise Exception("Could not read temperature from '{0}'".format(temp_result.Name))
 
 # ============================================================
@@ -247,6 +255,7 @@ for cid in CABLE_IDS:
     # Use guess temperature for both core and screen (first iteration)
     losses = cable.calculate_losses(T_guess_C, T_guess_C)
     set_internal_heat_generation(hg_map[(cid, "Core")],      losses["core"] / cable.A_cond_FE)
+    # Dielectric W/m -> W/m^3 uses CASE.assumptions.innerins_area_convention via cable.A_innerins_FE.
     set_internal_heat_generation(hg_map[(cid, "InnerIns")],  losses["dielectric"] / cable.A_innerins_FE)
     set_internal_heat_generation(hg_map[(cid, "Screen")],    losses["screen"] / cable.A_screen_FE)
 
@@ -286,6 +295,7 @@ for it in range(1, max_iter + 1):
         cable = cables[cid]
         losses = cable.calculate_losses(T_curr_core[cid], T_curr_screen[cid])
         set_internal_heat_generation(hg_map[(cid, "Core")],      losses["core"] / cable.A_cond_FE)
+        # Dielectric W/m -> W/m^3 uses CASE.assumptions.innerins_area_convention via cable.A_innerins_FE.
         set_internal_heat_generation(hg_map[(cid, "InnerIns")],  losses["dielectric"] / cable.A_innerins_FE)
         set_internal_heat_generation(hg_map[(cid, "Screen")],    losses["screen"] / cable.A_screen_FE)
 

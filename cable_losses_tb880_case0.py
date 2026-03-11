@@ -15,6 +15,16 @@
 import math
 from tb880_case0_data import CASE
 
+
+def normalize_bonding_mode(bonding):
+    """Normalize bonding mode to: solid, single, cross (with one legacy alias mapped to solid)."""
+    mode = str(bonding).strip().lower()
+    legacy = {"both": "solid"}
+    normalized = legacy.get(mode, mode)
+    if normalized not in ("solid", "single", "cross"):
+        raise ValueError("Unsupported bonding mode '{0}'. Use: solid, single, cross".format(bonding))
+    return normalized
+
 class Cable:
     """
     Represents one phase of a cable. Contains all geometry, material,
@@ -97,7 +107,7 @@ class Cable:
         self.lambda1 = None      # total sheath loss factor
 
         # Bonding scheme
-        self.bonding = bonding.lower()
+        self.bonding = normalize_bonding_mode(bonding)
 
     # ------------------------------------------------------------------
     # Helper: resistance at temperature
@@ -249,10 +259,10 @@ class Cable:
         X = self.sheath_reactance_X()
         lambda1_prime = self._lambda1_prime(Rs, Rac, X)
 
-        if self.bonding in ("solid", "both"):   # both ends bonded
+        if self.bonding == "solid":   # solid-bonded at both ends
             lambda1_doubleprime = self._lambda1_doubleprime(Rs, Rac, T_screen_C)
             lambda1 = lambda1_prime + lambda1_doubleprime
-        else:                                   # single point or cross bonded -> no circulating current
+        else:                                   # single-point or cross-bonded
             lambda1 = self._lambda1_doubleprime(Rs, Rac, T_screen_C)
             lambda1_prime = 0.0   # not used, but keep for clarity
 
@@ -297,6 +307,7 @@ def create_case0_cables(I_rms_A=None, bonding=None):
         I_rms_A = CASE.benchmark.i_final_a
     if bonding is None:
         bonding = CASE.installation.bonding
+    bonding = normalize_bonding_mode(bonding)
 
     # Geometry and areas from centralized TB 880 Case 0 data.
     d_core = CASE.geometry.d_cond_m
@@ -310,6 +321,7 @@ def create_case0_cables(I_rms_A=None, bonding=None):
     A_cond_elec = CASE.geometry.a_cond_elec_m2
     A_screen_elec = CASE.geometry.a_screen_elec_m2
     A_cond_FE = CASE.geometry.a_cond_geom_m2
+    # FE area convention is centralized in CASE.assumptions.innerins_area_convention.
     A_innerins_FE = CASE.geometry.a_innerins_geom_m2
     A_screen_FE = CASE.geometry.a_screen_geom_m2
 

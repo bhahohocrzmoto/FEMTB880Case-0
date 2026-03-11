@@ -13,14 +13,7 @@
 # ============================================================
 
 import math
-import warnings
-
-# ------------------------------------------------------------
-# Physical constants
-# ------------------------------------------------------------
-EPS0 = 8.854187817e-12          # vacuum permittivity [F/m]
-MU0  = 4e-7 * math.pi            # vacuum permeability [H/m]
-
+from tb880_case0_data import CASE
 
 class Cable:
     """
@@ -150,6 +143,10 @@ class Cable:
         rho_screen = self._resistance(self.rho_screen_20, self.alpha_screen, T_screen_C)
         return rho_screen / self.A_screen_elec
 
+    # Backward-compatible alias expected by legacy analytical solver code.
+    def sheath_resistance_at_temp(self, T_screen_C):
+        return self.Rs_at_temp(T_screen_C)
+
     # ------------------------------------------------------------------
     # Sheath reactance X (for circulating currents)
     # ------------------------------------------------------------------
@@ -219,7 +216,7 @@ class Cable:
         d  = self.d_inner_semicon
         if Di <= d:
             raise Exception("Need Di > d")
-        C = 2.0 * math.pi * EPS0 * self.eps_r / math.log(Di / d)
+        C = 2.0 * math.pi * CASE.constants.eps0_f_per_m * self.eps_r / math.log(Di / d)
 
         U0 = self.U_LL_V / math.sqrt(3.0)
         omega = 2.0 * math.pi * self.f
@@ -292,47 +289,44 @@ class Cable:
 # ----------------------------------------------------------------------
 # Helper function to instantiate three cables with common TB880 Case 0 data
 # ----------------------------------------------------------------------
-def create_case0_cables(I_rms_A=822.0, bonding="solid"):
+def create_case0_cables(I_rms_A=None, bonding=None):
     """
     Returns a dict of three Cable objects for C01, C02, C03 with TB880 Case 0 parameters.
     """
-    # Geometry (meters)  from TB880 Case 0
-    d_core             = 30.3e-3
-    d_inner_semicon    = 33.3e-3
-    d_ins              = 64.3e-3
-    d_outer_semicon    = 66.9e-3   # actually insulation screen outer diameter
-    d_screen_mean      = 67.7e-3   # mean sheath diameter
-    d_screen_out       = 68.5e-3
-    d_oversheath       = 75.5e-3
+    if I_rms_A is None:
+        I_rms_A = CASE.benchmark.i_final_a
+    if bonding is None:
+        bonding = CASE.installation.bonding
 
-    # Areas (m^2)
-    A_cond_elec        = 630e-6               # electrical cross section (630 mm^2)
-    A_cond_FE          = math.pi * (d_core/2)**2   # geometric FE area
+    # Geometry and areas from centralized TB 880 Case 0 data.
+    d_core = CASE.geometry.d_cond_m
+    d_inner_semicon = CASE.geometry.d_inner_semicon_m
+    d_ins = CASE.geometry.d_ins_m
+    d_outer_semicon = CASE.geometry.d_outer_semicon_m
+    d_screen_mean = CASE.geometry.d_screen_mean_m
+    d_screen_out = CASE.geometry.d_screen_out_m
+    d_oversheath = CASE.geometry.d_oversheath_m
 
-    # Inner insulation area (from d_core to d_ins)  includes semicons? We'll use total area.
-    A_innerins_FE      = math.pi * ((d_ins/2)**2 - (d_core/2)**2)
+    A_cond_elec = CASE.geometry.a_cond_elec_m2
+    A_screen_elec = CASE.geometry.a_screen_elec_m2
+    A_cond_FE = CASE.geometry.a_cond_geom_m2
+    A_innerins_FE = CASE.geometry.a_innerins_geom_m2
+    A_screen_FE = CASE.geometry.a_screen_geom_m2
 
-    # Screen FE area  geometric area of metallic sheath (thin ring)
-    t_screen           = (d_screen_out - d_outer_semicon) / 2   # approx 0.8 mm
-    A_screen_FE        = math.pi * d_screen_mean * t_screen
+    # Material and operating data from centralized TB 880 Case 0 data.
+    rho_cond_20 = CASE.material.rho_cond_20_ohm_m
+    alpha_cond = CASE.material.alpha_cond_20_per_k
+    ks = CASE.material.ks
+    kp = CASE.material.kp
 
-    # Electrical screen area  same as geometric for thin sheath
-    A_screen_elec      = A_screen_FE
+    rho_screen_20 = CASE.material.rho_screen_20_ohm_m
+    alpha_screen = CASE.material.alpha_screen_20_per_k
 
-    # Material properties (IEC 60287)
-    rho_cond_20        = 28.3e-6 * A_cond_elec      # R0 * A_elec gives resistivity [Ohm*m]
-    alpha_cond         = 3.93e-3
-    ks                 = 1.0
-    kp                 = 1.0
+    eps_r = CASE.material.eps_r
+    tan_delta = CASE.material.tan_delta
 
-    rho_screen_20      = 2.84e-8                    # Aluminium
-    alpha_screen       = 3.93e-3
-
-    eps_r              = 2.5
-    tan_delta          = 1.0e-3
-
-    f_hz               = 50.0
-    U_LL_V             = 132e3
+    f_hz = CASE.installation.frequency_hz
+    U_LL_V = CASE.installation.u_ll_v
 
     cables = {}
     for cid in ["C01", "C02", "C03"]:
@@ -363,3 +357,7 @@ def create_case0_cables(I_rms_A=822.0, bonding="solid"):
             bonding=bonding
         )
     return cables
+
+
+# Backward-compatible module-level dictionary expected by legacy callers.
+cables = create_case0_cables()

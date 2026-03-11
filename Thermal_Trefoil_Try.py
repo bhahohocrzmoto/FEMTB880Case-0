@@ -38,6 +38,7 @@ for d in SCRIPT_DIRS:
 
 # Import the revised loss module
 import cable_losses_tb880_case0 as loss_mod
+from tb880_case0_data import CASE
 try:
     import imp
     imp.reload(loss_mod)
@@ -64,13 +65,13 @@ PARTS_WITH_HEAT = ["Core", "InnerIns", "Screen"]
 TEMP_REFERENCE_PARTS = ["Core", "Screen"]   # parts whose temperature we read
 
 # Outer iteration parameters
-T_guess_C = 20.0
+T_guess_C = CASE.installation.ambient_temp_c
 max_iter  = 20
 tol_dT    = 1e-3          # convergence tolerance on core temperature change
 
 # Current (same for all phases)
-I_RMS_A = 822.0
-bonding = "solid"          # "solid" (both ends), "single", or "cross"
+I_RMS_A = CASE.benchmark.i_final_a
+bonding = CASE.installation.bonding          # "solid" (both ends), "single", or "cross"
 
 # Create the three Cable objects using the helper function
 cables = loss_mod.create_case0_cables(I_rms_A=I_RMS_A, bonding=bonding)

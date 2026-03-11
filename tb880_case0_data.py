@@ -310,3 +310,6 @@ TB880_CASE_0 = TB880Case0(
         ),
     ),
 )
+
+# Convenience alias for scripts expecting a short case object name.
+CASE = TB880_CASE_0

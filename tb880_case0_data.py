@@ -86,6 +86,10 @@ class Geometry:
 # ----------------------------------------------------------------------
 @dataclass(frozen=True)
 class MaterialElectricalData:
+    # Benchmark-aligned conductor DC resistance at 20°C [ohm/m]
+    # This is a primary Case #0 input for IEC/TB880 benchmark traceability.
+    r_cond_dc_20_ohm_per_m: float
+
     # True material resistivities at 20°C [ohm·m]
     rho_cond_20_ohm_m: float
     rho_screen_20_ohm_m: float
@@ -106,13 +110,6 @@ class MaterialElectricalData:
     rho_semicon_k_m_per_w: float
     rho_ins_k_m_per_w: float
     rho_oversheath_k_m_per_w: float
-
-    @property
-    def r_cond_dc_20_case_ohm_per_m_for_630mm2(self) -> float:
-        # Convenience value for this specific Case 0 conductor only.
-        # Derived from rho / A, not a primary stored truth.
-        return self.rho_cond_20_ohm_m / (630e-6)
-
 
 # ----------------------------------------------------------------------
 # Installation / operating data
@@ -191,6 +188,12 @@ class ModelAssumptions:
     # Touching trefoil (centre spacing = cable outer diameter) is the default geometry.
     touching_trefoil_spacing_assumed: bool
 
+    # Repository default interpretation for sheath losses in TB 880 Case #0-1 regression.
+    sheath_loss_interpretation: str
+
+    # In the default benchmark-faithful path, solid-bonded eddy sheath losses are neglected.
+    solid_bonded_include_eddy_default: bool
+
 
 # ----------------------------------------------------------------------
 # Master case object
@@ -229,6 +232,9 @@ TB880_CASE_0 = TB880Case0(
         a_screen_elec_m2=170e-6,
     ),
     material=MaterialElectricalData(
+        # IEC 60228 / TB 880-aligned benchmark primary input for 630 mm² copper conductor.
+        r_cond_dc_20_ohm_per_m=2.83e-5,
+
         # IEC 60287-1-1 Table 1
         rho_cond_20_ohm_m=1.7241e-8,   # Copper
         rho_screen_20_ohm_m=2.84e-8,   # Aluminium
@@ -332,6 +338,8 @@ TB880_CASE_0 = TB880Case0(
         innerins_area_convention="conductor_od_to_insulation_od",
         screen_fe_area_equals_electrical_area_assumed=True,
         touching_trefoil_spacing_assumed=True,
+        sheath_loss_interpretation="tb880_case0_iec_base",
+        solid_bonded_include_eddy_default=False,
     ),
 )
 

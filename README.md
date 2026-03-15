@@ -1,40 +1,59 @@
 # FEMTB880Case-0
 
-Python scripts for **CIGRE TB 880 Case 0** (132 kV single-core XLPE, touching trefoil, directly buried), with a centralized data model and an Ansys Mechanical electrothermal iteration workflow.
+Python scripts for **CIGRE TB 880 Case #0** (132 kV single-core XLPE, touching trefoil, directly buried), with centralized benchmark data and an ANSYS Mechanical outer electrothermal iteration workflow.
+
+## Default benchmark interpretation (repository default)
+
+This repository defaults to the **TB 880 Case #0-1 benchmark-faithful IEC base case**:
+
+- touching trefoil,
+- directly buried,
+- bonding = solid,
+- circulating sheath losses included,
+- **eddy-current sheath losses neglected in the default benchmark path**.
+
+Stored benchmark targets remain:
+
+- `I_final = 821.7763334392 A`
+- `Wc_final = 26.6895 W/m`
+- `Ws_final = 7.8442 W/m`
+- `theta_core_final = 90.0 C`
+- `theta_screen_final = 78.7130 C`
+
+An optional non-default comparison mode (solid bonding with eddy sheath losses included) is supported through `sheath_eddy_policy="include_for_solid"`.
 
 ## Current repository layout (top-level files)
 
 - `tb880_case0_data.py`  
-  Centralized Case 0 input data, benchmark values, sources, and explicit model assumptions/conventions used by this repository.
+  Centralized Case #0 input data, benchmark values, source traceability, and explicit model assumptions.
 
 - `cable_losses_tb880_case0.py`  
-  IEC 60287-style electrical loss model (conductor, screen/sheath, dielectric) wrapped in a `Cable` class. Uses centralized Case 0 data.
+  IEC 60287-style electrical loss model in a `Cable` class. `calculate_losses()` is the authoritative path for conductor/screen/dielectric losses and lambda factors.
 
 - `analytical_solver_case0.py`  
-  Standalone analytical iterative solver for Case 0 using the loss model + IEC thermal resistances. Also exposes `solve_case0()` for programmatic checks.
+  Standalone analytical iterative solver for Case #0 that uses the common loss API in both thermal iteration and ampacity calculation.
 
 - `Thermal_Trefoil_Try.py`  
-  Ansys Mechanical IronPython script for electrothermal coupling iterations:
-  1) solve thermal model, 2) read temperatures, 3) update heat-generation loads from analytical losses, 4) repeat to convergence.
+  ANSYS Mechanical script for outer electrothermal iteration:
+  1) solve thermal FEM,
+  2) read temperatures in **Celsius**,
+  3) update IEC losses,
+  4) convert W/m -> W/m^3,
+  5) re-apply FEM heat loads,
+  6) iterate to convergence.
 
 - `temp_convergence_monitor.py`  
-  Optional helper for logging/plotting temperature iteration convergence history.
+  Optional helper for text-mode CSV logging (Python 3-safe) and optional live convergence plot.
 
 - `test_case0_regression.py`  
-  Lightweight regression/self-check entry point to validate that analytical Case 0 outputs remain aligned with benchmark values within tolerances.
+  Regression checks for benchmark-faithful default behavior and optional eddy-included comparison mode.
 
-## Workflow summary
+## Technical notes
 
-1. **Centralized data**: `CASE` is defined once in `tb880_case0_data.py`.
-2. **Analytical losses**: `cable_losses_tb880_case0.py` computes W/m losses from temperatures and bonding mode.
-3. **Mechanical iteration**: `Thermal_Trefoil_Try.py` applies volumetric heat loads (W/m³), solves, reads temperatures, and updates losses.
-4. **Convergence monitoring**: optional logging/plotting via `temp_convergence_monitor.py`.
-5. **Regression check**: `test_case0_regression.py` quickly guards benchmark behavior after edits.
-
-## Scope and benchmark-specific assumptions
-
-This repository currently targets the **TB880 Case 0 touching-trefoil workflow**.
-Some modeling conventions are intentionally benchmark-specific and are kept explicit in centralized data (for example, FE area conventions used to convert dielectric W/m to W/m³ and touching-trefoil spacing assumptions).
+- Conductor DC resistance at 20°C is treated as a **primary benchmark input** (`r_cond_dc_20_ohm_per_m`) for IEC/TB880 traceability.
+- Material resistivity is still stored for documentation and related calculations, but benchmark DC conductor resistance is not reconstructed from `rho/A` in the default path.
+- FE area convention for `InnerIns` remains explicitly documented and unchanged.
+- ANSYS script now guards against model length-unit misuse by requiring explicit `LENGTH_UNIT` validation.
 
 ## Quick run commands
 
@@ -43,10 +62,10 @@ Some modeling conventions are intentionally benchmark-specific and are kept expl
   python analytical_solver_case0.py
   ```
 
-- Regression/self-check:
+- Regression checks:
   ```bash
   python test_case0_regression.py
   ```
 
-- Ansys Mechanical script:
-  Run `Thermal_Trefoil_Try.py` inside Ansys Mechanical (IronPython environment) with required named selections already defined.
+- ANSYS Mechanical script:
+  Run `Thermal_Trefoil_Try.py` inside ANSYS Mechanical (IronPython environment) with required named selections already defined.

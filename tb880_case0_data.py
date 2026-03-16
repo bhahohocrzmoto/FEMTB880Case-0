@@ -52,7 +52,7 @@ class Geometry:
     d_screen_out_m: float
     d_oversheath_m: float
 
-    # Electrical areas [m²]
+    # Electrical areas [m2]
     a_cond_elec_m2: float
     a_screen_elec_m2: float
 
@@ -86,15 +86,15 @@ class Geometry:
 # ----------------------------------------------------------------------
 @dataclass(frozen=True)
 class MaterialElectricalData:
-    # Benchmark-aligned conductor DC resistance at 20°C [ohm/m]
+    # Benchmark-aligned conductor DC resistance at 20C [ohm/m]
     # This is a primary Case #0 input for IEC/TB880 benchmark traceability.
     r_cond_dc_20_ohm_per_m: float
 
-    # True material resistivities at 20°C [ohm·m]
+    # True material resistivities at 20C [ohm*m]
     rho_cond_20_ohm_m: float
     rho_screen_20_ohm_m: float
 
-    # Temperature coefficients at 20°C [1/K]
+    # Temperature coefficients at 20C [1/K]
     alpha_cond_20_per_k: float
     alpha_screen_20_per_k: float
 
@@ -106,7 +106,7 @@ class MaterialElectricalData:
     eps_r: float
     tan_delta: float
 
-    # Thermal resistivities [K·m/W]
+    # Thermal resistivities [K*m/W]
     rho_semicon_k_m_per_w: float
     rho_ins_k_m_per_w: float
     rho_oversheath_k_m_per_w: float
@@ -133,7 +133,7 @@ class Installation:
 # ----------------------------------------------------------------------
 @dataclass(frozen=True)
 class Benchmark:
-    # Thermal resistances [K·m/W]
+    # Thermal resistances [K*m/W]
     t1_k_m_per_w: float
     t2_k_m_per_w: float
     t3_k_m_per_w: float
@@ -228,11 +228,11 @@ TB880_CASE_0 = TB880Case0(
 
         # Electrical cross-sections
         a_cond_elec_m2=630e-6,
-        # TB 963 states the TB 880 Case 0 aluminium laminated sheath cross-section as 170 mm².
+        # TB 963 states the TB 880 Case 0 aluminium laminated sheath cross-section as 170 mm2.
         a_screen_elec_m2=170e-6,
     ),
     material=MaterialElectricalData(
-        # IEC 60228 / TB 880-aligned benchmark primary input for 630 mm² copper conductor.
+        # IEC 60228 / TB 880-aligned benchmark primary input for 630 mm2 copper conductor.
         r_cond_dc_20_ohm_per_m=2.83e-5,
 
         # IEC 60287-1-1 Table 1

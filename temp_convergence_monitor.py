@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ============================================================
 # temp_convergence_monitor.py
 # ------------------------------------------------------------
@@ -51,8 +52,11 @@ def _ensure_dir(path):
 
 
 def _open_csv_text(path, mode):
-    # Python 3 safe newline handling; works in Mechanical's CPython/IronPython bridges.
-    return open(path, mode, newline="")
+    # Use Py2/Py3 compatible open semantics for csv text writes.
+    try:
+        return open(path, mode, newline="")
+    except TypeError:
+        return open(path, mode + "b")
 
 
 _CHARTING_AVAILABLE = False

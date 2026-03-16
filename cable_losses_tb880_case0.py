@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ============================================================
 # cable_losses_tb880_case0.py
 # ------------------------------------------------------------
@@ -41,7 +42,7 @@ def normalize_sheath_eddy_policy(policy):
     return mode
 
 
-class Cable:
+class Cable(object):
     def __init__(self, cid,
                  d_cond, d_inner_semicon, d_ins, d_outer_semicon, d_screen_mean, d_screen_out, d_oversheath,
                  A_cond_elec, A_screen_elec, A_cond_FE, A_innerins_FE, A_screen_FE,

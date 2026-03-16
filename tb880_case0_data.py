@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # tb880_case0_data.py
 # Centralized, object-based storage for CIGRE TB 880 Case #0
 # -----------------------------------------------------------
@@ -14,69 +15,79 @@
 #   Keep physical input data separate from benchmark results.
 #   Solver scripts should import this object and never hard-code constants.
 
-from dataclasses import dataclass, field
 import math
 
 
 # ----------------------------------------------------------------------
 # Reference metadata
 # ----------------------------------------------------------------------
-@dataclass(frozen=True)
-class Ref:
-    doc: str
-    section: str
-    page: str
-    note: str = ""
+class Ref(object):
+    def __init__(self, doc, section, page, note=""):
+        self.doc = doc
+        self.section = section
+        self.page = page
+        self.note = note
 
 
 # ----------------------------------------------------------------------
 # Fundamental constants
 # ----------------------------------------------------------------------
-@dataclass(frozen=True)
-class PhysicalConstants:
-    eps0_f_per_m: float = 8.854187817e-12
-    mu0_h_per_m: float = 4e-7 * math.pi
+class PhysicalConstants(object):
+    def __init__(self, eps0_f_per_m=8.854187817e-12, mu0_h_per_m=4e-7 * math.pi):
+        self.eps0_f_per_m = eps0_f_per_m
+        self.mu0_h_per_m = mu0_h_per_m
 
 
 # ----------------------------------------------------------------------
 # Cable geometry for TB 880 Case 0
 # ----------------------------------------------------------------------
-@dataclass(frozen=True)
-class Geometry:
-    # Diameters [m]
-    d_cond_m: float
-    d_inner_semicon_m: float
-    d_ins_m: float
-    d_outer_semicon_m: float
-    d_screen_mean_m: float
-    d_screen_out_m: float
-    d_oversheath_m: float
+class Geometry(object):
+    def __init__(
+        self,
+        d_cond_m,
+        d_inner_semicon_m,
+        d_ins_m,
+        d_outer_semicon_m,
+        d_screen_mean_m,
+        d_screen_out_m,
+        d_oversheath_m,
+        a_cond_elec_m2,
+        a_screen_elec_m2,
+    ):
+        # Diameters [m]
+        self.d_cond_m = d_cond_m
+        self.d_inner_semicon_m = d_inner_semicon_m
+        self.d_ins_m = d_ins_m
+        self.d_outer_semicon_m = d_outer_semicon_m
+        self.d_screen_mean_m = d_screen_mean_m
+        self.d_screen_out_m = d_screen_out_m
+        self.d_oversheath_m = d_oversheath_m
 
-    # Electrical areas [m2]
-    a_cond_elec_m2: float
-    a_screen_elec_m2: float
+        # Electrical areas [m2]
+        self.a_cond_elec_m2 = a_cond_elec_m2
+        self.a_screen_elec_m2 = a_screen_elec_m2
 
     @property
-    def screen_thickness_m(self) -> float:
+    def screen_thickness_m(self):
         return 0.5 * (self.d_screen_out_m - self.d_outer_semicon_m)
 
     @property
-    def a_cond_geom_m2(self) -> float:
+    def a_cond_geom_m2(self):
         return math.pi * (self.d_cond_m / 2.0) ** 2
 
     @property
-    def a_innerins_geom_m2(self) -> float:
+    def a_innerins_geom_m2(self):
         # Convention for this benchmark workflow: annulus from conductor OD to insulation OD.
         # This geometric FE area may include semicon sublayers when they are part of one InnerIns FE body.
         return math.pi * ((self.d_ins_m / 2.0) ** 2 - (self.d_cond_m / 2.0) ** 2)
 
     @property
-    def a_screen_geom_m2(self) -> float:
+    def a_screen_geom_m2(self):
         # Thin-ring approximation
         return math.pi * self.d_screen_mean_m * self.screen_thickness_m
 
     @property
-    def spacing_touching_trefoil_m(self) -> float:
+    def spacing_touching_trefoil_m(self):
         # In touching trefoil, centre-to-centre spacing is cable outer diameter.
         return self.d_oversheath_m
 
@@ -84,131 +95,199 @@ class Geometry:
 # ----------------------------------------------------------------------
 # Material and electrical parameters
 # ----------------------------------------------------------------------
-@dataclass(frozen=True)
-class MaterialElectricalData:
-    # Benchmark-aligned conductor DC resistance at 20C [ohm/m]
-    # This is a primary Case #0 input for IEC/TB880 benchmark traceability.
-    r_cond_dc_20_ohm_per_m: float
+class MaterialElectricalData(object):
+    def __init__(
+        self,
+        r_cond_dc_20_ohm_per_m,
+        rho_cond_20_ohm_m,
+        rho_screen_20_ohm_m,
+        alpha_cond_20_per_k,
+        alpha_screen_20_per_k,
+        ks,
+        kp,
+        eps_r,
+        tan_delta,
+        rho_semicon_k_m_per_w,
+        rho_ins_k_m_per_w,
+        rho_oversheath_k_m_per_w,
+    ):
+        # Benchmark-aligned conductor DC resistance at 20C [ohm/m]
+        # This is a primary Case #0 input for IEC/TB880 benchmark traceability.
+        self.r_cond_dc_20_ohm_per_m = r_cond_dc_20_ohm_per_m
 
-    # True material resistivities at 20C [ohm*m]
-    rho_cond_20_ohm_m: float
-    rho_screen_20_ohm_m: float
+        # True material resistivities at 20C [ohm*m]
+        self.rho_cond_20_ohm_m = rho_cond_20_ohm_m
+        self.rho_screen_20_ohm_m = rho_screen_20_ohm_m
 
-    # Temperature coefficients at 20C [1/K]
-    alpha_cond_20_per_k: float
-    alpha_screen_20_per_k: float
+        # Temperature coefficients at 20C [1/K]
+        self.alpha_cond_20_per_k = alpha_cond_20_per_k
+        self.alpha_screen_20_per_k = alpha_screen_20_per_k
 
-    # IEC skin/proximity coefficients
-    ks: float
-    kp: float
+        # IEC skin/proximity coefficients
+        self.ks = ks
+        self.kp = kp
 
-    # Dielectric data
-    eps_r: float
-    tan_delta: float
+        # Dielectric data
+        self.eps_r = eps_r
+        self.tan_delta = tan_delta
 
-    # Thermal resistivities [K*m/W]
-    rho_semicon_k_m_per_w: float
-    rho_ins_k_m_per_w: float
-    rho_oversheath_k_m_per_w: float
+        # Thermal resistivities [K*m/W]
+        self.rho_semicon_k_m_per_w = rho_semicon_k_m_per_w
+        self.rho_ins_k_m_per_w = rho_ins_k_m_per_w
+        self.rho_oversheath_k_m_per_w = rho_oversheath_k_m_per_w
+
 
 # ----------------------------------------------------------------------
 # Installation / operating data
 # ----------------------------------------------------------------------
-@dataclass(frozen=True)
-class Installation:
-    frequency_hz: float
-    u_ll_v: float
-    ambient_temp_c: float
-    burial_depth_to_trefoil_center_m: float
-    soil_thermal_resistivity_k_m_per_w: float
-    bonding: str
+class Installation(object):
+    def __init__(
+        self,
+        frequency_hz,
+        u_ll_v,
+        ambient_temp_c,
+        burial_depth_to_trefoil_center_m,
+        soil_thermal_resistivity_k_m_per_w,
+        bonding,
+    ):
+        self.frequency_hz = frequency_hz
+        self.u_ll_v = u_ll_v
+        self.ambient_temp_c = ambient_temp_c
+        self.burial_depth_to_trefoil_center_m = burial_depth_to_trefoil_center_m
+        self.soil_thermal_resistivity_k_m_per_w = soil_thermal_resistivity_k_m_per_w
+        self.bonding = bonding
 
     @property
-    def u0_v(self) -> float:
+    def u0_v(self):
         return self.u_ll_v / math.sqrt(3.0)
 
 
 # ----------------------------------------------------------------------
 # Benchmark values from TB 880 Case 0-1
 # ----------------------------------------------------------------------
-@dataclass(frozen=True)
-class Benchmark:
-    # Thermal resistances [K*m/W]
-    t1_k_m_per_w: float
-    t2_k_m_per_w: float
-    t3_k_m_per_w: float
-    t4_k_m_per_w: float
+class Benchmark(object):
+    def __init__(
+        self,
+        t1_k_m_per_w,
+        t2_k_m_per_w,
+        t3_k_m_per_w,
+        t4_k_m_per_w,
+        wd_w_per_m,
+        i_final_a,
+        wc_final_w_per_m,
+        ws_final_w_per_m,
+        theta_core_final_c,
+        theta_screen_final_c,
+        theta_oversheath_final_c,
+        theta_screen_init_c,
+        r_ac_90c_ohm_per_m,
+        r_screen_80c_ohm_per_m,
+        lambda1_circulating_first_iter,
+    ):
+        # Thermal resistances [K*m/W]
+        self.t1_k_m_per_w = t1_k_m_per_w
+        self.t2_k_m_per_w = t2_k_m_per_w
+        self.t3_k_m_per_w = t3_k_m_per_w
+        self.t4_k_m_per_w = t4_k_m_per_w
 
-    # Benchmark losses and rating
-    wd_w_per_m: float
-    i_final_a: float
-    wc_final_w_per_m: float
-    ws_final_w_per_m: float
+        # Benchmark losses and rating
+        self.wd_w_per_m = wd_w_per_m
+        self.i_final_a = i_final_a
+        self.wc_final_w_per_m = wc_final_w_per_m
+        self.ws_final_w_per_m = ws_final_w_per_m
 
-    # Final temperatures
-    theta_core_final_c: float
-    theta_screen_final_c: float
-    theta_oversheath_final_c: float
+        # Final temperatures
+        self.theta_core_final_c = theta_core_final_c
+        self.theta_screen_final_c = theta_screen_final_c
+        self.theta_oversheath_final_c = theta_oversheath_final_c
 
-    # Useful first-iteration benchmark quantities
-    theta_screen_init_c: float
-    r_ac_90c_ohm_per_m: float
-    r_screen_80c_ohm_per_m: float
-    lambda1_circulating_first_iter: float
+        # Useful first-iteration benchmark quantities
+        self.theta_screen_init_c = theta_screen_init_c
+        self.r_ac_90c_ohm_per_m = r_ac_90c_ohm_per_m
+        self.r_screen_80c_ohm_per_m = r_screen_80c_ohm_per_m
+        self.lambda1_circulating_first_iter = lambda1_circulating_first_iter
 
 
 # ----------------------------------------------------------------------
 # Source map
 # ----------------------------------------------------------------------
-@dataclass(frozen=True)
-class SourceMap:
-    geometry: Ref
-    material_resistivity: Ref
-    skin_proximity: Ref
-    iteration_guidance: Ref
-    benchmark_t1_t3: Ref
-    benchmark_t4_wd: Ref
-    benchmark_final: Ref
-    fem_alignment: Ref
+class SourceMap(object):
+    def __init__(
+        self,
+        geometry,
+        material_resistivity,
+        skin_proximity,
+        iteration_guidance,
+        benchmark_t1_t3,
+        benchmark_t4_wd,
+        benchmark_final,
+        fem_alignment,
+    ):
+        self.geometry = geometry
+        self.material_resistivity = material_resistivity
+        self.skin_proximity = skin_proximity
+        self.iteration_guidance = iteration_guidance
+        self.benchmark_t1_t3 = benchmark_t1_t3
+        self.benchmark_t4_wd = benchmark_t4_wd
+        self.benchmark_final = benchmark_final
+        self.fem_alignment = fem_alignment
 
 
 # ----------------------------------------------------------------------
 # Explicit model assumptions / conventions used by this benchmark setup
 # ----------------------------------------------------------------------
-@dataclass(frozen=True)
-class ModelAssumptions:
-    # The InnerIns FE body is treated as one annulus from conductor OD to insulation OD.
-    # This area is used to convert dielectric W/m to W/m^3 for NS_C0x_InnerIns.
-    innerins_area_convention: str
+class ModelAssumptions(object):
+    def __init__(
+        self,
+        innerins_area_convention,
+        screen_fe_area_equals_electrical_area_assumed,
+        touching_trefoil_spacing_assumed,
+        sheath_loss_interpretation,
+        solid_bonded_include_eddy_default,
+    ):
+        # The InnerIns FE body is treated as one annulus from conductor OD to insulation OD.
+        # This area is used to convert dielectric W/m to W/m^3 for NS_C0x_InnerIns.
+        self.innerins_area_convention = innerins_area_convention
 
-    # Informational traceability flag: in this case setup, screen FE and electrical
-    # areas are intentionally treated as equivalent for load conversion and resistance.
-    screen_fe_area_equals_electrical_area_assumed: bool
+        # Informational traceability flag: in this case setup, screen FE and electrical
+        # areas are intentionally treated as equivalent for load conversion and resistance.
+        self.screen_fe_area_equals_electrical_area_assumed = screen_fe_area_equals_electrical_area_assumed
 
-    # Touching trefoil (centre spacing = cable outer diameter) is the default geometry.
-    touching_trefoil_spacing_assumed: bool
+        # Touching trefoil (centre spacing = cable outer diameter) is the default geometry.
+        self.touching_trefoil_spacing_assumed = touching_trefoil_spacing_assumed
 
-    # Repository default interpretation for sheath losses in TB 880 Case #0-1 regression.
-    sheath_loss_interpretation: str
+        # Repository default interpretation for sheath losses in TB 880 Case #0-1 regression.
+        self.sheath_loss_interpretation = sheath_loss_interpretation
 
-    # In the default benchmark-faithful path, solid-bonded eddy sheath losses are neglected.
-    solid_bonded_include_eddy_default: bool
+        # In the default benchmark-faithful path, solid-bonded eddy sheath losses are neglected.
+        self.solid_bonded_include_eddy_default = solid_bonded_include_eddy_default
 
 
 # ----------------------------------------------------------------------
 # Master case object
 # ----------------------------------------------------------------------
-@dataclass(frozen=True)
-class TB880Case0:
-    case_id: str
-    title: str
-    constants: PhysicalConstants
-    geometry: Geometry
-    material: MaterialElectricalData
-    installation: Installation
-    benchmark: Benchmark
-    sources: SourceMap
-    assumptions: ModelAssumptions
+class TB880Case0(object):
+    def __init__(
+        self,
+        case_id,
+        title,
+        constants,
+        geometry,
+        material,
+        installation,
+        benchmark,
+        sources,
+        assumptions,
+    ):
+        self.case_id = case_id
+        self.title = title
+        self.constants = constants
+        self.geometry = geometry
+        self.material = material
+        self.installation = installation
+        self.benchmark = benchmark
+        self.sources = sources
+        self.assumptions = assumptions
 
 
 TB880_CASE_0 = TB880Case0(

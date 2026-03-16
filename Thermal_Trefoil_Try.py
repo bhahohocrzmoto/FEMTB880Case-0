@@ -192,7 +192,7 @@ def _extract_unit_string(value_obj):
 
 def _to_celsius(value_obj, result_name):
     raw_value = float(value_obj.Value)
-    unit_text = _extract_unit_string(value_obj).strip().lower().replace("°", "")
+    unit_text = _extract_unit_string(value_obj).strip().lower().replace(chr(176), "")
 
     if unit_text in ("", "c", "degc", "celsius", "degree c"):
         return raw_value

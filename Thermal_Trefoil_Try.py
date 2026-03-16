@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ============================================================
 # Thermal_Trefoil_Try.py
 # ------------------------------------------------------------
@@ -12,7 +13,6 @@
 
 import os
 import sys
-import importlib
 
 SCRIPT_DIRS = []
 try:
@@ -37,11 +37,21 @@ for d in SCRIPT_DIRS:
 
 import cable_losses_tb880_case0 as loss_mod
 from tb880_case0_data import CASE
-loss_mod = importlib.reload(loss_mod)
+
+
+def _reload_module(mod):
+    try:
+        return reload(mod)
+    except NameError:
+        import importlib
+        return importlib.reload(mod)
+
+
+loss_mod = _reload_module(loss_mod)
 
 try:
     import temp_convergence_monitor as tmon
-    tmon = importlib.reload(tmon)
+    tmon = _reload_module(tmon)
 except Exception as exc:
     print("Info: temp_convergence_monitor unavailable: {0}".format(exc))
     tmon = None

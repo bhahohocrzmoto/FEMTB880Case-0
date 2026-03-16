@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Regression/self-check for TB880 Case #0 benchmark-faithful workflow.
 
 Run:

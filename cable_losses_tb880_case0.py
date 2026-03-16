@@ -94,7 +94,7 @@ class Cable:
         return 1.0 + alpha * (T_C - 20.0)
 
     def Rdc_at_temp(self, T_cond_C):
-        """Conductor DC resistance [ohm/m] at temperature from stored 20°C benchmark input."""
+        """Conductor DC resistance [ohm/m] at temperature from stored 20C benchmark input."""
         return self.r_cond_dc_20_ohm_per_m * self._resistance_ratio(self.alpha_cond, T_cond_C)
 
     def Rac_at_temp(self, T_cond_C):

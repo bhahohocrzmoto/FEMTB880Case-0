@@ -378,3 +378,5 @@ def create_case0_cables(I_rms_A=None, bonding=None, sheath_eddy_policy="auto"):
             sheath_eddy_policy=sheath_eddy_policy,
         )
     return cables
+    
+cables = create_case0_cables()

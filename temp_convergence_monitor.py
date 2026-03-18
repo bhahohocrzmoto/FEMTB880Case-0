@@ -7,6 +7,7 @@
 # ============================================================
 
 import os
+import sys
 import csv
 
 _USE_DOTNET_IO = False
@@ -52,11 +53,12 @@ def _ensure_dir(path):
 
 
 def _open_csv_text(path, mode):
-    # Use Py2/Py3 compatible open semantics for csv text writes.
-    try:
+    # ANSYS Mechanical commonly hosts IronPython 2.7, whose built-in open()
+    # does not accept the Python 3-only newline keyword argument. The csv
+    # module therefore needs a runtime-specific open mode.
+    if sys.version_info[0] >= 3:
         return open(path, mode, newline="")
-    except TypeError:
-        return open(path, mode + "b")
+    return open(path, mode + "b")
 
 
 _CHARTING_AVAILABLE = False

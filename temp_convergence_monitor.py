@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+"""Diagnostic convergence monitor for the ANSYS Picard electrothermal loop.
+
+I use this helper to record per-iteration cable core temperatures to CSV and,
+when the ANSYS Mechanical environment exposes the required .NET assemblies, to
+show a live WinForms chart during the Picard iterations. This keeps the FEM
+coupling process observable without changing the thermal solution logic.
+"""
 # ============================================================
 # temp_convergence_monitor.py
 # ------------------------------------------------------------
@@ -15,6 +22,8 @@ File = None
 Directory = None
 
 try:
+    # I import clr and System.IO because this script commonly runs inside ANSYS
+    # Mechanical, whose IronPython 2.7 host exposes .NET assemblies directly.
     import clr
     clr.AddReference("System")
     from System.IO import File as _File, Directory as _Directory
@@ -53,9 +62,9 @@ def _ensure_dir(path):
 
 
 def _open_csv_text(path, mode):
-    # ANSYS Mechanical commonly hosts IronPython 2.7, whose built-in open()
-    # does not accept the Python 3-only newline keyword argument. The csv
-    # module therefore needs a runtime-specific open mode.
+    # I branch on Python 2 versus Python 3 because IronPython 2.7 does not accept
+    # the Python 3 newline keyword, while the csv module still needs binary-safe
+    # handling to avoid blank lines in CSV output.
     if sys.version_info[0] >= 3:
         return open(path, mode, newline="")
     return open(path, mode + "b")
@@ -74,6 +83,8 @@ AxisEnabled = None
 ChartImageFormat = None
 
 try:
+    # I load the WinForms charting assemblies because ANSYS Mechanical ships with
+    # System.Windows.Forms.DataVisualization in the IronPython runtime environment.
     import clr
     clr.AddReference("System.Windows.Forms")
     clr.AddReference("System.Windows.Forms.DataVisualization")
@@ -192,7 +203,7 @@ class TempConvergenceMonitor(object):
             self._form.Controls.Add(self._chart)
             self._form.Show()
 
-            # If DoEvents is used, avoid interacting with Mechanical UI during solve.
+            # If DoEvents is used, I avoid interacting with the Mechanical UI during solve.
             Application.DoEvents()
         except Exception as exc:
             print("Warning: live plot disabled: {0}".format(exc))

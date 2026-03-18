@@ -1,4 +1,12 @@
 # -*- coding: utf-8 -*-
+"""Iterative IEC 60287 analytical solver for TB 880 Case #0.
+
+I implement the benchmark procedure described in CIGRE TB 880 pp. 66-68. This
+module performs two related calculations: first, it iterates the IEC 60287-2-1
+thermal network to recover the steady-state conductor and sheath temperatures at
+the benchmark load current; second, it solves the IEC general rating equation to
+recover the ampacity that corresponds to theta_c = 90 degC.
+"""
 # ============================================================
 # analytical_solver_case0.py
 # ------------------------------------------------------------
@@ -33,6 +41,8 @@ def solve_case0(verbose=True, sheath_eddy_policy="auto"):
         print("Load Current: {0} A | Ambient Temp: {1} C".format(I_load, T_amb))
 
     Tc = T_amb
+    # According to TB 880 pp. 66-68, I start with the published 80 degC screen
+    # temperature guess because the losses depend on sheath temperature.
     Ts = CASE.benchmark.theta_screen_init_c
 
     max_iter = 100
@@ -46,11 +56,18 @@ def solve_case0(verbose=True, sheath_eddy_policy="auto"):
         Ws = losses["screen"]
         Wd = losses["dielectric"]
 
+        # I apply the IEC 60287-2-1 thermal ladder exactly as TB 880 pp. 66-68
+        # describes it: half of W_d heats inward through T1, while the full sum of
+        # W_c + W_s + W_d crosses the outer thermal resistances.
         delta_T_ins = (Wc + 0.5 * Wd) * T1
         delta_T_sheath = (Wc + Ws + Wd) * (T2 + T3)
         delta_T_soil = (Wc + Ws + Wd) * T4
 
+        # I recover the new conductor temperature as ambient plus the complete
+        # temperature rise decomposition from the IEC 60287-2-1 general equation.
         Tc_new = T_amb + delta_T_ins + delta_T_sheath + delta_T_soil
+        # I update the screen temperature as theta_s = theta_c - delta_T_ins because
+        # the screen sits outside the insulation drop in the thermal network.
         Ts_new = Tc_new - delta_T_ins
 
         error_Tc = abs(Tc_new - Tc)
@@ -74,6 +91,8 @@ def solve_case0(verbose=True, sheath_eddy_policy="auto"):
 
     Tc_max = CASE.benchmark.theta_core_final_c
     Ts_guess = CASE.benchmark.theta_screen_init_c
+    # I set lambda2 = 0 because this cable has no armour, so the IEC general rating
+    # equation includes only conductor and sheath losses in the denominator.
     lambda2 = 0.0
 
     ampacity_losses = None
@@ -84,8 +103,12 @@ def solve_case0(verbose=True, sheath_eddy_policy="auto"):
         Wd = ampacity_losses["dielectric"]
 
         delta_theta = Tc_max - T_amb
+        # I use the IEC 60287-2-1 general rating equation numerator as the available
+        # temperature rise after subtracting the dielectric heating burden.
         numerator = delta_theta - Wd * (0.5 * T1 + T2 + T3 + T4)
 
+        # I use the denominator form from the IEC rating equation, where conductor
+        # and sheath loss multipliers are weighted by T1, T2, T3, and T4.
         denominator = (
             Rac_90 * T1
             + Rac_90 * (1 + lambda1_90) * T2
@@ -97,6 +120,8 @@ def solve_case0(verbose=True, sheath_eddy_policy="auto"):
         cable.I = I_max
         ampacity_losses = cable.calculate_losses(Tc_max, Ts_guess)
         Wc_max = ampacity_losses["core"]
+        # I iterate the screen temperature a few times so that R_ac and lambda1 are
+        # refined at the actual rated operating point instead of the initial guess.
         Ts_guess = Tc_max - (Wc_max + 0.5 * Wd) * T1
 
     if verbose:

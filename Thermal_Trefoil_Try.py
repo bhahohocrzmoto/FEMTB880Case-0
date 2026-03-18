@@ -1,4 +1,13 @@
 # -*- coding: utf-8 -*-
+"""ANSYS Mechanical IronPython driver for the TB 963 Picard coupling workflow.
+
+I use this script as the main ANSYS Mechanical driver for the fixed-point
+Picard electrothermal strategy described in CIGRE TB 963. The algorithm seeds
+initial FEM body loads from an ambient-temperature IEC estimate, solves the
+thermal FEM model, reads back body temperatures, recomputes IEC 60287 losses,
+updates the volumetric heat generation loads, and repeats until the cable core
+temperatures converge.
+"""
 # ============================================================
 # Thermal_Trefoil_Try.py
 # ------------------------------------------------------------
@@ -30,6 +39,9 @@ except Exception:
 
 for d in SCRIPT_DIRS:
     try:
+        # I append candidate project directories to sys.path because the ANSYS
+        # Mechanical scripting host does not reliably start in the project folder,
+        # so companion modules must be discoverable explicitly.
         if d and (d not in sys.path) and os.path.isdir(d):
             sys.path.append(d)
     except Exception:
@@ -40,6 +52,8 @@ from tb880_case0_data import CASE
 
 
 def _reload_module(mod):
+    # I reload modules because the ANSYS Mechanical Python interpreter persists
+    # between script runs, and stale cached module state would otherwise mask edits.
     try:
         return reload(mod)
     except NameError:
@@ -59,15 +73,19 @@ except Exception as exc:
 # ============================================================
 # 1) USER SETTINGS
 # ============================================================
-# Set explicitly to match Mechanical model length units.
-# No implicit fallback: use only "m" or "mm".
+# I force this setting because ANSYS Mechanical may use m or mm internally, and
+# the volumetric heat generation units must match the active model length unit.
+# When the model uses mm, W/m^3 must be converted to W/mm^3 by dividing by 1e9.
 LENGTH_UNIT = "m"
 
 CABLE_IDS = ["C01", "C02", "C03"]
 PARTS_WITH_HEAT = ["Core", "InnerIns", "Screen"]
-# Core and Screen temperatures are fed back into IEC loss update in next outer iteration.
+# I feed back only the core and screen temperatures because those are the state
+# variables required by the IEC loss model in the next Picard iteration.
 TEMP_REFERENCE_PARTS = ["Core", "Screen"]
 
+# I use the volume-averaged body temperature because that is the most appropriate
+# FEM quantity to couple back into the IEC lumped-parameter loss formulation.
 TEMP_READ_MODE = "average"   # "average", "maximum", "minimum"
 
 T_guess_C = CASE.installation.ambient_temp_c
@@ -107,14 +125,20 @@ if tmon is not None:
 # 3) HELPERS
 # ============================================================
 def ns_name(cable_id, part):
+    # I enforce the NS_ prefix convention so the script can locate Named Selections
+    # that identify each FE body in the Mechanical model tree.
     return "NS_{0}_{1}".format(cable_id, part)
 
 
 def hg_name(cable_id, part):
+    # I enforce the HG_ prefix convention so each Internal Heat Generation object
+    # can be found or created deterministically for every cable part.
     return "HG_{0}_{1}".format(cable_id, part)
 
 
 def t_name(cable_id, part):
+    # I enforce the T_ prefix convention for Temperature result objects that read
+    # back the coupled body temperatures from the FEM solution.
     return "T_{0}_{1}".format(cable_id, part)
 
 
@@ -138,6 +162,10 @@ def get_named_selection(name):
 
 
 def q_to_model_units(q_m3):
+    # I convert the IEC-derived volumetric load into the active Mechanical unit
+    # system because ANSYS applies body heat generation in model-length units.
+    # The upstream conversion from W/m to W/m^3 comes from dividing by FE area,
+    # and a mm-based model requires the additional 1e9 scaling to W/mm^3.
     if LENGTH_UNIT.lower() == "mm":
         return (q_m3 / 1e9, "W mm^-1 mm^-1 mm^-1")
     return (q_m3, "W m^-1 m^-1 m^-1")
@@ -261,7 +289,8 @@ for cid in CABLE_IDS:
     for part in PARTS_WITH_HEAT:
         hg_map[(cid, part)] = ensure_internal_heatgen(analysis, hg_name(cid, part), ns_map[(cid, part)])
 
-# Initial IEC losses from ambient guess, then W/m -> W/m^3 for FEM loads.
+# I seed the first FEM solve with ambient-temperature IEC losses for both the core
+# and the screen, then let the Picard loop progressively correct those source terms.
 for cid in CABLE_IDS:
     cable = cables[cid]
     losses = cable.calculate_losses(T_guess_C, T_guess_C)
@@ -281,6 +310,8 @@ T_prev_core = {}
 converged = False
 
 for it in range(1, max_iter + 1):
+    # I follow the TB 963 fixed-point sequence: solve the thermal FEM field, read
+    # back temperatures, recompute IEC losses, update heat loads, and test convergence.
     solve_and_eval()
 
     T_curr_core = {}
@@ -292,6 +323,9 @@ for it in range(1, max_iter + 1):
     max_dT = 0.0
     if T_prev_core:
         for cid in CABLE_IDS:
+            # I check convergence on the maximum absolute change in cable core
+            # temperature because TB 963 recommends monitoring the coupled state
+            # variable that drives the next IEC resistance update.
             dT = abs(T_curr_core[cid] - T_prev_core.get(cid, T_curr_core[cid]))
             if dT > max_dT:
                 max_dT = dT
@@ -315,7 +349,11 @@ for it in range(1, max_iter + 1):
     if mon is not None:
         mon.log(it, "iter", T_curr_core, max_dT)
 
+    # I stop when the maximum core-temperature update falls below the Picard
+    # tolerance, which is the practical convergence check recommended in TB 963.
     if T_prev_core and max_dT < tol_dT:
+        # I run one additional FEM solve with the converged heat loads so that the
+        # reported field is fully consistent with the final IEC loss update.
         print("Converged -> running FINAL solve with updated losses...")
         solve_and_eval()
         T_final_core = {}
@@ -336,6 +374,8 @@ for it in range(1, max_iter + 1):
     T_prev_core = T_curr_core
 
 if not converged:
+    # If convergence is not reached, I still report the last updated solution but I
+    # flag it clearly so the user can inspect mesh quality or the iteration settings.
     print("Reached max_iter without convergence -> running FINAL solve with last updated losses...")
     solve_and_eval()
     T_final_core = {}

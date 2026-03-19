@@ -56,8 +56,11 @@ def main():
     # bonded circulating-current result is the most sensitive benchmark output.
     assert_close("Ws_w_per_m", default_result["Ws_w_per_m"], CASE.benchmark.ws_final_w_per_m, rel_tol=0.03)
     # I check the dielectric loss against TB 880 pp. 71-72, where W_d is published
-    # independently of the temperature iteration.
-    assert_close("Wd_w_per_m", default_result["Wd_w_per_m"], CASE.benchmark.wd_w_per_m, rel_tol=0.08)
+    # independently of the temperature iteration. After fixing the dielectric
+    # geometry to use d_c at the conductor screen and D_i at the insulation OD,
+    # the benchmark mismatch drops to about 0.14%, so 0.5% keeps this traceability
+    # check tight enough to catch geometry regressions without being brittle.
+    assert_close("Wd_w_per_m", default_result["Wd_w_per_m"], CASE.benchmark.wd_w_per_m, rel_tol=0.005)
     # I check the final current rating against TB 880 p. 76, where the published
     # Case #0-1 ampacity is 821.78 A.
     assert_close("I_max_a", default_result["I_max_a"], CASE.benchmark.i_final_a, rel_tol=0.01)

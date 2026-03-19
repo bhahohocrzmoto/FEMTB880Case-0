@@ -73,11 +73,13 @@ class Geometry(object):
         # I store the diameter over the conductor screen from TB 880 Figure 25
         # because IEC 60287-1-1 Eq. (15) uses it as d_c in the cable capacitance.
         self.d_inner_semicon_m = d_inner_semicon_m
-        # I store the diameter over the main insulation from TB 880 Figure 25 so
-        # that the insulation FE annulus and thermal path remain benchmark aligned.
+        # I store the diameter over the main insulation from TB 880 Figure 25
+        # because this is the D_i used for dielectric capacitance in the TB 880
+        # Case #0 benchmark, while also keeping the insulation FE annulus aligned.
         self.d_ins_m = d_ins_m
         # I store the diameter over the insulation screen from TB 880 Figure 25
-        # because IEC 60287-1-1 Eq. (15) uses it as D_i in the capacitance formula.
+        # because it is relevant for screen/sheath geometry and thickness recovery,
+        # not the D_i used in the dielectric capacitance formula for this benchmark.
         self.d_outer_semicon_m = d_outer_semicon_m
         # I store the mean sheath diameter from TB 880 Figure 25 because IEC
         # 60287-1-1 Section 2.3.1 uses the mean sheath diameter in reactance X.

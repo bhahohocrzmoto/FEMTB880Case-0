@@ -223,9 +223,11 @@ class Cable(object):
         return True
 
     def dielectric_loss_W_per_m(self):
-        # I use IEC 60287-1-1 Eq. (15) for capacitance, with the semicon screen
-        # diameters D_i and d_c taken from the stored TB 880 geometry definition.
-        Di = self.d_outer_semicon
+        # I use IEC 60287-1-1 Eq. (15) for capacitance, with d_c taken as the
+        # diameter over conductor screen and D_i taken as the diameter over
+        # insulation; semiconducting layers are excluded from the dielectric-only
+        # geometry selection for this benchmark.
+        Di = self.d_ins
         d = self.d_inner_semicon
         if Di <= d:
             raise Exception("Need Di > d")

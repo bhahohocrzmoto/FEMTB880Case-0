@@ -257,6 +257,177 @@ def read_temperature_celsius(temp_result, mode=TEMP_READ_MODE):
     return _to_celsius(value_obj, temp_result.Name)
 
 
+def _model_length_scale_to_m():
+    # I convert the active Mechanical model length unit into a multiplier to meters
+    # so that a native 2D body area can always be converted to m^2 before it is
+    # stored in CASE or used in the W/m to W/m^3 source conversion.
+    unit = LENGTH_UNIT.strip().lower()
+    scale_map = {
+        "m": 1.0,
+        "mm": 1e-3,
+    }
+    # I fail immediately for any unsupported unit string because a wrong area-unit
+    # assumption would silently corrupt every volumetric heat generation value.
+    if unit not in scale_map:
+        raise RuntimeError("Unsupported LENGTH_UNIT for area conversion: '{0}'".format(LENGTH_UNIT))
+    return scale_map[unit]
+
+
+def _selection_entity_ids(ns_obj):
+    # I collect entity ids from the Named Selection object using the most common
+    # Mechanical access paths so the helper remains compatible with different
+    # ACT / IronPython object layouts seen across ANSYS versions.
+    candidates = []
+    location = getattr(ns_obj, "Location", None)
+    if location is not None and hasattr(location, "Ids"):
+        candidates.append(location.Ids)
+    if hasattr(ns_obj, "Ids"):
+        candidates.append(ns_obj.Ids)
+
+    # I return the first non-empty id list because the heat-load Named Selection
+    # is expected to resolve to a concrete scoped set of model entities.
+    for ids in candidates:
+        if ids is None:
+            continue
+        entity_ids = [int(entity_id) for entity_id in ids]
+        if entity_ids:
+            return entity_ids
+
+    # I stop with a clear error instead of guessing because the FEM area split must
+    # be traceable to actual model bodies, not inferred from incomplete selection data.
+    raise RuntimeError(
+        "Named Selection '{0}' has no accessible entity ids for FE body area readout.".format(ns_obj.Name)
+    )
+
+
+def _geo_entity_by_id(entity_id):
+    # I resolve each entity id back to a geometry object so the script can query the
+    # actual body area represented by the Named Selection rather than using stored
+    # reference diameters. ANSYS APIs vary, so I check both common access names.
+    geo_data = ExtAPI.DataModel.GeoData
+    if hasattr(geo_data, "GeoEntityById"):
+        return geo_data.GeoEntityById(entity_id)
+    if hasattr(geo_data, "GetGeoEntityById"):
+        return geo_data.GetGeoEntityById(entity_id)
+    raise RuntimeError("Unable to resolve geometry entities by id in this Mechanical session.")
+
+
+def _as_float_scalar(value_obj, context_text):
+    # ANSYS objects sometimes return plain numeric values and sometimes return value
+    # wrappers with a .Value field. I normalize both cases to a Python float so the
+    # downstream area summation code can stay explicit and version-tolerant.
+    if hasattr(value_obj, "Value"):
+        return float(value_obj.Value)
+    return float(value_obj)
+
+
+def _body_area_native_units(geo_entity, ns_name_text):
+    # I verify that each resolved entity is a body because this helper is intended
+    # only for 2D body areas that receive Internal Heat Generation, not for edges,
+    # faces, or convection boundaries.
+    type_name = ""
+    try:
+        type_name = geo_entity.GetType().Name
+    except Exception:
+        type_name = str(type(geo_entity))
+    if "Body" not in type_name:
+        raise RuntimeError(
+            "Named Selection '{0}' includes non-body entity type '{1}'. Expected body-scoped heat regions.".format(
+                ns_name_text, type_name
+            )
+        )
+
+    # I then read the native body area using the common ANSYS property / method names.
+    # The value is still in native model units here and is converted to m^2 later.
+    for attr in ("Area", "area"):
+        if hasattr(geo_entity, attr):
+            area_value = getattr(geo_entity, attr)
+            return _as_float_scalar(area_value, "area attribute")
+    for method_name in ("GetArea", "getArea"):
+        if hasattr(geo_entity, method_name):
+            return _as_float_scalar(getattr(geo_entity, method_name)(), "area method")
+
+    # I fail loudly if the area accessor is unavailable because using an uncertain
+    # fallback here would break the thesis traceability requirement for heat loading.
+    raise RuntimeError(
+        "Unable to read body area for Named Selection '{0}' from geometry entity '{1}'.".format(
+            ns_name_text, type_name
+        )
+    )
+
+
+def get_named_selection_body_area_m2(ns_obj):
+    # I sum the body areas represented by the Named Selection because a single heat
+    # region may legitimately contain more than one FE body in the Mechanical model.
+    area_native_total = 0.0
+    entity_ids = _selection_entity_ids(ns_obj)
+    for entity_id in entity_ids:
+        geo_entity = _geo_entity_by_id(entity_id)
+        area_native_total += _body_area_native_units(geo_entity, ns_obj.Name)
+
+    # Zero or negative total area is treated as a hard error because it means the
+    # selected heat-load region cannot safely support W/m to W/m^3 conversion.
+    if area_native_total <= 0.0:
+        raise RuntimeError(
+            "Named Selection '{0}' resolved to zero body area. Check the scoped FE bodies.".format(ns_obj.Name)
+        )
+
+    # I convert the summed native area to m^2 so the runtime store and the cable FE
+    # model fields are always kept in the same SI unit system as the reference areas.
+    length_scale_to_m = _model_length_scale_to_m()
+    return area_native_total * (length_scale_to_m ** 2)
+
+
+def collect_model_read_fe_areas_m2(ns_map):
+    # I collect only the regions that actually receive internal heat generation so
+    # the runtime area map stays focused on the FEM source-conversion workflow.
+    area_map = {}
+    for key, ns_obj in ns_map.items():
+        cid, part = key
+        if part not in PARTS_WITH_HEAT:
+            continue
+        area_map[(cid, part)] = get_named_selection_body_area_m2(ns_obj)
+    return area_map
+
+
+def _assign_model_read_fe_areas_to_cables(cables, area_map):
+    # I keep an explicit mapping from Mechanical region names to the cable FE-model
+    # attributes so the geometry-reference fields remain untouched and readable.
+    attr_by_part = {
+        "Core": "A_cond_FE_model",
+        "InnerIns": "A_innerins_FE_model",
+        "Screen": "A_screen_FE_model",
+    }
+    geom_attr_by_part = {
+        "Core": "A_cond_FE_geom",
+        "InnerIns": "A_innerins_FE_geom",
+        "Screen": "A_screen_FE_geom",
+    }
+
+    # I store the model-read areas centrally on CASE for traceability and possible
+    # reuse elsewhere in the Mechanical workflow.
+    CASE.runtime_fe_areas.a_model_read_m2_by_region = dict(area_map)
+
+    # I overwrite each cable object's FEM model areas with the actual ANSYS body area
+    # that will receive the Internal Heat Generation load, then print a clear startup
+    # comparison against the geometry-derived reference area for thesis documentation.
+    for cid in CABLE_IDS:
+        cable = cables[cid]
+        for part in PARTS_WITH_HEAT:
+            key = (cid, part)
+            if key not in area_map:
+                raise RuntimeError("Missing model-read FE area for {0} {1}.".format(cid, part))
+            model_area_m2 = area_map[key]
+            setattr(cable, attr_by_part[part], model_area_m2)
+            geom_area_m2 = getattr(cable, geom_attr_by_part[part])
+            rel_diff_pct = 100.0 * (model_area_m2 - geom_area_m2) / geom_area_m2
+            print(
+                "FE area {0} {1}: geom={2:.9e} m^2, model={3:.9e} m^2, rel_diff={4:+.3f}%".format(
+                    cid, part, geom_area_m2, model_area_m2, rel_diff_pct
+                )
+            )
+
+
 # ============================================================
 # 4) MAIN ITERATION
 # ============================================================
@@ -281,6 +452,9 @@ if missing:
             uniq.append(m)
     raise Exception("Create these Named Selections first:\n  " + "\n  ".join(uniq))
 
+model_read_fe_areas_m2 = collect_model_read_fe_areas_m2(ns_map)
+_assign_model_read_fe_areas_to_cables(cables, model_read_fe_areas_m2)
+
 hg_map = {}
 t_map = {}
 for cid in CABLE_IDS:
@@ -294,9 +468,9 @@ for cid in CABLE_IDS:
 for cid in CABLE_IDS:
     cable = cables[cid]
     losses = cable.calculate_losses(T_guess_C, T_guess_C)
-    set_internal_heat_generation(hg_map[(cid, "Core")], losses["core"] / cable.A_cond_FE)
-    set_internal_heat_generation(hg_map[(cid, "InnerIns")], losses["dielectric"] / cable.A_innerins_FE)
-    set_internal_heat_generation(hg_map[(cid, "Screen")], losses["screen"] / cable.A_screen_FE)
+    set_internal_heat_generation(hg_map[(cid, "Core")], losses["core"] / cable.A_cond_FE_model)
+    set_internal_heat_generation(hg_map[(cid, "InnerIns")], losses["dielectric"] / cable.A_innerins_FE_model)
+    set_internal_heat_generation(hg_map[(cid, "Screen")], losses["screen"] / cable.A_screen_FE_model)
 
 print("Initialised loads with T_guess = {0} C (Core+Screen readback seeds).".format(T_guess_C))
 
@@ -334,9 +508,9 @@ for it in range(1, max_iter + 1):
         cable = cables[cid]
         losses = cable.calculate_losses(T_curr_core[cid], T_curr_screen[cid])
         try:
-            set_internal_heat_generation(hg_map[(cid, "Core")], losses["core"] / cable.A_cond_FE)
-            set_internal_heat_generation(hg_map[(cid, "InnerIns")], losses["dielectric"] / cable.A_innerins_FE)
-            set_internal_heat_generation(hg_map[(cid, "Screen")], losses["screen"] / cable.A_screen_FE)
+            set_internal_heat_generation(hg_map[(cid, "Core")], losses["core"] / cable.A_cond_FE_model)
+            set_internal_heat_generation(hg_map[(cid, "InnerIns")], losses["dielectric"] / cable.A_innerins_FE_model)
+            set_internal_heat_generation(hg_map[(cid, "Screen")], losses["screen"] / cable.A_screen_FE_model)
         except Exception as exc:
             raise RuntimeError("Failed applying heat generation for {0}: {1}".format(cid, exc))
 

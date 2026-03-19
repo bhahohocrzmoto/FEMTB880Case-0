@@ -356,6 +356,17 @@ class ModelAssumptions(object):
 
 
 # ----------------------------------------------------------------------
+# Runtime FEM area data read from the active ANSYS model
+# ----------------------------------------------------------------------
+class RuntimeFEAreas(object):
+    def __init__(self):
+        # I keep the actual FE body areas read from Mechanical separate from the
+        # diameter-derived reference areas so the FEM source conversion can be
+        # audited without changing the benchmark geometry inputs.
+        self.a_model_read_m2_by_region = {}
+
+
+# ----------------------------------------------------------------------
 # Master case object
 # ----------------------------------------------------------------------
 class TB880Case0(object):
@@ -380,6 +391,7 @@ class TB880Case0(object):
         self.benchmark = benchmark
         self.sources = sources
         self.assumptions = assumptions
+        self.runtime_fe_areas = RuntimeFEAreas()
 
 
 TB880_CASE_0 = TB880Case0(

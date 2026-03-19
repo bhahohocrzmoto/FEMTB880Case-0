@@ -52,7 +52,7 @@ def normalize_sheath_eddy_policy(policy):
 class Cable(object):
     def __init__(self, cid,
                  d_cond, d_inner_semicon, d_ins, d_outer_semicon, d_screen_mean, d_screen_out, d_oversheath,
-                 A_cond_elec, A_screen_elec, A_cond_FE, A_innerins_FE, A_screen_FE,
+                 A_cond_elec, A_screen_elec, A_cond_FE_geom, A_innerins_FE_geom, A_screen_FE_geom,
                  r_cond_dc_20_ohm_per_m,
                  rho_cond_20, alpha_cond, ks, kp,
                  rho_screen_20, alpha_screen,
@@ -75,9 +75,12 @@ class Cable(object):
 
         self.A_cond_elec = A_cond_elec
         self.A_screen_elec = A_screen_elec
-        self.A_cond_FE = A_cond_FE
-        self.A_innerins_FE = A_innerins_FE
-        self.A_screen_FE = A_screen_FE
+        self.A_cond_FE_geom = A_cond_FE_geom
+        self.A_innerins_FE_geom = A_innerins_FE_geom
+        self.A_screen_FE_geom = A_screen_FE_geom
+        self.A_cond_FE_model = A_cond_FE_geom
+        self.A_innerins_FE_model = A_innerins_FE_geom
+        self.A_screen_FE_model = A_screen_FE_geom
 
         # I preserve the benchmark input R_dc(20 degC) because TB 880 takes this as
         # a primary conductor datum and IEC 60287-1-1 Eq. (1) updates it with temperature.
@@ -291,22 +294,22 @@ class Cable(object):
         }
 
     def q_core(self, T_core_C, T_screen_C):
-        # I convert conductor loss from W/m to W/m^3 by dividing by the geometric FE
-        # copper area, which follows the volumetric source convention described in TB 963.
+        # I convert conductor loss from W/m to W/m^3 by dividing by the active FEM
+        # conductor area, defaulting to geometry and later overwritten by ANSYS readback.
         losses = self.calculate_losses(T_core_C, T_screen_C)
-        return losses["core"] / self.A_cond_FE
+        return losses["core"] / self.A_cond_FE_model
 
     def q_screen(self, T_core_C, T_screen_C):
-        # I convert sheath loss from W/m to W/m^3 in the same way so that ANSYS can
-        # apply the metallic screen heating as a body load.
+        # I convert sheath loss from W/m to W/m^3 using the active FEM screen area so
+        # that ANSYS applies the metallic screen heating to the exact loaded body.
         losses = self.calculate_losses(T_core_C, T_screen_C)
-        return losses["screen"] / self.A_screen_FE
+        return losses["screen"] / self.A_screen_FE_model
 
     def q_innerins(self, T_core_C, T_screen_C):
-        # I convert dielectric loss from W/m to W/m^3 using the FE inner-insulation
-        # annulus area because TB 963 couples IEC losses back as volumetric heating.
+        # I convert dielectric loss from W/m to W/m^3 using the active FEM InnerIns
+        # area because TB 963 couples IEC losses back as volumetric heating.
         losses = self.calculate_losses(T_core_C, T_screen_C)
-        return losses["dielectric"] / self.A_innerins_FE
+        return losses["dielectric"] / self.A_innerins_FE_model
 
 
 def create_case0_cables(I_rms_A=None, bonding=None, sheath_eddy_policy="auto"):
@@ -327,9 +330,9 @@ def create_case0_cables(I_rms_A=None, bonding=None, sheath_eddy_policy="auto"):
 
     A_cond_elec = CASE.geometry.a_cond_elec_m2
     A_screen_elec = CASE.geometry.a_screen_elec_m2
-    A_cond_FE = CASE.geometry.a_cond_geom_m2
-    A_innerins_FE = CASE.geometry.a_innerins_geom_m2
-    A_screen_FE = CASE.geometry.a_screen_geom_m2
+    A_cond_FE_geom = CASE.geometry.a_cond_geom_m2
+    A_innerins_FE_geom = CASE.geometry.a_innerins_geom_m2
+    A_screen_FE_geom = CASE.geometry.a_screen_geom_m2
 
     r_cond_dc_20_ohm_per_m = CASE.material.r_cond_dc_20_ohm_per_m
     rho_cond_20 = CASE.material.rho_cond_20_ohm_m
@@ -361,9 +364,9 @@ def create_case0_cables(I_rms_A=None, bonding=None, sheath_eddy_policy="auto"):
             d_oversheath=d_oversheath,
             A_cond_elec=A_cond_elec,
             A_screen_elec=A_screen_elec,
-            A_cond_FE=A_cond_FE,
-            A_innerins_FE=A_innerins_FE,
-            A_screen_FE=A_screen_FE,
+            A_cond_FE_geom=A_cond_FE_geom,
+            A_innerins_FE_geom=A_innerins_FE_geom,
+            A_screen_FE_geom=A_screen_FE_geom,
             r_cond_dc_20_ohm_per_m=r_cond_dc_20_ohm_per_m,
             rho_cond_20=rho_cond_20,
             alpha_cond=alpha_cond,

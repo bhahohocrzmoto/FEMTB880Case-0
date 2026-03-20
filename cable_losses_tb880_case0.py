@@ -150,9 +150,33 @@ class Cable(object):
         # sheath loss factor lambda1' in touching trefoil.
         return (Rs / Rac) * (1.0 / (1.0 + (Rs / X) ** 2))
 
+    def _beta1(self, Rs):
+        # IEC 60287-1-1:2023 Sec 5.3.7.1 defines beta_1 = sqrt(4 * pi * omega /
+        # (rho_s * 1e7)), where rho_s is the sheath resistivity in ohm.m recovered
+        # from R_s = rho_s / A_s using the nominal electrical sheath area.
+        rho_s = Rs * self.A_screen_elec
+        omega = 2.0 * math.pi * self.f
+        return math.sqrt(4.0 * math.pi * omega / (rho_s * 1e7))
+
+    def _gs_factor(self, beta1):
+        # IEC 60287-1-1:2023 Sec 5.3.7.1 defines C_gs = 1 + (t_s / D_s)^1.74 *
+        # (beta_1 * D_s * 1e-3 - 1.6), with sheath thickness t_s in mm and D_s as
+        # the external diameter of the metallic sheath in mm.
+        t_s_mm = 0.5 * (self.d_screen_out - self.d_outer_semicon) * 1000.0
+        D_s_mm = self.d_screen_out * 1000.0
+        ratio = t_s_mm / D_s_mm
+        return 1.0 + ratio ** 1.74 * (beta1 * D_s_mm * 1e-3 - 1.6)
+
+    def _eddy_thickness_term(self, beta1):
+        # IEC 60287-1-1:2023 Sec 5.3.7.1 adds (beta_1 * t_s)^4 / (12 * 1e12), with
+        # sheath thickness t_s taken in mm using the metallic sheath radial build.
+        t_s_mm = 0.5 * (self.d_screen_out - self.d_outer_semicon) * 1000.0
+        return (beta1 * t_s_mm) ** 4 / (12.0 * 1e12)
+
     def _lambda1_doubleprime(self, Rs, Rac):
-        # I implement IEC 60287-1-1 Section 2.3.5 and Section 2.3.6, where the eddy
-        # term depends on m = omega * 1e-7 / R_s and on the geometric factor lambda_0.
+        # I implement IEC 60287-1-1:2023 Sec 5.3.7.1 for sheath eddy-current losses,
+        # where m = omega * 1e-7 / R_s, lambda_0 is the base trefoil coupling term,
+        # and beta_1/C_gs/thickness use the metallic sheath geometry.
         omega = 2.0 * math.pi * self.f
         m = omega * 1e-7 / Rs
 
@@ -160,20 +184,22 @@ class Cable(object):
         s = self.d_oversheath
 
         # I use lambda_0 = 3 * [m^2 / (1 + m^2)] * (d / (2s))^2 from IEC 60287-1-1
-        # as the base eddy-current coupling term for single-core cables.
+        # Sec 5.3.7.1 as the base eddy-current coupling term for trefoil cables.
         lambda0 = 3.0 * (m**2 / (1.0 + m**2)) * (d / (2.0 * s)) ** 2
-        # I keep delta_1 explicitly because IEC 60287-1-1 applies this correction to
-        # account for the non-ideal distribution in the bonded sheath loss formula.
+        # I keep delta_1 exactly as already implemented because IEC 60287-1-1:2023
+        # Sec 5.3.7.1 applies this correction to the trefoil eddy-current branch.
         delta1 = (1.14 * m**2.45 + 0.33) * (d / (2.0 * s)) ** (0.92 * m + 1.66)
-        # I set delta_2 to zero because there is no additional correction active for
-        # this thin single-layer sheath representation in the benchmark case.
+        # IEC 60287-1-1:2023 Sec 5.3.7.1: Delta_2 = 0 for three single-core cables
+        # in trefoil formation. Non-zero Delta_2 applies only to flat formations
+        # (centre cable, outer leading, outer lagging; see Sec 5.3.7.1 items 2a/2b/2c).
         delta2 = 0.0
-        # I use g_s = 1.0 for a single metallic layer, which matches the simplified
-        # TB 880 sheath model used in this repository.
-        gs = 1.0
-        # I set the thickness term to zero because I treat the laminated sheath as a
-        # thin screen and therefore neglect the extra thickness correction.
-        thickness_term = 0.0
+        # IEC 60287-1-1:2023 Sec 5.3.7.1 defines C_gs from beta_1, sheath thickness
+        # t_s = 0.5 * (D_s,out - d_outer_semicon), and sheath outer diameter D_s,out.
+        beta1 = self._beta1(Rs)
+        gs = self._gs_factor(beta1)
+        # IEC 60287-1-1:2023 Sec 5.3.7.1 adds (beta_1 * t_s)^4 / (12 * 1e12), using
+        # the metallic sheath thickness t_s in mm recovered from the stored diameters.
+        thickness_term = self._eddy_thickness_term(beta1)
 
         lambda1pp = (Rs / Rac) * (gs * lambda0 * (1.0 + delta1 + delta2) + thickness_term)
 
@@ -185,7 +211,15 @@ class Cable(object):
             F = (4.0 * M**4 + (2.0 * M)**2) / (4.0 * (M**2 + 1.0)**2)
             lambda1pp *= F
 
-        return lambda1pp
+        return {
+            "lambda1_doubleprime": lambda1pp,
+            "beta1": beta1,
+            "gs": gs,
+            "lambda0": lambda0,
+            "delta1": delta1,
+            "delta2": delta2,
+            "thickness_term": thickness_term,
+        }
 
 
     def dielectric_loss_W_per_m(self):
@@ -222,7 +256,8 @@ class Cable(object):
         # 60287-1-1 defines W_s = lambda1 * W_c for the metallic sheath.
         X = self.sheath_reactance_X()
         lambda1_prime = self._lambda1_prime(Rs, Rac, X)
-        lambda1_doubleprime = self._lambda1_doubleprime(Rs, Rac)
+        eddy_terms = self._lambda1_doubleprime(Rs, Rac)
+        lambda1_doubleprime = eddy_terms["lambda1_doubleprime"]
 
         # I assemble lambda1 only from the centralized CASE flags so that sheath
         # circulating and eddy losses can be included independently of bonding.
@@ -251,6 +286,12 @@ class Cable(object):
             "lambda1": lambda1,
             "lambda1_prime": lambda1_prime,
             "lambda1_doubleprime": lambda1_doubleprime,
+            "beta1": eddy_terms["beta1"],
+            "gs": eddy_terms["gs"],
+            "lambda0": eddy_terms["lambda0"],
+            "delta1": eddy_terms["delta1"],
+            "delta2": eddy_terms["delta2"],
+            "thickness_term": eddy_terms["thickness_term"],
             "Rac": Rac,
             "Rdc": Rdc,
             "Rs": Rs,

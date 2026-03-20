@@ -82,6 +82,24 @@ def main():
         if default_result["lambda1_doubleprime"] <= 0.0:
             raise AssertionError("Default benchmark path should still compute lambda1_doubleprime")
 
+        # I verify the IEC 60287-1-1:2023 Sec 5.3.7.1 eddy intermediates against the
+        # TB 880 p. 79 benchmark values at the published 90/80 degC operating point.
+        CASE.assumptions.include_sheath_circulating_losses = False
+        CASE.assumptions.include_sheath_eddy_losses = True
+        cable_eddy = create_case0_cables(I_rms_A=CASE.benchmark.i_final_a, bonding="single")["C02"]
+        eddy_terms = cable_eddy.calculate_losses(
+            CASE.benchmark.theta_core_final_c,
+            80.0,
+        )
+        assert_close("beta1", eddy_terms["beta1"], 105.8022420, rel_tol=0.002)
+        assert_close("gs", eddy_terms["gs"], 1.002449783, rel_tol=0.002)
+        assert_close("lambda0", eddy_terms["lambda0"], 0.01354, rel_tol=0.01)
+        assert_close("delta1", eddy_terms["delta1"], 0.08056, rel_tol=0.01)
+        assert_close("delta2", eddy_terms["delta2"], 0.0, rel_tol=0.0, abs_tol=0.0)
+        assert_close("lambda1_doubleprime_single", eddy_terms["lambda1_doubleprime"], 0.07696, rel_tol=0.02)
+        if eddy_terms["thickness_term"] <= 0.0:
+            raise AssertionError("IEC thickness term should now be computed and positive")
+
         # I also check the optional comparison mode, where the central flags include
         # both circulating and eddy losses and therefore reduce the current rating.
         CASE.assumptions.include_sheath_circulating_losses = True

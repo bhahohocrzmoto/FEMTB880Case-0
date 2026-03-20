@@ -4,13 +4,15 @@ Python scripts for **CIGRE TB 880 Case #0** (132 kV single-core XLPE, touching t
 
 ## Default benchmark interpretation (repository default)
 
-This repository defaults to the **TB 880 Case #0-1 benchmark-faithful IEC base case**:
+This repository defaults to the **TB 880 Case #0-1 benchmark-faithful IEC base case**.
+Sheath-loss inclusion is now controlled centrally in `tb880_case0_data.py` by two
+boolean flags on `CASE.assumptions`:
 
-- touching trefoil,
-- directly buried,
-- bonding = solid,
-- circulating sheath losses included,
-- **eddy-current sheath losses neglected in the default benchmark path**.
+- `include_sheath_circulating_losses = True`
+- `include_sheath_eddy_losses = False`
+
+The default benchmark therefore keeps circulating sheath losses included while
+excluding eddy-current sheath losses.
 
 Stored benchmark targets remain:
 
@@ -20,7 +22,7 @@ Stored benchmark targets remain:
 - `theta_core_final = 90.0 C`
 - `theta_screen_final = 78.7130 C`
 
-An optional non-default comparison mode (solid bonding with eddy sheath losses included) is supported through `sheath_eddy_policy="include_for_solid"`.
+To study alternate sheath-loss combinations, update those two central flags before running the analytical or FEM workflows.
 
 ## Current repository layout (top-level files)
 
@@ -46,7 +48,7 @@ An optional non-default comparison mode (solid bonding with eddy sheath losses i
   Optional helper for text-mode CSV logging (Python 3-safe) and optional live convergence plot.
 
 - `test_case0_regression.py`  
-  Regression checks for benchmark-faithful default behavior and optional eddy-included comparison mode.
+  Regression checks for the default benchmark flags, the combined circulating-plus-eddy case, and the zero-sheath-loss case.
 
 ## Technical notes
 

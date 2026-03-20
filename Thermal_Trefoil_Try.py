@@ -94,9 +94,7 @@ max_iter = 20
 tol_dT = 1e-3
 
 I_RMS_A = CASE.benchmark.i_final_a
-bonding = CASE.installation.bonding
-
-cables = loss_mod.create_case0_cables(I_rms_A=I_RMS_A, bonding=bonding)
+cables = loss_mod.create_case0_cables(I_rms_A=I_RMS_A, bonding=CASE.installation.bonding)
 
 if LENGTH_UNIT not in ("m", "mm"):
     raise ValueError("LENGTH_UNIT must be explicitly set to 'm' or 'mm'. Got: {0}".format(LENGTH_UNIT))

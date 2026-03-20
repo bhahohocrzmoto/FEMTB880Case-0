@@ -20,7 +20,7 @@ import cable_losses_tb880_case0 as loss_mod
 from tb880_case0_data import CASE
 
 
-def solve_case0(verbose=True, sheath_eddy_policy="auto"):
+def solve_case0(verbose=True):
     T1 = CASE.benchmark.t1_k_m_per_w
     T2 = CASE.benchmark.t2_k_m_per_w
     T3 = CASE.benchmark.t3_k_m_per_w
@@ -32,7 +32,6 @@ def solve_case0(verbose=True, sheath_eddy_policy="auto"):
     cables = loss_mod.create_case0_cables(
         I_rms_A=I_load,
         bonding=CASE.installation.bonding,
-        sheath_eddy_policy=sheath_eddy_policy,
     )
     cable = cables["C02"]
 
@@ -143,7 +142,6 @@ def solve_case0(verbose=True, sheath_eddy_policy="auto"):
         "I_max_a": I_max,
         "Ts_at_Imax_c": Ts_guess,
         "iterations": converged_iterations,
-        "sheath_eddy_policy": sheath_eddy_policy,
     }
 
 

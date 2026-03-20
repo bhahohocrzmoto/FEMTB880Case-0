@@ -328,8 +328,8 @@ class ModelAssumptions(object):
         innerins_area_convention,
         screen_fe_area_equals_electrical_area_assumed,
         touching_trefoil_spacing_assumed,
-        sheath_loss_interpretation,
-        solid_bonded_include_eddy_default,
+        include_sheath_circulating_losses,
+        include_sheath_eddy_losses,
     ):
         # I record that the InnerIns FE body is treated as one annulus from the
         # conductor OD to the insulation OD because that area is used to convert
@@ -345,14 +345,13 @@ class ModelAssumptions(object):
         # the sheath reactance expression both depend on the spacing convention.
         self.touching_trefoil_spacing_assumed = touching_trefoil_spacing_assumed
 
-        # I state which sheath loss interpretation is considered benchmark-faithful
-        # so that alternate comparison modes can be distinguished from the baseline.
-        self.sheath_loss_interpretation = sheath_loss_interpretation
+        # I centralize the switch that controls whether lambda1' contributes to the
+        # assembled sheath loss factor for this benchmark workflow.
+        self.include_sheath_circulating_losses = include_sheath_circulating_losses
 
-        # I document the design decision that solid-bonded eddy losses are excluded
-        # by default because the published TB 880 Case #0-1 benchmark results match
-        # the circulating-current-only interpretation rather than a combined value.
-        self.solid_bonded_include_eddy_default = solid_bonded_include_eddy_default
+        # I centralize the switch that controls whether lambda1'' contributes to the
+        # assembled sheath loss factor for this benchmark workflow.
+        self.include_sheath_eddy_losses = include_sheath_eddy_losses
 
 
 # ----------------------------------------------------------------------
@@ -533,8 +532,8 @@ TB880_CASE_0 = TB880Case0(
         innerins_area_convention="conductor_od_to_insulation_od",
         screen_fe_area_equals_electrical_area_assumed=True,
         touching_trefoil_spacing_assumed=True,
-        sheath_loss_interpretation="tb880_case0_iec_base",
-        solid_bonded_include_eddy_default=False,
+        include_sheath_circulating_losses=True,
+        include_sheath_eddy_losses=False,
     ),
 )
 

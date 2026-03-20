@@ -25,67 +25,99 @@ def assert_close(name, value, ref, rel_tol=0.01, abs_tol=1e-9):
 
 
 def main():
-    default_result = solve_case0(verbose=False)
+    default_circulating = CASE.assumptions.include_sheath_circulating_losses
+    default_eddy = CASE.assumptions.include_sheath_eddy_losses
 
-    required = [
-        "Tc_final_c", "Ts_final_c", "Wc_w_per_m", "Ws_w_per_m", "Wd_w_per_m", "I_max_a",
-        "Rac_ohm_per_m", "Rs_ohm_per_m", "lambda1_prime", "lambda1_doubleprime",
-    ]
-    for k in required:
-        if k not in default_result:
-            raise AssertionError("Missing output key: {0}".format(k))
-        if not math.isfinite(default_result[k]):
-            raise AssertionError("Non-finite output for key: {0}".format(k))
+    try:
+        default_result = solve_case0(verbose=False)
 
-    # I check the final AC conductor resistance against TB 880 p. 74 because this
-    # validates the IEC 60287-1-1 Eq. (2) implementation at 90 degC.
-    assert_close("Rac_90C", default_result["Rac_ohm_per_m"], CASE.benchmark.r_ac_90c_ohm_per_m, rel_tol=0.005)
-    # I check the screen resistance against TB 880 p. 74 because the first-iteration
-    # sheath loss factor depends directly on this benchmark quantity.
-    assert_close("Rs_screen", default_result["Rs_ohm_per_m"], CASE.benchmark.r_screen_80c_ohm_per_m, rel_tol=0.03)
-    # I check the final conductor temperature against TB 880 p. 76, where the rated
-    # solution is defined by theta_c = 90 degC.
-    assert_close("Tc_final_c", default_result["Tc_final_c"], CASE.benchmark.theta_core_final_c, rel_tol=0.001)
-    # I check the final screen temperature against TB 880 pp. 74-76 because it is a
-    # key convergence target for the benchmark iteration procedure.
-    assert_close("Ts_final_c", default_result["Ts_final_c"], CASE.benchmark.theta_screen_final_c, rel_tol=0.01)
-    # I check the final conductor loss against TB 880 pp. 74-76 to preserve the
-    # published Joule heating reference value.
-    assert_close("Wc_w_per_m", default_result["Wc_w_per_m"], CASE.benchmark.wc_final_w_per_m, rel_tol=0.01)
-    # I check the final sheath loss against TB 880 pp. 74-76 because the solid-
-    # bonded circulating-current result is the most sensitive benchmark output.
-    assert_close("Ws_w_per_m", default_result["Ws_w_per_m"], CASE.benchmark.ws_final_w_per_m, rel_tol=0.03)
-    # I check the dielectric loss against TB 880 pp. 71-72, where W_d is published
-    # independently of the temperature iteration. After fixing the dielectric
-    # geometry to use d_c at the conductor screen and D_i at the insulation OD,
-    # the benchmark mismatch drops to about 0.14%, so 0.5% keeps this traceability
-    # check tight enough to catch geometry regressions without being brittle.
-    assert_close("Wd_w_per_m", default_result["Wd_w_per_m"], CASE.benchmark.wd_w_per_m, rel_tol=0.005)
-    # I check the final current rating against TB 880 p. 76, where the published
-    # Case #0-1 ampacity is 821.78 A.
-    assert_close("I_max_a", default_result["I_max_a"], CASE.benchmark.i_final_a, rel_tol=0.01)
+        required = [
+            "Tc_final_c", "Ts_final_c", "Wc_w_per_m", "Ws_w_per_m", "Wd_w_per_m", "I_max_a",
+            "Rac_ohm_per_m", "Rs_ohm_per_m", "lambda1_prime", "lambda1_doubleprime",
+        ]
+        for k in required:
+            if k not in default_result:
+                raise AssertionError("Missing output key: {0}".format(k))
+            if not math.isfinite(default_result[k]):
+                raise AssertionError("Non-finite output for key: {0}".format(k))
 
-    # I enforce the design intent that the default solid-bonded benchmark path must
-    # exclude eddy losses, because that is the interpretation matched to TB 880.
-    if default_result["lambda1_doubleprime"] != 0.0:
-        raise AssertionError("Default solid-bonded benchmark path must not include eddy losses")
+        # I check the final AC conductor resistance against TB 880 p. 74 because this
+        # validates the IEC 60287-1-1 Eq. (2) implementation at 90 degC.
+        assert_close("Rac_90C", default_result["Rac_ohm_per_m"], CASE.benchmark.r_ac_90c_ohm_per_m, rel_tol=0.005)
+        # I check the screen resistance against TB 880 p. 74 because the first-iteration
+        # sheath loss factor depends directly on this benchmark quantity.
+        assert_close("Rs_screen", default_result["Rs_ohm_per_m"], CASE.benchmark.r_screen_80c_ohm_per_m, rel_tol=0.03)
+        # I check the final conductor temperature against TB 880 p. 76, where the rated
+        # solution is defined by theta_c = 90 degC.
+        assert_close("Tc_final_c", default_result["Tc_final_c"], CASE.benchmark.theta_core_final_c, rel_tol=0.001)
+        # I check the final screen temperature against TB 880 pp. 74-76 because it is a
+        # key convergence target for the benchmark iteration procedure.
+        assert_close("Ts_final_c", default_result["Ts_final_c"], CASE.benchmark.theta_screen_final_c, rel_tol=0.01)
+        # I check the final conductor loss against TB 880 pp. 74-76 to preserve the
+        # published Joule heating reference value.
+        assert_close("Wc_w_per_m", default_result["Wc_w_per_m"], CASE.benchmark.wc_final_w_per_m, rel_tol=0.01)
+        # I check the final sheath loss against TB 880 pp. 74-76 because the solid-
+        # bonded circulating-current result is the most sensitive benchmark output.
+        assert_close("Ws_w_per_m", default_result["Ws_w_per_m"], CASE.benchmark.ws_final_w_per_m, rel_tol=0.03)
+        # I check the dielectric loss against TB 880 pp. 71-72, where W_d is published
+        # independently of the temperature iteration. After fixing the dielectric
+        # geometry to use d_c at the conductor screen and D_i at the insulation OD,
+        # the benchmark mismatch drops to about 0.14%, so 0.5% keeps this traceability
+        # check tight enough to catch geometry regressions without being brittle.
+        assert_close("Wd_w_per_m", default_result["Wd_w_per_m"], CASE.benchmark.wd_w_per_m, rel_tol=0.005)
+        # I check the final current rating against TB 880 p. 76, where the published
+        # Case #0-1 ampacity is 821.78 A.
+        assert_close("I_max_a", default_result["I_max_a"], CASE.benchmark.i_final_a, rel_tol=0.01)
 
-    # I also check the optional comparison mode, where eddy losses are included for
-    # solid bonding to study how they reduce the current rating relative to TB 880.
-    eddy_result = solve_case0(verbose=False, sheath_eddy_policy="include_for_solid")
-    if eddy_result["lambda1_doubleprime"] <= 0.0:
-        raise AssertionError("Eddy comparison mode expected lambda1_doubleprime > 0")
-    if not (eddy_result["I_max_a"] < default_result["I_max_a"]):
-        raise AssertionError("Eddy comparison mode should produce lower current rating")
+        # I enforce the design intent that the default benchmark path must use the
+        # centralized sheath flags: circulating included and eddy excluded.
+        if not CASE.assumptions.include_sheath_circulating_losses:
+            raise AssertionError("Default benchmark path must include circulating sheath losses")
+        if CASE.assumptions.include_sheath_eddy_losses:
+            raise AssertionError("Default benchmark path must exclude eddy sheath losses")
+        if default_result["lambda1_prime"] <= 0.0:
+            raise AssertionError("Default benchmark path expected lambda1_prime > 0")
+        if default_result["lambda1"] != default_result["lambda1_prime"]:
+            raise AssertionError("Default benchmark path expected lambda1 = lambda1_prime")
+        if default_result["lambda1_doubleprime"] <= 0.0:
+            raise AssertionError("Default benchmark path should still compute lambda1_doubleprime")
 
-    # I verify the direct loss API too, so the default solver path and the reusable
-    # loss library stay consistent about excluding eddy losses for this benchmark.
-    cable_default = create_case0_cables(I_rms_A=CASE.benchmark.i_final_a)["C02"]
-    losses_default = cable_default.calculate_losses(CASE.benchmark.theta_core_final_c, CASE.benchmark.theta_screen_final_c)
-    if losses_default["lambda1_doubleprime"] != 0.0:
-        raise AssertionError("Loss API default must keep lambda1_doubleprime = 0 for solid bonding")
+        # I also check the optional comparison mode, where the central flags include
+        # both circulating and eddy losses and therefore reduce the current rating.
+        CASE.assumptions.include_sheath_circulating_losses = True
+        CASE.assumptions.include_sheath_eddy_losses = True
+        eddy_result = solve_case0(verbose=False)
+        if eddy_result["lambda1_doubleprime"] <= 0.0:
+            raise AssertionError("Eddy comparison mode expected lambda1_doubleprime > 0")
+        if not math.isclose(
+            eddy_result["lambda1"],
+            eddy_result["lambda1_prime"] + eddy_result["lambda1_doubleprime"],
+            rel_tol=1e-12,
+            abs_tol=1e-12,
+        ):
+            raise AssertionError("Combined sheath mode expected lambda1 = lambda1_prime + lambda1_doubleprime")
+        if not (eddy_result["I_max_a"] < default_result["I_max_a"]):
+            raise AssertionError("Combined sheath mode should produce lower current rating")
 
-    print("TB880 Case #0 regression checks passed.")
+        # I verify the direct loss API too, so the reusable loss library stays
+        # aligned with the central flag model when both sheath terms are disabled.
+        CASE.assumptions.include_sheath_circulating_losses = False
+        CASE.assumptions.include_sheath_eddy_losses = False
+        cable_no_sheath = create_case0_cables(I_rms_A=CASE.benchmark.i_final_a)["C02"]
+        losses_no_sheath = cable_no_sheath.calculate_losses(
+            CASE.benchmark.theta_core_final_c,
+            CASE.benchmark.theta_screen_final_c,
+        )
+        if losses_no_sheath["lambda1"] != 0.0:
+            raise AssertionError("Both sheath flags false must produce lambda1 = 0")
+        if losses_no_sheath["screen"] != 0.0:
+            raise AssertionError("Both sheath flags false must produce Ws = 0")
+
+        print("TB880 Case #0 regression checks passed.")
+    finally:
+        CASE.assumptions.include_sheath_circulating_losses = default_circulating
+        CASE.assumptions.include_sheath_eddy_losses = default_eddy
+
 
 
 if __name__ == "__main__":

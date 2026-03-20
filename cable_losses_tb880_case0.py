@@ -13,10 +13,8 @@ losses are always computed with one traceable formulation.
 #
 # Default repository interpretation:
 # - benchmark-faithful TB 880 Case #0-1 IEC base path
-# - solid bonding includes circulating sheath losses
-# - solid-bonded eddy sheath losses are neglected by default
-#
-# Optional comparison mode is retained via sheath_eddy_policy.
+# - central CASE flags include circulating sheath losses by default
+# - central CASE flags exclude eddy sheath losses by default
 # ============================================================
 
 import math
@@ -33,21 +31,6 @@ def normalize_bonding_mode(bonding):
     return normalized
 
 
-def normalize_sheath_eddy_policy(policy):
-    """Normalize sheath eddy policy mode."""
-    mode = str(policy).strip().lower()
-    valid = (
-        "auto",
-        "exclude",
-        "include_for_solid",
-        "include_for_all",
-    )
-    if mode not in valid:
-        raise ValueError(
-            "Unsupported sheath_eddy_policy '{0}'. Use: {1}".format(policy, ", ".join(valid))
-        )
-    return mode
-
 
 class Cable(object):
     def __init__(self, cid,
@@ -58,8 +41,7 @@ class Cable(object):
                  rho_screen_20, alpha_screen,
                  eps_r, tan_delta,
                  f_hz, U_LL_V, I_rms_A,
-                 bonding="solid",
-                 sheath_eddy_policy="auto"):
+                 bonding="solid"):
         self.cid = cid
         self.I = float(I_rms_A)
         self.f = float(f_hz)
@@ -100,7 +82,6 @@ class Cable(object):
         self.lambda1 = None
 
         self.bonding = normalize_bonding_mode(bonding)
-        self.sheath_eddy_policy = normalize_sheath_eddy_policy(sheath_eddy_policy)
 
     def _resistance_ratio(self, alpha, T_C):
         # I apply IEC 60287-1-1:2023 Eq. (1) in ratio form so that the same linear
@@ -206,24 +187,6 @@ class Cable(object):
 
         return lambda1pp
 
-    def _include_eddy_for_current_setup(self):
-        # I centralize this policy logic because the repository keeps two use cases:
-        # benchmark-faithful TB 880 regression, and comparison studies that include
-        # eddy losses to examine their impact on the current rating.
-        mode = self.sheath_eddy_policy
-        if mode == "exclude":
-            return False
-        if mode == "include_for_solid":
-            return self.bonding == "solid"
-        if mode == "include_for_all":
-            return True
-
-        # auto -> repository default interpretation from CASE assumptions.
-        # I exclude solid-bonded eddy losses by default because the published TB 880
-        # Case #0-1 results align with circulating-current losses only.
-        if self.bonding == "solid":
-            return bool(CASE.assumptions.solid_bonded_include_eddy_default)
-        return True
 
     def dielectric_loss_W_per_m(self):
         # I use IEC 60287-1-1 Eq. (15) for capacitance, with d_c taken as the
@@ -258,16 +221,16 @@ class Cable(object):
         # I next compute sheath losses through lambda1' and lambda1'' because IEC
         # 60287-1-1 defines W_s = lambda1 * W_c for the metallic sheath.
         X = self.sheath_reactance_X()
-        lambda1_prime = self._lambda1_prime(Rs, Rac, X) if self.bonding == "solid" else 0.0
-        lambda1_doubleprime = self._lambda1_doubleprime(Rs, Rac) if self._include_eddy_for_current_setup() else 0.0
+        lambda1_prime = self._lambda1_prime(Rs, Rac, X)
+        lambda1_doubleprime = self._lambda1_doubleprime(Rs, Rac)
 
-        # I combine the sheath terms according to IEC 60287-1-1 Section 2.3.7:
-        # solid bonding uses lambda1' + lambda1'', while single-point or cross
-        # bonding keeps only the eddy component because circulating current is absent.
-        if self.bonding == "solid":
-            lambda1 = lambda1_prime + lambda1_doubleprime
-        else:
-            lambda1 = lambda1_doubleprime
+        # I assemble lambda1 only from the centralized CASE flags so that sheath
+        # circulating and eddy losses can be included independently of bonding.
+        lambda1 = 0.0
+        if CASE.assumptions.include_sheath_circulating_losses:
+            lambda1 += lambda1_prime
+        if CASE.assumptions.include_sheath_eddy_losses:
+            lambda1 += lambda1_doubleprime
 
         Ws = lambda1 * Wc
 
@@ -312,7 +275,7 @@ class Cable(object):
         return losses["dielectric"] / self.A_innerins_FE_model
 
 
-def create_case0_cables(I_rms_A=None, bonding=None, sheath_eddy_policy="auto"):
+def create_case0_cables(I_rms_A=None, bonding=None):
     """Return three symmetric trefoil Cable objects built from the centralized CASE data."""
     if I_rms_A is None:
         I_rms_A = CASE.benchmark.i_final_a
@@ -380,7 +343,6 @@ def create_case0_cables(I_rms_A=None, bonding=None, sheath_eddy_policy="auto"):
             U_LL_V=U_LL_V,
             I_rms_A=I_rms_A,
             bonding=bonding,
-            sheath_eddy_policy=sheath_eddy_policy,
         )
     return cables
     

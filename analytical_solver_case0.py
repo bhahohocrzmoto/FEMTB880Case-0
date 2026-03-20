@@ -94,8 +94,16 @@ def solve_case0(verbose=True):
     # equation includes only conductor and sheath losses in the denominator.
     lambda2 = 0.0
 
+    ampacity_max_iter = 100
+    ampacity_tol_I = 1e-6
+    ampacity_tol_Ts = 1e-6
     ampacity_losses = None
-    for _ in range(5):
+    I_prev = None
+    error_I = float("inf")
+    error_Ts = float("inf")
+    converged_ampacity_iterations = None
+    for iteration in range(ampacity_max_iter):
+        Ts_prev = Ts_guess
         ampacity_losses = cable.calculate_losses(Tc_max, Ts_guess)
         Rac_90 = ampacity_losses["Rac"]
         lambda1_90 = ampacity_losses["lambda1"]
@@ -119,13 +127,33 @@ def solve_case0(verbose=True):
         cable.I = I_max
         ampacity_losses = cable.calculate_losses(Tc_max, Ts_guess)
         Wc_max = ampacity_losses["core"]
-        # I iterate the screen temperature a few times so that R_ac and lambda1 are
-        # refined at the actual rated operating point instead of the initial guess.
-        Ts_guess = Tc_max - (Wc_max + 0.5 * Wd) * T1
+        # I iterate the rated operating point until both the current rating and the
+        # sheath temperature are converged in this fixed-point refinement.
+        Ts_new = Tc_max - (Wc_max + 0.5 * Wd) * T1
+
+        if I_prev is not None:
+            error_I = abs(I_max - I_prev)
+            error_Ts = abs(Ts_new - Ts_prev)
+            if error_I < ampacity_tol_I and error_Ts < ampacity_tol_Ts:
+                Ts_guess = Ts_new
+                converged_ampacity_iterations = iteration + 1
+                break
+
+        I_prev = I_max
+        Ts_guess = Ts_new
+    else:
+        raise RuntimeError(
+            "Ampacity iteration did not converge within "
+            f"{ampacity_max_iter} iterations. "
+            f"Last error_I={error_I:.3e}, error_Ts={error_Ts:.3e}"
+        )
 
     if verbose:
         print("Maximum Current Rating (I) = {0:.2f} A".format(I_max))
         print("Sheath Temp at Max Load    = {0:.3f} C".format(Ts_guess))
+        print("Ampacity iterations used   = {0}".format(converged_ampacity_iterations))
+        print("Final ampacity error_I     = {0:.3e} A".format(error_I))
+        print("Final ampacity error_Ts    = {0:.3e} C".format(error_Ts))
 
     return {
         "Tc_final_c": Tc,
@@ -142,6 +170,7 @@ def solve_case0(verbose=True):
         "I_max_a": I_max,
         "Ts_at_Imax_c": Ts_guess,
         "iterations": converged_iterations,
+        "ampacity_iterations": converged_ampacity_iterations,
     }
 
 

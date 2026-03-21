@@ -80,6 +80,15 @@ physics directly through these flags.
 - Conductor DC resistance at 20 degC is treated as a **primary benchmark input** (`r_cond_dc_20_ohm_per_m`) for IEC/TB880 traceability.
 - Material resistivity is still stored for documentation and related calculations, but benchmark DC conductor resistance is not reconstructed from `rho/A` in the default path.
 - FE area convention for `InnerIns` remains explicitly documented and unchanged.
+- The `area_mode` parameter on `calculate_losses()` controls which cross-sectional
+  areas are used for all area-dependent quantities in the IEC loss chain (Rs, beta1,
+  and the W/m to W/m3 conversion). The analytical solver uses the default
+  `area_mode="analytical"`, which routes to the IEC nominal/electrical areas stored
+  in the central data file. The FEM driver passes `area_mode="fem"`, which routes
+  to the FEM body areas read from ANSYS Mechanical at runtime. This separation allows
+  the user to cross-check that the drawn FEM geometry matches the intended analytical
+  cable dimensions. Any mismatch between analytical and FEM areas will produce
+  different loss values, making geometry errors visible and traceable.
 - ANSYS script now guards against model length-unit misuse by requiring explicit `LENGTH_UNIT` validation.
 
 ## Quick run commands

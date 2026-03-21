@@ -31,7 +31,6 @@ def solve_case0(verbose=True):
 
     cables = loss_mod.create_case0_cables(
         I_rms_A=I_load,
-        bonding=CASE.installation.bonding,
     )
     cable = cables["C02"]
 
@@ -144,8 +143,10 @@ def solve_case0(verbose=True):
     else:
         raise RuntimeError(
             "Ampacity iteration did not converge within "
-            f"{ampacity_max_iter} iterations. "
-            f"Last error_I={error_I:.3e}, error_Ts={error_Ts:.3e}"
+            "{0} iterations. "
+            "Last error_I={1:.3e}, error_Ts={2:.3e}".format(
+                ampacity_max_iter, error_I, error_Ts
+            )
         )
 
     if verbose:

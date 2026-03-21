@@ -264,6 +264,31 @@ def main():
                 "Disabling dielectric losses must produce Wd = 0"
             )
 
+        # -- ANSYS call-path guard test --
+        # I verify that the exact call pattern used by the ANSYS FEM driver
+        # in Thermal_Trefoil_Try.py works without raising a TypeError.
+        # This catches keyword-name mismatches between the driver and the
+        # loss API that would otherwise only surface at runtime in ANSYS.
+        cable_call_test = create_case0_cables(
+            I_rms_A=CASE.benchmark.i_final_a
+        )["C02"]
+        try:
+            call_test_losses = cable_call_test.calculate_losses(
+                90.0, 80.0, area_mode="fem"
+            )
+        except TypeError as call_err:
+            raise AssertionError(
+                "FEM-driver call pattern raised TypeError: {0}".format(call_err)
+            )
+        # I also verify that the result contains the expected keys so that
+        # the FEM driver's downstream access to losses["core"], losses["screen"],
+        # and losses["dielectric"] will not raise a KeyError.
+        for required_key in ["core", "screen", "dielectric", "F"]:
+            if required_key not in call_test_losses:
+                raise AssertionError(
+                    "FEM-driver call pattern missing key: {0}".format(required_key)
+                )
+
         print("TB880 Case #0 regression checks passed.")
     finally:
         CASE.assumptions.include_sheath_circulating_losses = default_circulating

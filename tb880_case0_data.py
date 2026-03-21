@@ -95,8 +95,9 @@ class Geometry(object):
         # which is distinct from the geometric circular FE area used for heat load
         # conversion in the coupled FEM model.
         self.a_cond_elec_m2 = a_cond_elec_m2
-        # I keep the metallic sheath electrical area because TB 963 p. 104 states
-        # the reused TB 880 sheath corresponds to a 170 mm2 aluminium laminate.
+        # I keep the metallic sheath electrical area computed from the TB 880
+        # thin-ring formula A_s = pi * t_s * (D_s - t_s), which gives the
+        # exact analytical benchmark area for sheath resistance calculations.
         self.a_screen_elec_m2 = a_screen_elec_m2
 
     @property
@@ -459,9 +460,14 @@ TB880_CASE_0 = TB880Case0(
         # I use the IEC nominal electrical cross-sections from the published case
         # because the benchmark electrical model is defined by nominal areas.
         a_cond_elec_m2=630e-6,
-        # TB 963 p. 104 states the reused TB 880 aluminium laminated sheath has an
-        # electrical cross-section of 170 mm2, so I store that directly here.
-        a_screen_elec_m2=170e-6,
+        # I compute the sheath electrical cross-section using the TB 880
+        # thin-ring formula A_s = pi * t_s * (D_s - t_s), where t_s is
+        # the sheath thickness and D_s is the sheath outer diameter.
+        # This gives 170.15 mm2 and matches TB 880's published Rs0 exactly,
+        # rather than using the rounded 170 mm2 nominal from TB 963 p. 104.
+        # The constants used here (68.5e-3 and 66.9e-3) are the same
+        # d_screen_out_m and d_outer_semicon_m defined above in this block.
+        a_screen_elec_m2=math.pi * 0.5 * (68.5e-3 - 66.9e-3) * (68.5e-3 - 0.5 * (68.5e-3 - 66.9e-3)),
     ),
     material=MaterialElectricalData(
         # I keep the IEC 60228 maximum conductor resistance at 20 degC as a primary

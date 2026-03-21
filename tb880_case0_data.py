@@ -323,6 +323,9 @@ class ModelAssumptions(object):
         innerins_area_convention,
         screen_fe_area_equals_electrical_area_assumed,
         touching_trefoil_spacing_assumed,
+        include_skin_effect,
+        include_proximity_effect,
+        include_dielectric_losses,
         include_sheath_circulating_losses,
         include_sheath_eddy_losses,
         include_F_factor_for_eddy_reduction,
@@ -340,6 +343,35 @@ class ModelAssumptions(object):
         # I capture the touching trefoil assumption because IEC 60287 Eq. (10) and
         # the sheath reactance expression both depend on the spacing convention.
         self.touching_trefoil_spacing_assumed = touching_trefoil_spacing_assumed
+
+        # I centralize the switch that controls whether the skin-effect
+        # factor ys from IEC 60287-1-1:2023 Eq. (5)-(8) is included in
+        # the AC resistance calculation Rac = Rdc * (1 + ys + yp).
+        # Default is True (standard IEC approach).
+        # Setting this to False forces ys = 0, so only the proximity
+        # effect and DC resistance contribute to Rac. This lets the user
+        # study the isolated impact of the skin-effect correction.
+        self.include_skin_effect = include_skin_effect
+
+        # I centralize the switch that controls whether the proximity-effect
+        # factor yp from IEC 60287-1-1:2023 Eq. (9)-(10) is included in
+        # the AC resistance calculation Rac = Rdc * (1 + ys + yp).
+        # Default is True (standard IEC approach).
+        # Setting this to False forces yp = 0, which means the mutual
+        # heating between adjacent cables does not increase the conductor
+        # AC resistance. This lets the user study the isolated impact of
+        # the proximity-effect correction.
+        self.include_proximity_effect = include_proximity_effect
+
+        # I centralize the switch that controls whether dielectric losses
+        # Wd from IEC 60287-1-1:2023 Eq. (14)-(15) are included in the
+        # loss chain. Default is True (standard IEC approach, and
+        # recommended by TB 880 Guidance Point 7 for all voltage levels).
+        # Setting this to False forces Wd = 0 in the loss output, which
+        # means no heat is generated in the insulation body. This lets
+        # the user study the effect of neglecting dielectric losses, as
+        # IEC allows for cables below certain voltage thresholds.
+        self.include_dielectric_losses = include_dielectric_losses
 
         # I centralize the switch that controls whether lambda1' contributes to the
         # assembled sheath loss factor for this benchmark workflow.
@@ -545,6 +577,9 @@ TB880_CASE_0 = TB880Case0(
         innerins_area_convention="conductor_od_to_insulation_od",
         screen_fe_area_equals_electrical_area_assumed=True,
         touching_trefoil_spacing_assumed=True,
+        include_skin_effect=True,
+        include_proximity_effect=True,
+        include_dielectric_losses=True,
         include_sheath_circulating_losses=True,
         include_sheath_eddy_losses=False,
         include_F_factor_for_eddy_reduction=True,

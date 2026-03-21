@@ -520,9 +520,13 @@ for it in range(1, max_iter + 1):
 
     for cid in CABLE_IDS:
         cable = cables[cid]
+        # I pass area_mode="fem" so that the sheath resistance Rs and all
+        # other area-dependent quantities use the FEM body areas read from
+        # ANSYS, matching the initial seed convention at script startup.
         losses = cable.calculate_losses(
-            theta_core=T_avg_core[cid],
-            theta_screen=T_avg_screen[cid]
+            T_avg_core[cid],
+            T_avg_screen[cid],
+            area_mode="fem"
         )
         try:
             set_internal_heat_generation(hg_map[(cid, "Core")], losses["core"] / cable._get_area("conductor", "fem"))

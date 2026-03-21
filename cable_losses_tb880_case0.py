@@ -95,6 +95,13 @@ class Cable(object):
         else:
             ys = 0.354 * xs - 0.733
 
+        # I check the central skin-effect flag. If the user has disabled
+        # the skin-effect correction, I force ys = 0 so that only the
+        # proximity-effect term (if enabled) modifies the AC resistance.
+        # Reference: IEC 60287-1-1:2023 Eq. (5)-(8) for ys calculation.
+        if not CASE.assumptions.include_skin_effect:
+            ys = 0.0
+
         # I evaluate x_p^2 from IEC 60287-1-1 Eq. (9), then form g with the same
         # rational expression used in Eq. (10) for the proximity-effect calculation.
         xp2 = (8.0 * math.pi * self.f * 1e-7 * self.kp) / Rdc
@@ -107,6 +114,13 @@ class Cable(object):
         # I apply IEC 60287-1-1 Eq. (10) for three single-core cables in trefoil,
         # which adds the proximity term y_p to the AC resistance formulation.
         yp = g * r * (0.312 * r + 1.18 / (g + 0.27))
+
+        # I check the central proximity-effect flag. If the user has
+        # disabled the proximity correction, I force yp = 0 so that only
+        # the skin-effect term (if enabled) modifies the AC resistance.
+        # Reference: IEC 60287-1-1:2023 Eq. (9)-(10) for yp calculation.
+        if not CASE.assumptions.include_proximity_effect:
+            yp = 0.0
 
         # I complete IEC 60287-1-1 Eq. (2) by multiplying R_dc(theta) by the sum of
         # the skin and proximity correction factors.
@@ -178,8 +192,10 @@ class Cable(object):
         return 2.0 * omega * 1e-7 * math.log((2.0 * s) / d)
 
     def _lambda1_prime(self, Rs, Rac, X):
-        # I apply IEC 60287-1-1 Section 2.3.1 for the solid-bonded circulating
-        # sheath loss factor lambda1' in touching trefoil.
+        # I apply IEC 60287-1-1 Section 2.3.1 for the circulating-current
+        # sheath loss factor lambda1_prime in touching trefoil. This term
+        # is included in the assembled lambda1 when the central flag
+        # include_sheath_circulating_losses is True.
         return (Rs / Rac) * (1.0 / (1.0 + (Rs / X) ** 2))
 
     def _beta1(self, Rs, area_mode="analytical"):
@@ -205,7 +221,7 @@ class Cable(object):
         t_s_mm = 0.5 * (self.d_screen_out - self.d_outer_semicon) * 1000.0
         return (beta1 * t_s_mm) ** 4 / (12.0 * 1e12)
 
-    def _lambda1_doubleprime(self, Rs, Rac, apply_F=False):
+    def _lambda1_doubleprime(self, Rs, Rac, apply_F=False, area_mode="analytical"):
         # I implement IEC 60287-1-1:2023 Sec 5.3.7.1 for sheath eddy-current
         # losses. The parameter m = omega * 1e-7 / R_s quantifies the sheath
         # penetration depth relative to its thickness. lambda_0 is the base
@@ -232,9 +248,9 @@ class Cable(object):
         # formations, namely centre cable, outer leading, and outer lagging.
         delta2 = 0.0
 
-        # IEC 60287-1-1:2023 Sec 5.3.7.1 defines beta_1 from the sheath
-        # resistivity and angular frequency.
-        beta1 = self._beta1(Rs)
+        # I pass the active area_mode so that beta1 recovers the sheath
+        # resistivity using the same screen area convention as Rs.
+        beta1 = self._beta1(Rs, area_mode=area_mode)
 
         # IEC 60287-1-1:2023 Sec 5.3.7.1 defines C_gs from beta_1, sheath
         # thickness t_s, and sheath outer diameter D_s.
@@ -307,6 +323,17 @@ class Cable(object):
         # I evaluate dielectric loss independently from current because IEC 60287-1-1
         # Eq. (14) depends on voltage, capacitance, and tan(delta), not on load current.
         Wd = self.dielectric_loss_W_per_m()
+
+        # I check the central dielectric-loss flag. If the user has
+        # disabled dielectric losses, I force Wd = 0 so that no heat
+        # is generated in the insulation body. This corresponds to the
+        # IEC simplified approach that neglects dielectric losses below
+        # certain voltage thresholds.
+        # Reference: IEC 60287-1-1:2023 Eq. (14)-(15) for Wd.
+        # Reference: TB 880 Guidance Point 7 recommends always including Wd.
+        if not CASE.assumptions.include_dielectric_losses:
+            Wd = 0.0
+
         Wc = self.I**2 * Rac
 
         # I compute sheath losses through lambda1_prime and lambda1_doubleprime
@@ -337,7 +364,9 @@ class Cable(object):
             and CASE.assumptions.include_sheath_eddy_losses
             and CASE.assumptions.include_F_factor_for_eddy_reduction
         )
-        eddy_terms = self._lambda1_doubleprime(Rs, Rac, apply_F=apply_F)
+        eddy_terms = self._lambda1_doubleprime(
+            Rs, Rac, apply_F=apply_F, area_mode=area_mode
+        )
         lambda1_doubleprime = eddy_terms["lambda1_doubleprime"]
 
         # I assemble lambda1 only from the centralized CASE flags so that

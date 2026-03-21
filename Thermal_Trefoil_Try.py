@@ -84,10 +84,10 @@ PARTS_WITH_HEAT = ["Core", "InnerIns", "Screen"]
 # variables required by the IEC loss model in the next Picard iteration.
 TEMP_REFERENCE_PARTS = ["Core", "Screen"]
 
-# I use the maximum body temperature readback as a conservative modelling choice.
+# I use the average body temperature readback to avoid reading hotspots.
 # This affects both the Picard convergence check and the temperature values sent
 # into the IEC loss update.
-TEMP_READ_MODE = "maximum"   # "average", "maximum", "minimum"
+TEMP_READ_MODE = "average"   # "average", "maximum", "minimum"
 
 T_guess_C = CASE.installation.ambient_temp_c
 max_iter = 20

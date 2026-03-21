@@ -27,6 +27,7 @@ def assert_close(name, value, ref, rel_tol=0.01, abs_tol=1e-9):
 def main():
     default_circulating = CASE.assumptions.include_sheath_circulating_losses
     default_eddy = CASE.assumptions.include_sheath_eddy_losses
+    default_F = CASE.assumptions.include_F_factor_for_eddy_reduction
 
     try:
         default_result = solve_case0(verbose=False)
@@ -84,9 +85,14 @@ def main():
 
         # I verify the IEC 60287-1-1:2023 Sec 5.3.7.1 eddy intermediates against the
         # TB 880 p. 79 benchmark values at the published 90/80 degC operating point.
+        # I test the eddy-only scenario, which is physically equivalent to
+        # single-point bonding or balanced cross-bonding, by setting circulating
+        # losses off and eddy losses on. With circulating off, the F factor is
+        # automatically not applied regardless of the dedicated F flag because
+        # F only acts when both loss mechanisms coexist.
         CASE.assumptions.include_sheath_circulating_losses = False
         CASE.assumptions.include_sheath_eddy_losses = True
-        cable_eddy = create_case0_cables(I_rms_A=CASE.benchmark.i_final_a, bonding="single")["C02"]
+        cable_eddy = create_case0_cables(I_rms_A=CASE.benchmark.i_final_a)["C02"]
         eddy_terms = cable_eddy.calculate_losses(
             CASE.benchmark.theta_core_final_c,
             80.0,
@@ -99,6 +105,14 @@ def main():
         assert_close("lambda1_doubleprime_single", eddy_terms["lambda1_doubleprime"], 0.07696, rel_tol=0.02)
         if eddy_terms["thickness_term"] <= 0.0:
             raise AssertionError("IEC thickness term should now be computed and positive")
+        # I verify that F = 1.0, meaning the correction is not applied, because
+        # there are no circulating currents in this eddy-only scenario.
+        if eddy_terms["F"] != 1.0:
+            raise AssertionError(
+                "Eddy-only mode must not apply F factor, but F={0}".format(
+                    eddy_terms["F"]
+                )
+            )
 
         # I also check the optional comparison mode, where the central flags include
         # both circulating and eddy losses and therefore reduce the current rating.
@@ -116,6 +130,51 @@ def main():
             raise AssertionError("Combined sheath mode expected lambda1 = lambda1_prime + lambda1_doubleprime")
         if not (eddy_result["I_max_a"] < default_result["I_max_a"]):
             raise AssertionError("Combined sheath mode should produce lower current rating")
+        # I verify that F < 1.0 when both circulating and eddy losses are active,
+        # confirming that the IEC 60287-1-1 Section 2.3.5 correction is applied
+        # to reduce eddy losses in the presence of circulating currents.
+        cable_combined_check = create_case0_cables(
+            I_rms_A=CASE.benchmark.i_final_a
+        )["C02"]
+        combined_check_losses = cable_combined_check.calculate_losses(
+            CASE.benchmark.theta_core_final_c,
+            80.0,
+        )
+        if combined_check_losses["F"] >= 1.0:
+            raise AssertionError(
+                "Combined circ+eddy mode must apply F < 1.0, but F={0}".format(
+                    combined_check_losses["F"]
+                )
+            )
+
+        # I verify that setting include_F_factor_for_eddy_reduction = False
+        # causes F to not be applied even when both circulating and eddy
+        # losses are active. This lets the user study the impact of omitting
+        # the F correction from the simplified non-Milliken approach.
+        CASE.assumptions.include_F_factor_for_eddy_reduction = False
+        cable_no_F = create_case0_cables(
+            I_rms_A=CASE.benchmark.i_final_a
+        )["C02"]
+        losses_no_F = cable_no_F.calculate_losses(
+            CASE.benchmark.theta_core_final_c,
+            80.0,
+        )
+        if losses_no_F["F"] != 1.0:
+            raise AssertionError(
+                "F flag False must produce F=1.0, but F={0}".format(
+                    losses_no_F["F"]
+                )
+            )
+        # I also check that lambda1'' without F is larger than with F,
+        # confirming the F factor reduces eddy losses as expected.
+        if not (
+            losses_no_F["lambda1_doubleprime"]
+            > combined_check_losses["lambda1_doubleprime"]
+        ):
+            raise AssertionError(
+                "lambda1'' without F must be larger than with F"
+            )
+        CASE.assumptions.include_F_factor_for_eddy_reduction = default_F
 
         # I verify the direct loss API too, so the reusable loss library stays
         # aligned with the central flag model when both sheath terms are disabled.
@@ -144,6 +203,7 @@ def main():
     finally:
         CASE.assumptions.include_sheath_circulating_losses = default_circulating
         CASE.assumptions.include_sheath_eddy_losses = default_eddy
+        CASE.assumptions.include_F_factor_for_eddy_reduction = default_F
 
 
 

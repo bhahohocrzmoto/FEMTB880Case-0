@@ -5,14 +5,16 @@ Python scripts for **CIGRE TB 880 Case #0** (132 kV single-core XLPE, touching t
 ## Default benchmark interpretation (repository default)
 
 This repository defaults to the **TB 880 Case #0-1 benchmark-faithful IEC base case**.
-Sheath-loss inclusion is now controlled centrally in `tb880_case0_data.py` by two
+Sheath-loss inclusion is controlled centrally in `tb880_case0_data.py` by three
 boolean flags on `CASE.assumptions`:
 
-- `include_sheath_circulating_losses = True`
-- `include_sheath_eddy_losses = False`
+- `include_sheath_circulating_losses = True` (`lambda1_prime`, IEC 60287-1-1 Sec 2.3.1)
+- `include_sheath_eddy_losses = False` (`lambda1_doubleprime`, IEC 60287-1-1 Sec 5.3.7.1)
+- `include_F_factor_for_eddy_reduction = True` (F factor, IEC 60287-1-1 Sec 2.3.5 / TB 880 GP 31)
 
 The default benchmark therefore keeps circulating sheath losses included while
-excluding eddy-current sheath losses.
+excluding eddy-current sheath losses. The F factor flag defaults to True but has
+no effect unless both circulating and eddy losses are enabled simultaneously.
 
 Stored benchmark targets remain:
 
@@ -22,7 +24,15 @@ Stored benchmark targets remain:
 - `theta_core_final = 90.0 C`
 - `theta_screen_final = 78.7130 C`
 
-To study alternate sheath-loss combinations, update those two central flags before running the analytical or FEM workflows.
+To model different scenarios, set the flags as follows:
+
+| Scenario                        | circ  | eddy  | F flag |
+|---------------------------------|-------|-------|--------|
+| IEC simplified solid-bonded     | True  | False | True   |
+| TB 880 recommended solid-bonded | True  | True  | True   |
+| Single-point / cross-bonded     | False | True  | True   |
+| Study: omit F correction        | True  | True  | False  |
+| No sheath losses                | False | False | True   |
 
 ## Current repository layout (top-level files)
 
@@ -52,7 +62,7 @@ To study alternate sheath-loss combinations, update those two central flags befo
 
 ## Technical notes
 
-- Conductor DC resistance at 20°C is treated as a **primary benchmark input** (`r_cond_dc_20_ohm_per_m`) for IEC/TB880 traceability.
+- Conductor DC resistance at 20 degC is treated as a **primary benchmark input** (`r_cond_dc_20_ohm_per_m`) for IEC/TB880 traceability.
 - Material resistivity is still stored for documentation and related calculations, but benchmark DC conductor resistance is not reconstructed from `rho/A` in the default path.
 - FE area convention for `InnerIns` remains explicitly documented and unchanged.
 - ANSYS script now guards against model length-unit misuse by requiring explicit `LENGTH_UNIT` validation.

@@ -206,17 +206,12 @@ class Installation(object):
         ambient_temp_c,
         burial_depth_to_trefoil_center_m,
         soil_thermal_resistivity_k_m_per_w,
-        bonding,
     ):
         self.frequency_hz = frequency_hz
         self.u_ll_v = u_ll_v
         self.ambient_temp_c = ambient_temp_c
         self.burial_depth_to_trefoil_center_m = burial_depth_to_trefoil_center_m
         self.soil_thermal_resistivity_k_m_per_w = soil_thermal_resistivity_k_m_per_w
-        # I store the bonding mode explicitly because solid means both sheath ends
-        # are bonded, which activates circulating current losses lambda1' per IEC
-        # 60287-1-1:2023 Section 2.3.1 for single-core trefoil cables.
-        self.bonding = bonding
 
     @property
     def u0_v(self):
@@ -330,6 +325,7 @@ class ModelAssumptions(object):
         touching_trefoil_spacing_assumed,
         include_sheath_circulating_losses,
         include_sheath_eddy_losses,
+        include_F_factor_for_eddy_reduction,
     ):
         # I record that the InnerIns FE body is treated as one annulus from the
         # conductor OD to the insulation OD because that area is used to convert
@@ -352,6 +348,26 @@ class ModelAssumptions(object):
         # I centralize the switch that controls whether lambda1'' contributes to the
         # assembled sheath loss factor for this benchmark workflow.
         self.include_sheath_eddy_losses = include_sheath_eddy_losses
+
+        # I centralize the switch that controls whether the F factor from
+        # IEC 60287-1-1:2023 Section 2.3.5 is applied to reduce lambda1''
+        # when circulating currents are also present. TB 880 Guidance Point 31
+        # recommends applying F for all conductor designs, not only Milliken.
+        # The physical reason is that circulating sheath currents suppress
+        # the magnetic field that drives eddy currents.
+        #
+        # I default this to True because TB 880 Guidance Point 31 recommends
+        # the correction for the general case.
+        #
+        # Setting this to False lets the user study the effect of omitting
+        # the F factor, which corresponds to the IEC simplified approach for
+        # non-Milliken conductors.
+        #
+        # NOTE: I only get a physical effect from this flag when BOTH
+        # include_sheath_circulating_losses and include_sheath_eddy_losses
+        # are True. If either loss mechanism is disabled, the assembled
+        # lambda1 path will not use the F correction.
+        self.include_F_factor_for_eddy_reduction = include_F_factor_for_eddy_reduction
 
 
 # ----------------------------------------------------------------------
@@ -449,9 +465,6 @@ TB880_CASE_0 = TB880Case0(
         ambient_temp_c=20.0,
         burial_depth_to_trefoil_center_m=1.0,
         soil_thermal_resistivity_k_m_per_w=1.0,
-        # I use solid bonding here, meaning both sheath ends are bonded and the IEC
-        # 60287-1-1 Section 2.3.1 circulating-current term lambda1' is active.
-        bonding="solid",
     ),
     benchmark=Benchmark(
         # TB 880 pp. 70-71 publish the temperature-independent thermal resistances.
@@ -534,6 +547,7 @@ TB880_CASE_0 = TB880Case0(
         touching_trefoil_spacing_assumed=True,
         include_sheath_circulating_losses=True,
         include_sheath_eddy_losses=False,
+        include_F_factor_for_eddy_reduction=True,
     ),
 )
 

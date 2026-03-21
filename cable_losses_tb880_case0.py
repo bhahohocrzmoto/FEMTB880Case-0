@@ -21,16 +21,6 @@ import math
 from tb880_case0_data import CASE
 
 
-def normalize_bonding_mode(bonding):
-    """Normalize bonding mode to: solid, single, cross (legacy alias: both->solid)."""
-    mode = str(bonding).strip().lower()
-    legacy = {"both": "solid"}
-    normalized = legacy.get(mode, mode)
-    if normalized not in ("solid", "single", "cross"):
-        raise ValueError("Unsupported bonding mode '{0}'. Use: solid, single, cross".format(bonding))
-    return normalized
-
-
 
 class Cable(object):
     def __init__(self, cid,
@@ -40,8 +30,7 @@ class Cable(object):
                  rho_cond_20, alpha_cond, ks, kp,
                  rho_screen_20, alpha_screen,
                  eps_r, tan_delta,
-                 f_hz, U_LL_V, I_rms_A,
-                 bonding="solid"):
+                 f_hz, U_LL_V, I_rms_A):
         self.cid = cid
         self.I = float(I_rms_A)
         self.f = float(f_hz)
@@ -80,8 +69,6 @@ class Cable(object):
         self.Rdc = None
         self.Rs = None
         self.lambda1 = None
-
-        self.bonding = normalize_bonding_mode(bonding)
 
     def _resistance_ratio(self, alpha, T_C):
         # I apply IEC 60287-1-1:2023 Eq. (1) in ratio form so that the same linear
@@ -218,46 +205,71 @@ class Cable(object):
         t_s_mm = 0.5 * (self.d_screen_out - self.d_outer_semicon) * 1000.0
         return (beta1 * t_s_mm) ** 4 / (12.0 * 1e12)
 
-    def _lambda1_doubleprime(self, Rs, Rac, area_mode="analytical"):
-        # I implement IEC 60287-1-1:2023 Sec 5.3.7.1 for sheath eddy-current losses,
-        # where m = omega * 1e-7 / R_s, lambda_0 is the base trefoil coupling term,
-        # and beta_1/C_gs/thickness use the metallic sheath geometry.
+    def _lambda1_doubleprime(self, Rs, Rac, apply_F=False):
+        # I implement IEC 60287-1-1:2023 Sec 5.3.7.1 for sheath eddy-current
+        # losses. The parameter m = omega * 1e-7 / R_s quantifies the sheath
+        # penetration depth relative to its thickness. lambda_0 is the base
+        # trefoil coupling term, and beta_1 / C_gs / thickness use the
+        # metallic sheath geometry from the stored cable diameters.
         omega = 2.0 * math.pi * self.f
         m = omega * 1e-7 / Rs
 
         d = self.d_screen_mean
         s = self.d_oversheath
 
-        # I use lambda_0 = 3 * [m^2 / (1 + m^2)] * (d / (2s))^2 from IEC 60287-1-1
-        # Sec 5.3.7.1 as the base eddy-current coupling term for trefoil cables.
+        # I use lambda_0 = 3 * [m^2 / (1 + m^2)] * (d / (2s))^2 from
+        # IEC 60287-1-1:2023 Sec 5.3.7.1 as the base eddy-current coupling
+        # term for three single-core cables in trefoil formation.
+        # The coefficient 3 is C_C0 for trefoil in IEC 60287-1-1 Sec 5.3.7.1.
         lambda0 = 3.0 * (m**2 / (1.0 + m**2)) * (d / (2.0 * s)) ** 2
-        # I keep delta_1 exactly as already implemented because IEC 60287-1-1:2023
-        # Sec 5.3.7.1 applies this correction to the trefoil eddy-current branch.
+
+        # I evaluate Delta_1 from IEC 60287-1-1:2023 Sec 5.3.7.1 as the
+        # first correction to the base eddy-current coupling term.
         delta1 = (1.14 * m**2.45 + 0.33) * (d / (2.0 * s)) ** (0.92 * m + 1.66)
-        # IEC 60287-1-1:2023 Sec 5.3.7.1: Delta_2 = 0 for three single-core cables
-        # in trefoil formation. Non-zero Delta_2 applies only to flat formations
-        # (centre cable, outer leading, outer lagging; see Sec 5.3.7.1 items 2a/2b/2c).
+
+        # IEC 60287-1-1:2023 Sec 5.3.7.1: Delta_2 = 0 for three single-core
+        # cables in trefoil formation. Non-zero Delta_2 applies only to flat
+        # formations, namely centre cable, outer leading, and outer lagging.
         delta2 = 0.0
-        # IEC 60287-1-1:2023 Sec 5.3.7.1 defines C_gs from beta_1, sheath thickness
-        # t_s = 0.5 * (D_s,out - d_outer_semicon), and sheath outer diameter D_s,out.
-        beta1 = self._beta1(Rs, area_mode=area_mode)
+
+        # IEC 60287-1-1:2023 Sec 5.3.7.1 defines beta_1 from the sheath
+        # resistivity and angular frequency.
+        beta1 = self._beta1(Rs)
+
+        # IEC 60287-1-1:2023 Sec 5.3.7.1 defines C_gs from beta_1, sheath
+        # thickness t_s, and sheath outer diameter D_s.
         gs = self._gs_factor(beta1)
-        # IEC 60287-1-1:2023 Sec 5.3.7.1 adds (beta_1 * t_s)^4 / (12 * 1e12), using
-        # the metallic sheath thickness t_s in mm recovered from the stored diameters.
+
+        # IEC 60287-1-1:2023 Sec 5.3.7.1 adds (beta_1 * t_s)^4 / (12 * 1e12)
+        # using the metallic sheath thickness t_s in mm.
         thickness_term = self._eddy_thickness_term(beta1)
 
+        # I assemble the base eddy-current loss factor before the F correction.
         lambda1pp = (Rs / Rac) * (gs * lambda0 * (1.0 + delta1 + delta2) + thickness_term)
 
-        if self.bonding == "solid":
+        # I apply the F factor from IEC 60287-1-1:2023 Section 2.3.5 when the
+        # caller requests it. TB 880 Guidance Point 31 extends F to all
+        # conductor designs, not only Milliken. The physical reason is that
+        # circulating sheath currents reduce the magnetic field that drives
+        # eddy currents, so lambda1'' is smaller when both loss mechanisms
+        # coexist. F is always between 0 and 1.
+        #
+        # The caller derives apply_F from three central flags:
+        # include_sheath_circulating_losses,
+        # include_sheath_eddy_losses, and
+        # include_F_factor_for_eddy_reduction.
+        # If any of these is False, apply_F will be False.
+        F = 1.0
+        if apply_F:
             X = self.sheath_reactance_X()
-            # For solid bonding, IEC 60287-1-1 applies the reduction factor F based
-            # on M = R_s / X so that eddy losses are adjusted for the bonding circuit.
+            # I use M = R_s / X for trefoil formation because M = N in trefoil.
             M = Rs / X
             F = (4.0 * M**4 + (2.0 * M)**2) / (4.0 * (M**2 + 1.0)**2)
-            lambda1pp *= F
+            lambda1pp = lambda1pp * F
 
         return {
             "lambda1_doubleprime": lambda1pp,
+            "F": F,
             "beta1": beta1,
             "gs": gs,
             "lambda0": lambda0,
@@ -297,20 +309,45 @@ class Cable(object):
         Wd = self.dielectric_loss_W_per_m()
         Wc = self.I**2 * Rac
 
-        # I next compute sheath losses through lambda1' and lambda1'' because IEC
-        # 60287-1-1 defines W_s = lambda1 * W_c for the metallic sheath.
+        # I compute sheath losses through lambda1_prime and lambda1_doubleprime
+        # because IEC 60287-1-1 defines W_s = lambda1 * W_c for the metallic
+        # sheath, where lambda1 is assembled from circulating and eddy terms.
         X = self.sheath_reactance_X()
         lambda1_prime = self._lambda1_prime(Rs, Rac, X)
-        eddy_terms = self._lambda1_doubleprime(Rs, Rac, area_mode=area_mode)
+
+        # I derive the apply_F decision from three central flags on CASE.assumptions:
+        #
+        # 1) include_sheath_circulating_losses must be True because F represents
+        #    the physical suppression of eddy currents by circulating currents.
+        #    If circulating losses are off, there is nothing to suppress eddies.
+        #
+        # 2) include_sheath_eddy_losses must be True because F modifies lambda1''
+        #    and lambda1'' is only relevant if eddy losses are included.
+        #
+        # 3) include_F_factor_for_eddy_reduction must be True because the user
+        #    may want to deliberately omit F to study its effect on the rating.
+        #    This corresponds to the IEC simplified approach for non-Milliken
+        #    conductors, where eddy losses are either neglected entirely or
+        #    computed without the F reduction.
+        #
+        # Reference: IEC 60287-1-1:2023 Section 2.3.5 for the F factor formula.
+        # Reference: TB 880 Guidance Point 31 for extending F to all conductor types.
+        apply_F = (
+            CASE.assumptions.include_sheath_circulating_losses
+            and CASE.assumptions.include_sheath_eddy_losses
+            and CASE.assumptions.include_F_factor_for_eddy_reduction
+        )
+        eddy_terms = self._lambda1_doubleprime(Rs, Rac, apply_F=apply_F)
         lambda1_doubleprime = eddy_terms["lambda1_doubleprime"]
 
-        # I assemble lambda1 only from the centralized CASE flags so that sheath
-        # circulating and eddy losses can be included independently of bonding.
+        # I assemble lambda1 only from the centralized CASE flags so that
+        # sheath circulating and eddy losses can be toggled independently
+        # for parametric studies of simplification effects.
         lambda1 = 0.0
         if CASE.assumptions.include_sheath_circulating_losses:
-            lambda1 += lambda1_prime
+            lambda1 = lambda1 + lambda1_prime
         if CASE.assumptions.include_sheath_eddy_losses:
-            lambda1 += lambda1_doubleprime
+            lambda1 = lambda1 + lambda1_doubleprime
 
         Ws = lambda1 * Wc
 
@@ -337,6 +374,7 @@ class Cable(object):
             "delta1": eddy_terms["delta1"],
             "delta2": eddy_terms["delta2"],
             "thickness_term": eddy_terms["thickness_term"],
+            "F": eddy_terms["F"],
             "Rac": Rac,
             "Rdc": Rdc,
             "Rs": Rs,
@@ -361,13 +399,10 @@ class Cable(object):
         return losses["dielectric"] / self._get_area("innerins", area_mode)
 
 
-def create_case0_cables(I_rms_A=None, bonding=None):
+def create_case0_cables(I_rms_A=None):
     """Return three symmetric trefoil Cable objects built from the centralized CASE data."""
     if I_rms_A is None:
         I_rms_A = CASE.benchmark.i_final_a
-    if bonding is None:
-        bonding = CASE.installation.bonding
-    bonding = normalize_bonding_mode(bonding)
 
     d_core = CASE.geometry.d_cond_m
     d_inner_semicon = CASE.geometry.d_inner_semicon_m
@@ -428,8 +463,5 @@ def create_case0_cables(I_rms_A=None, bonding=None):
             f_hz=f_hz,
             U_LL_V=U_LL_V,
             I_rms_A=I_rms_A,
-            bonding=bonding,
         )
     return cables
-    
-cables = create_case0_cables()

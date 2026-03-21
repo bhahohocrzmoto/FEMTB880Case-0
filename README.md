@@ -5,16 +5,27 @@ Python scripts for **CIGRE TB 880 Case #0** (132 kV single-core XLPE, touching t
 ## Default benchmark interpretation (repository default)
 
 This repository defaults to the **TB 880 Case #0-1 benchmark-faithful IEC base case**.
-Sheath-loss inclusion is controlled centrally in `tb880_case0_data.py` by three
-boolean flags on `CASE.assumptions`:
+Physics simplification flags are controlled centrally in `tb880_case0_data.py`
+via boolean flags on `CASE.assumptions`:
 
-- `include_sheath_circulating_losses = True` (`lambda1_prime`, IEC 60287-1-1 Sec 2.3.1)
-- `include_sheath_eddy_losses = False` (`lambda1_doubleprime`, IEC 60287-1-1 Sec 5.3.7.1)
+**Conductor loss flags:**
+- `include_skin_effect = True` (ys factor, IEC 60287-1-1 Eq. 5-8)
+- `include_proximity_effect = True` (yp factor, IEC 60287-1-1 Eq. 9-10)
+
+**Dielectric loss flag:**
+- `include_dielectric_losses = True` (Wd, IEC 60287-1-1 Eq. 14-15 / TB 880 GP 7)
+
+**Sheath loss flags:**
+- `include_sheath_circulating_losses = True` (lambda1_prime, IEC 60287-1-1 Sec 2.3.1)
+- `include_sheath_eddy_losses = False` (lambda1_doubleprime, IEC 60287-1-1 Sec 5.3.7.1)
 - `include_F_factor_for_eddy_reduction = True` (F factor, IEC 60287-1-1 Sec 2.3.5 / TB 880 GP 31)
 
-The default benchmark therefore keeps circulating sheath losses included while
-excluding eddy-current sheath losses. The F factor flag defaults to True but has
-no effect unless both circulating and eddy losses are enabled simultaneously.
+All flags default to True except `include_sheath_eddy_losses` which defaults
+to False to match the IEC simplified benchmark (TB 880 Case 0-1).
+
+Each flag independently controls one physics simplification in the IEC 60287
+loss chain. There is no separate sheath-mode parameter. The user selects the
+desired loss assembly directly through these flags.
 
 Stored benchmark targets remain:
 
@@ -24,15 +35,19 @@ Stored benchmark targets remain:
 - `theta_core_final = 90.0 C`
 - `theta_screen_final = 78.7130 C`
 
-To model different scenarios, set the flags as follows:
+To model different sheath loss scenarios, set the flags as follows:
 
-| Scenario                        | circ  | eddy  | F flag |
-|---------------------------------|-------|-------|--------|
-| IEC simplified solid-bonded     | True  | False | True   |
-| TB 880 recommended solid-bonded | True  | True  | True   |
-| Single-point / cross-bonded     | False | True  | True   |
-| Study: omit F correction        | True  | True  | False  |
-| No sheath losses                | False | False | True   |
+| Scenario                                    | circ  | eddy  | F flag |
+|---------------------------------------------|-------|-------|--------|
+| IEC simplified (circulating only, no eddy)  | True  | False | True   |
+| TB 880 recommended (both, with F reduction) | True  | True  | True   |
+| Eddy-only (no circulating currents)         | False | True  | True   |
+| Study: omit F correction                    | True  | True  | False  |
+| No sheath losses                            | False | False | True   |
+
+The flags fully control which sheath loss terms are assembled into lambda1.
+There is no separate sheath-mode parameter. The user selects the desired
+physics directly through these flags.
 
 ## Current repository layout (top-level files)
 

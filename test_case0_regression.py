@@ -28,6 +28,9 @@ def main():
     default_circulating = CASE.assumptions.include_sheath_circulating_losses
     default_eddy = CASE.assumptions.include_sheath_eddy_losses
     default_F = CASE.assumptions.include_F_factor_for_eddy_reduction
+    default_skin = CASE.assumptions.include_skin_effect
+    default_prox = CASE.assumptions.include_proximity_effect
+    default_diel = CASE.assumptions.include_dielectric_losses
 
     try:
         default_result = solve_case0(verbose=False)
@@ -57,8 +60,8 @@ def main():
         # I check the final conductor loss against TB 880 pp. 74-76 to preserve the
         # published Joule heating reference value.
         assert_close("Wc_w_per_m", default_result["Wc_w_per_m"], CASE.benchmark.wc_final_w_per_m, rel_tol=0.01)
-        # I check the final sheath loss against TB 880 pp. 74-76 because the solid-
-        # bonded circulating-current result is the most sensitive benchmark output.
+        # I check the final sheath loss against TB 880 pp. 74-76 because the
+        # circulating-current result is the most sensitive benchmark output.
         assert_close("Ws_w_per_m", default_result["Ws_w_per_m"], CASE.benchmark.ws_final_w_per_m, rel_tol=0.03)
         # I check the dielectric loss against TB 880 pp. 71-72, where W_d is published
         # independently of the temperature iteration. After fixing the dielectric
@@ -85,11 +88,12 @@ def main():
 
         # I verify the IEC 60287-1-1:2023 Sec 5.3.7.1 eddy intermediates against the
         # TB 880 p. 79 benchmark values at the published 90/80 degC operating point.
-        # I test the eddy-only scenario, which is physically equivalent to
-        # single-point bonding or balanced cross-bonding, by setting circulating
-        # losses off and eddy losses on. With circulating off, the F factor is
-        # automatically not applied regardless of the dedicated F flag because
-        # F only acts when both loss mechanisms coexist.
+        # I test the eddy-only scenario by setting the circulating flag to
+        # False and the eddy flag to True. With the circulating flag off,
+        # the F factor is automatically not applied regardless of the
+        # dedicated F flag, because F only acts when both loss mechanisms
+        # coexist. This configuration represents a sheath loss assembly
+        # where only eddy currents contribute to lambda1.
         CASE.assumptions.include_sheath_circulating_losses = False
         CASE.assumptions.include_sheath_eddy_losses = True
         cable_eddy = create_case0_cables(I_rms_A=CASE.benchmark.i_final_a)["C02"]
@@ -190,13 +194,74 @@ def main():
         if losses_no_sheath["screen"] != 0.0:
             raise AssertionError("Both sheath flags false must produce Ws = 0")
 
+        # I verify that area_mode correctly routes area-dependent quantities
+        # through the full loss chain. I set A_screen_FE_model to a deliberately
+        # different value from A_screen_elec so that any function using the
+        # screen area will produce a different result depending on area_mode.
+        # This confirms that Rs (from Rs_at_temp) and lambda1_doubleprime (from
+        # the full eddy-current chain) both respect the area_mode flag. I also
+        # directly test _beta1 with a fixed Rs value so I can confirm that the
+        # helper itself honors area_mode when recovering sheath resistivity.
         cable_fem_test = create_case0_cables(I_rms_A=CASE.benchmark.i_final_a)["C02"]
         cable_fem_test.A_screen_FE_model = 200e-6
         losses_analytical = cable_fem_test.calculate_losses(90.0, 80.0, area_mode="analytical")
         losses_fem = cable_fem_test.calculate_losses(90.0, 80.0, area_mode="fem")
         if losses_analytical["Rs"] == losses_fem["Rs"]:
             raise AssertionError(
-                "area_mode='fem' should produce different Rs when A_screen_FE_model != A_screen_elec"
+                "area_mode='fem' must produce different Rs when "
+                "A_screen_FE_model != A_screen_elec"
+            )
+        if losses_analytical["lambda1_doubleprime"] == losses_fem["lambda1_doubleprime"]:
+            raise AssertionError(
+                "area_mode='fem' must produce different lambda1_doubleprime when "
+                "A_screen_FE_model != A_screen_elec"
+            )
+        beta1_from_fixed_rs_analytical = cable_fem_test._beta1(
+            losses_analytical["Rs"], area_mode="analytical"
+        )
+        beta1_from_fixed_rs_fem = cable_fem_test._beta1(
+            losses_analytical["Rs"], area_mode="fem"
+        )
+        if beta1_from_fixed_rs_analytical == beta1_from_fixed_rs_fem:
+            raise AssertionError(
+                "_beta1 must honor area_mode when recovering sheath resistivity"
+            )
+
+        # -- Skin-effect flag test --
+        # I verify that disabling the skin-effect flag produces a lower
+        # Rac than the default, because ys >= 0 always increases Rac.
+        CASE.assumptions.include_skin_effect = False
+        cable_no_skin = create_case0_cables(I_rms_A=CASE.benchmark.i_final_a)["C02"]
+        losses_no_skin = cable_no_skin.calculate_losses(90.0, 80.0)
+        CASE.assumptions.include_skin_effect = True
+        cable_with_skin = create_case0_cables(I_rms_A=CASE.benchmark.i_final_a)["C02"]
+        losses_with_skin = cable_with_skin.calculate_losses(90.0, 80.0)
+        if not (losses_no_skin["Rac"] < losses_with_skin["Rac"]):
+            raise AssertionError(
+                "Disabling skin effect must reduce Rac"
+            )
+
+        # -- Proximity-effect flag test --
+        # I verify that disabling the proximity-effect flag produces a lower
+        # Rac than the default, because yp >= 0 always increases Rac.
+        CASE.assumptions.include_proximity_effect = False
+        cable_no_prox = create_case0_cables(I_rms_A=CASE.benchmark.i_final_a)["C02"]
+        losses_no_prox = cable_no_prox.calculate_losses(90.0, 80.0)
+        CASE.assumptions.include_proximity_effect = True
+        if not (losses_no_prox["Rac"] < losses_with_skin["Rac"]):
+            raise AssertionError(
+                "Disabling proximity effect must reduce Rac"
+            )
+
+        # -- Dielectric-loss flag test --
+        # I verify that disabling the dielectric-loss flag produces Wd = 0.
+        CASE.assumptions.include_dielectric_losses = False
+        cable_no_diel = create_case0_cables(I_rms_A=CASE.benchmark.i_final_a)["C02"]
+        losses_no_diel = cable_no_diel.calculate_losses(90.0, 80.0)
+        CASE.assumptions.include_dielectric_losses = True
+        if losses_no_diel["dielectric"] != 0.0:
+            raise AssertionError(
+                "Disabling dielectric losses must produce Wd = 0"
             )
 
         print("TB880 Case #0 regression checks passed.")
@@ -204,6 +269,9 @@ def main():
         CASE.assumptions.include_sheath_circulating_losses = default_circulating
         CASE.assumptions.include_sheath_eddy_losses = default_eddy
         CASE.assumptions.include_F_factor_for_eddy_reduction = default_F
+        CASE.assumptions.include_skin_effect = default_skin
+        CASE.assumptions.include_proximity_effect = default_prox
+        CASE.assumptions.include_dielectric_losses = default_diel
 
 
 

@@ -120,7 +120,7 @@ class TempConvergenceMonitor(object):
                  csv_name="temp_history.csv",
                  clear_csv=True,
                  live_plot=True,
-                 window_title="Core temperature convergence"):
+                 window_title="Maximum core temperature convergence"):
         self.script_dir = script_dir
         self.cable_ids = list(cable_ids)
         self.csv_path = os.path.join(script_dir, csv_name)
@@ -129,7 +129,7 @@ class TempConvergenceMonitor(object):
 
         self._header = ["iter", "stage", "max_dT_C"]
         for cid in self.cable_ids:
-            self._header.append("Tcore_{0}_C".format(cid))
+            self._header.append("Tcore_max_{0}_C".format(cid))
 
         _ensure_dir(self.script_dir)
 
@@ -180,13 +180,13 @@ class TempConvergenceMonitor(object):
 
             area = ChartArea("Main")
             area.AxisX.Title = "Iteration"
-            area.AxisY.Title = "Core temperature [C]"
-            area.AxisY2.Title = "max_dT [C]"
+            area.AxisY.Title = "Maximum core temperature [C]"
+            area.AxisY2.Title = "max_dT on maximum core temperature [C]"
             area.AxisY2.Enabled = getattr(AxisEnabled, "True")
             self._chart.ChartAreas.Add(area)
 
             for cid in self.cable_ids:
-                s = Series("Tcore_{0}".format(cid))
+                s = Series("Tcore_max_{0}".format(cid))
                 s.ChartType = SeriesChartType.Line
                 s.ChartArea = "Main"
                 s.YAxisType = AxisType.Primary

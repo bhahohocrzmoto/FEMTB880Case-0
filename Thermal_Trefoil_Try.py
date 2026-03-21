@@ -84,10 +84,9 @@ PARTS_WITH_HEAT = ["Core", "InnerIns", "Screen"]
 # variables required by the IEC loss model in the next Picard iteration.
 TEMP_REFERENCE_PARTS = ["Core", "Screen"]
 
-# I use the average body temperature readback to avoid reading hotspots.
-# This affects both the Picard convergence check and the temperature values sent
-# into the IEC loss update.
-TEMP_READ_MODE = "average"   # "average", "maximum", "minimum"
+# CIGRE TB 963: Use average for loss updates, maximum for ampacity limits.
+TEMP_READ_MODE_LOSSES = "average"
+TEMP_READ_MODE_LIMIT = "maximum"
 
 T_guess_C = CASE.installation.ambient_temp_c
 max_iter = 20
@@ -117,6 +116,7 @@ if tmon is not None:
         csv_name="temp_history.csv",
         clear_csv=False,
         live_plot=True,
+        window_title="Maximum core temperature convergence",
     )
 
 
@@ -242,7 +242,7 @@ def _to_celsius(value_obj, result_name):
     )
 
 
-def read_temperature_celsius(temp_result, mode=TEMP_READ_MODE):
+def read_temperature_celsius(temp_result, mode=TEMP_READ_MODE_LIMIT):
     read_map = {
         "average": lambda r: r.Average,
         "maximum": lambda r: r.Maximum,
@@ -250,7 +250,7 @@ def read_temperature_celsius(temp_result, mode=TEMP_READ_MODE):
     }
     mode_key = str(mode).strip().lower()
     if mode_key not in read_map:
-        raise Exception("Unsupported TEMP_READ_MODE='{0}'. Use average, maximum, or minimum.".format(mode))
+        raise Exception("Unsupported temperature read mode='{0}'. Use average, maximum, or minimum.".format(mode))
 
     value_obj = read_map[mode_key](temp_result)
     return _to_celsius(value_obj, temp_result.Name)
@@ -479,33 +479,51 @@ def solve_and_eval():
     solution.EvaluateAllResults()
 
 
-T_prev_core = {}
+T_prev_max_core = {}
 converged = False
+T_final_avg_core = {}
+T_final_max_core = {}
+T_final_avg_screen = {}
+T_final_max_screen = {}
 
 for it in range(1, max_iter + 1):
     # I follow the TB 963 fixed-point sequence: solve the thermal FEM field, read
     # back temperatures, recompute IEC losses, update heat loads, and test convergence.
     solve_and_eval()
 
-    T_curr_core = {}
-    T_curr_screen = {}
+    T_avg_core = {}
+    T_max_core = {}
+    T_avg_screen = {}
+    T_max_screen = {}
     for cid in CABLE_IDS:
-        T_curr_core[cid] = read_temperature_celsius(t_map[(cid, "Core")])
-        T_curr_screen[cid] = read_temperature_celsius(t_map[(cid, "Screen")])
+        T_avg_core[cid] = read_temperature_celsius(
+            t_map[(cid, "Core")], mode=TEMP_READ_MODE_LOSSES
+        )
+        T_max_core[cid] = read_temperature_celsius(
+            t_map[(cid, "Core")], mode=TEMP_READ_MODE_LIMIT
+        )
+        T_avg_screen[cid] = read_temperature_celsius(
+            t_map[(cid, "Screen")], mode=TEMP_READ_MODE_LOSSES
+        )
+        T_max_screen[cid] = read_temperature_celsius(
+            t_map[(cid, "Screen")], mode=TEMP_READ_MODE_LIMIT
+        )
 
     max_dT = 0.0
-    if T_prev_core:
+    if T_prev_max_core:
         for cid in CABLE_IDS:
-            # I check convergence on the maximum absolute change in cable core
-            # temperature because TB 963 recommends monitoring the coupled state
-            # variable that drives the next IEC resistance update.
-            dT = abs(T_curr_core[cid] - T_prev_core.get(cid, T_curr_core[cid]))
+            # I check convergence on the maximum absolute change in cable maximum
+            # core temperature because that is the monitored ampacity limit state.
+            dT = abs(T_max_core[cid] - T_prev_max_core.get(cid, T_max_core[cid]))
             if dT > max_dT:
                 max_dT = dT
 
     for cid in CABLE_IDS:
         cable = cables[cid]
-        losses = cable.calculate_losses(T_curr_core[cid], T_curr_screen[cid])
+        losses = cable.calculate_losses(
+            theta_core=T_avg_core[cid],
+            theta_screen=T_avg_screen[cid]
+        )
         try:
             set_internal_heat_generation(hg_map[(cid, "Core")], losses["core"] / cable.A_cond_FE_model)
             set_internal_heat_generation(hg_map[(cid, "InnerIns")], losses["dielectric"] / cable.A_innerins_FE_model)
@@ -515,53 +533,99 @@ for it in range(1, max_iter + 1):
 
     msg = "Iter {0:02d}: ".format(it)
     for cid in CABLE_IDS:
-        msg += "{0} Tc={1:.2f} Ts={2:.2f} | ".format(cid, T_curr_core[cid], T_curr_screen[cid])
-    msg += "max_dT={0:.4f}".format(max_dT)
+        msg += (
+            "{0} Tc_avg={1:.2f} Tc_max={2:.2f} Ts_avg={3:.2f} Ts_max={4:.2f} | ".format(
+                cid, T_avg_core[cid], T_max_core[cid], T_avg_screen[cid], T_max_screen[cid]
+            )
+        )
+    msg += "max_dT(Tc_max)={0:.4f}".format(max_dT)
     print(msg)
 
     if mon is not None:
-        mon.log(it, "iter", T_curr_core, max_dT)
+        mon.log(it, "iter", T_max_core, max_dT)
 
     # I stop when the maximum core-temperature update falls below the Picard
     # tolerance, which is the practical convergence check recommended in TB 963.
-    if T_prev_core and max_dT < tol_dT:
+    if T_prev_max_core and max_dT < tol_dT:
         # I run one additional FEM solve with the converged heat loads so that the
         # reported field is fully consistent with the final IEC loss update.
         print("Converged -> running FINAL solve with updated losses...")
         solve_and_eval()
-        T_final_core = {}
-        T_final_screen = {}
         for cid in CABLE_IDS:
-            T_final_core[cid] = read_temperature_celsius(t_map[(cid, "Core")])
-            T_final_screen[cid] = read_temperature_celsius(t_map[(cid, "Screen")])
+            T_final_avg_core[cid] = read_temperature_celsius(
+                t_map[(cid, "Core")], mode=TEMP_READ_MODE_LOSSES
+            )
+            T_final_max_core[cid] = read_temperature_celsius(
+                t_map[(cid, "Core")], mode=TEMP_READ_MODE_LIMIT
+            )
+            T_final_avg_screen[cid] = read_temperature_celsius(
+                t_map[(cid, "Screen")], mode=TEMP_READ_MODE_LOSSES
+            )
+            T_final_max_screen[cid] = read_temperature_celsius(
+                t_map[(cid, "Screen")], mode=TEMP_READ_MODE_LIMIT
+            )
         msg = "Final: "
         for cid in CABLE_IDS:
-            msg += "{0} Tc={1:.4f} Ts={2:.4f} | ".format(cid, T_final_core[cid], T_final_screen[cid])
+            msg += (
+                "{0} Tc_avg={1:.4f} Tc_max={2:.4f} Ts_avg={3:.4f} Ts_max={4:.4f} | ".format(
+                    cid,
+                    T_final_avg_core[cid],
+                    T_final_max_core[cid],
+                    T_final_avg_screen[cid],
+                    T_final_max_screen[cid],
+                )
+            )
         print(msg)
         if mon is not None:
-            mon.log(it, "final", T_final_core, 0.0)
+            mon.log(it, "final", T_final_max_core, 0.0)
             mon.save_png("temp_history.png")
         converged = True
         break
 
-    T_prev_core = T_curr_core
+    T_prev_max_core = dict(T_max_core)
 
 if not converged:
     # If convergence is not reached, I still report the last updated solution but I
     # flag it clearly so the user can inspect mesh quality or the iteration settings.
     print("Reached max_iter without convergence -> running FINAL solve with last updated losses...")
     solve_and_eval()
-    T_final_core = {}
-    T_final_screen = {}
     for cid in CABLE_IDS:
-        T_final_core[cid] = read_temperature_celsius(t_map[(cid, "Core")])
-        T_final_screen[cid] = read_temperature_celsius(t_map[(cid, "Screen")])
+        T_final_avg_core[cid] = read_temperature_celsius(
+            t_map[(cid, "Core")], mode=TEMP_READ_MODE_LOSSES
+        )
+        T_final_max_core[cid] = read_temperature_celsius(
+            t_map[(cid, "Core")], mode=TEMP_READ_MODE_LIMIT
+        )
+        T_final_avg_screen[cid] = read_temperature_celsius(
+            t_map[(cid, "Screen")], mode=TEMP_READ_MODE_LOSSES
+        )
+        T_final_max_screen[cid] = read_temperature_celsius(
+            t_map[(cid, "Screen")], mode=TEMP_READ_MODE_LIMIT
+        )
     msg = "Final (Non-Converged): "
     for cid in CABLE_IDS:
-        msg += "{0} Tc={1:.4f} Ts={2:.4f} | ".format(cid, T_final_core[cid], T_final_screen[cid])
+        msg += (
+            "{0} Tc_avg={1:.4f} Tc_max={2:.4f} Ts_avg={3:.4f} Ts_max={4:.4f} | ".format(
+                cid,
+                T_final_avg_core[cid],
+                T_final_max_core[cid],
+                T_final_avg_screen[cid],
+                T_final_max_screen[cid],
+            )
+        )
     print(msg)
     if mon is not None:
-        mon.log(it, "final", T_final_core, 0.0)
+        mon.log(it, "final", T_final_max_core, 0.0)
         mon.save_png("temp_history.png")
+
+over_limit = []
+for cid in CABLE_IDS:
+    if T_final_max_core.get(cid, 0.0) > 90.0:
+        over_limit.append("{0} Tc_max={1:.2f} C".format(cid, T_final_max_core[cid]))
+
+if over_limit:
+    print("WARNING: 90 C ampacity limit exceeded based on maximum core temperature.")
+    for item in over_limit:
+        print("  {0}".format(item))
 
 print("Done.")

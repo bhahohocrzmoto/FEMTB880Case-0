@@ -131,6 +131,15 @@ def main():
         if losses_no_sheath["screen"] != 0.0:
             raise AssertionError("Both sheath flags false must produce Ws = 0")
 
+        cable_fem_test = create_case0_cables(I_rms_A=CASE.benchmark.i_final_a)["C02"]
+        cable_fem_test.A_screen_FE_model = 200e-6
+        losses_analytical = cable_fem_test.calculate_losses(90.0, 80.0, area_mode="analytical")
+        losses_fem = cable_fem_test.calculate_losses(90.0, 80.0, area_mode="fem")
+        if losses_analytical["Rs"] == losses_fem["Rs"]:
+            raise AssertionError(
+                "area_mode='fem' should produce different Rs when A_screen_FE_model != A_screen_elec"
+            )
+
         print("TB880 Case #0 regression checks passed.")
     finally:
         CASE.assumptions.include_sheath_circulating_losses = default_circulating

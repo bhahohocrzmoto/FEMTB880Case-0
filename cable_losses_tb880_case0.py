@@ -125,14 +125,59 @@ class Cable(object):
         # the skin and proximity correction factors.
         return Rdc * (1.0 + ys + yp)
 
-    def Rs_at_temp(self, T_screen_C):
-        # I compute the sheath DC resistance from material resistivity and nominal
-        # electrical area because IEC 60287-1-1 models the metallic sheath this way.
-        rho_screen = self.rho_screen_20 * self._resistance_ratio(self.alpha_screen, T_screen_C)
-        return rho_screen / self.A_screen_elec
+    def _get_area(self, region, area_mode):
+        """
+        Return the cross-sectional area for `region` based on `area_mode`.
 
-    def sheath_resistance_at_temp(self, T_screen_C):
-        return self.Rs_at_temp(T_screen_C)
+        Parameters
+        ----------
+        region : str
+            One of "conductor", "screen", "innerins".
+        area_mode : str
+            "analytical" -> use the IEC nominal/electrical areas stored in the
+            central data file (A_cond_elec, A_screen_elec). These are the areas
+            used for IEC 60287 resistance and loss-factor calculations.
+            "fem" -> use the FEM model areas (A_cond_FE_model,
+            A_screen_FE_model, A_innerins_FE_model). These are initially set from
+            geometry-derived reference values, and overwritten at runtime by the
+            ANSYS driver with actual FE body areas.
+
+        Returns
+        -------
+        float
+            Cross-sectional area in m^2.
+        """
+        if area_mode == "analytical":
+            mapping = {
+                "conductor": self.A_cond_elec,
+                "screen": self.A_screen_elec,
+                "innerins": None,
+            }
+        elif area_mode == "fem":
+            mapping = {
+                "conductor": self.A_cond_FE_model,
+                "screen": self.A_screen_FE_model,
+                "innerins": self.A_innerins_FE_model,
+            }
+        else:
+            raise ValueError(
+                "area_mode must be 'analytical' or 'fem', got '{0}'".format(area_mode)
+            )
+        area = mapping.get(region)
+        if area is None:
+            raise ValueError(
+                "No {0} area defined for region '{1}'".format(area_mode, region)
+            )
+        return area
+
+    def Rs_at_temp(self, T_screen_C, area_mode="analytical"):
+        # I compute the sheath DC resistance from material resistivity and the
+        # selected screen area so analytical and FEM workflows cannot mix modes.
+        rho_screen = self.rho_screen_20 * self._resistance_ratio(self.alpha_screen, T_screen_C)
+        return rho_screen / self._get_area("screen", area_mode)
+
+    def sheath_resistance_at_temp(self, T_screen_C, area_mode="analytical"):
+        return self.Rs_at_temp(T_screen_C, area_mode=area_mode)
 
     def sheath_reactance_X(self):
         # I use the IEC 60287-1-1 Section 2.3.1 trefoil reactance expression
@@ -150,11 +195,11 @@ class Cable(object):
         # sheath loss factor lambda1' in touching trefoil.
         return (Rs / Rac) * (1.0 / (1.0 + (Rs / X) ** 2))
 
-    def _beta1(self, Rs):
+    def _beta1(self, Rs, area_mode="analytical"):
         # IEC 60287-1-1:2023 Sec 5.3.7.1 defines beta_1 = sqrt(4 * pi * omega /
         # (rho_s * 1e7)), where rho_s is the sheath resistivity in ohm.m recovered
-        # from R_s = rho_s / A_s using the nominal electrical sheath area.
-        rho_s = Rs * self.A_screen_elec
+        # from R_s = rho_s / A_s using the selected screen area for the active mode.
+        rho_s = Rs * self._get_area("screen", area_mode)
         omega = 2.0 * math.pi * self.f
         return math.sqrt(4.0 * math.pi * omega / (rho_s * 1e7))
 
@@ -173,7 +218,7 @@ class Cable(object):
         t_s_mm = 0.5 * (self.d_screen_out - self.d_outer_semicon) * 1000.0
         return (beta1 * t_s_mm) ** 4 / (12.0 * 1e12)
 
-    def _lambda1_doubleprime(self, Rs, Rac):
+    def _lambda1_doubleprime(self, Rs, Rac, area_mode="analytical"):
         # I implement IEC 60287-1-1:2023 Sec 5.3.7.1 for sheath eddy-current losses,
         # where m = omega * 1e-7 / R_s, lambda_0 is the base trefoil coupling term,
         # and beta_1/C_gs/thickness use the metallic sheath geometry.
@@ -195,7 +240,7 @@ class Cable(object):
         delta2 = 0.0
         # IEC 60287-1-1:2023 Sec 5.3.7.1 defines C_gs from beta_1, sheath thickness
         # t_s = 0.5 * (D_s,out - d_outer_semicon), and sheath outer diameter D_s,out.
-        beta1 = self._beta1(Rs)
+        beta1 = self._beta1(Rs, area_mode=area_mode)
         gs = self._gs_factor(beta1)
         # IEC 60287-1-1:2023 Sec 5.3.7.1 adds (beta_1 * t_s)^4 / (12 * 1e12), using
         # the metallic sheath thickness t_s in mm recovered from the stored diameters.
@@ -239,13 +284,13 @@ class Cable(object):
         omega = 2.0 * math.pi * self.f
         return omega * C * U0**2 * self.tan_delta
 
-    def calculate_losses(self, T_core_C, T_screen_C):
+    def calculate_losses(self, T_core_C, T_screen_C, area_mode="analytical"):
         """Single IEC 60287 loss chain used by the analytical and FEM workflows."""
         # I begin with the conductor resistance chain R_dc -> R_ac because conductor
         # Joule loss W_c = I^2 * R_ac is the dominant source term in the benchmark.
         Rac = self.Rac_at_temp(T_core_C)
         Rdc = self.Rdc_at_temp(T_core_C)
-        Rs = self.Rs_at_temp(T_screen_C)
+        Rs = self.Rs_at_temp(T_screen_C, area_mode=area_mode)
 
         # I evaluate dielectric loss independently from current because IEC 60287-1-1
         # Eq. (14) depends on voltage, capacitance, and tan(delta), not on load current.
@@ -256,7 +301,7 @@ class Cable(object):
         # 60287-1-1 defines W_s = lambda1 * W_c for the metallic sheath.
         X = self.sheath_reactance_X()
         lambda1_prime = self._lambda1_prime(Rs, Rac, X)
-        eddy_terms = self._lambda1_doubleprime(Rs, Rac)
+        eddy_terms = self._lambda1_doubleprime(Rs, Rac, area_mode=area_mode)
         lambda1_doubleprime = eddy_terms["lambda1_doubleprime"]
 
         # I assemble lambda1 only from the centralized CASE flags so that sheath
@@ -297,23 +342,23 @@ class Cable(object):
             "Rs": Rs,
         }
 
-    def q_core(self, T_core_C, T_screen_C):
-        # I convert conductor loss from W/m to W/m^3 by dividing by the active FEM
-        # conductor area, defaulting to geometry and later overwritten by ANSYS readback.
-        losses = self.calculate_losses(T_core_C, T_screen_C)
-        return losses["core"] / self.A_cond_FE_model
+    def q_core(self, T_core_C, T_screen_C, area_mode="fem"):
+        # I convert conductor loss from W/m to W/m^3 using the selected area mode,
+        # defaulting to the ANSYS-loaded FEM body area for volumetric heating.
+        losses = self.calculate_losses(T_core_C, T_screen_C, area_mode=area_mode)
+        return losses["core"] / self._get_area("conductor", area_mode)
 
-    def q_screen(self, T_core_C, T_screen_C):
-        # I convert sheath loss from W/m to W/m^3 using the active FEM screen area so
-        # that ANSYS applies the metallic screen heating to the exact loaded body.
-        losses = self.calculate_losses(T_core_C, T_screen_C)
-        return losses["screen"] / self.A_screen_FE_model
+    def q_screen(self, T_core_C, T_screen_C, area_mode="fem"):
+        # I convert sheath loss from W/m to W/m^3 using the selected screen area so
+        # ANSYS applies heating to the exact body for the active workflow.
+        losses = self.calculate_losses(T_core_C, T_screen_C, area_mode=area_mode)
+        return losses["screen"] / self._get_area("screen", area_mode)
 
-    def q_innerins(self, T_core_C, T_screen_C):
-        # I convert dielectric loss from W/m to W/m^3 using the active FEM InnerIns
-        # area because TB 963 couples IEC losses back as volumetric heating.
-        losses = self.calculate_losses(T_core_C, T_screen_C)
-        return losses["dielectric"] / self.A_innerins_FE_model
+    def q_innerins(self, T_core_C, T_screen_C, area_mode="fem"):
+        # I convert dielectric loss from W/m to W/m^3 using the selected InnerIns
+        # area, which is only available in FEM mode for this benchmark workflow.
+        losses = self.calculate_losses(T_core_C, T_screen_C, area_mode=area_mode)
+        return losses["dielectric"] / self._get_area("innerins", area_mode)
 
 
 def create_case0_cables(I_rms_A=None, bonding=None):

@@ -466,10 +466,10 @@ for cid in CABLE_IDS:
 # and the screen, then let the Picard loop progressively correct those source terms.
 for cid in CABLE_IDS:
     cable = cables[cid]
-    losses = cable.calculate_losses(T_guess_C, T_guess_C)
-    set_internal_heat_generation(hg_map[(cid, "Core")], losses["core"] / cable.A_cond_FE_model)
-    set_internal_heat_generation(hg_map[(cid, "InnerIns")], losses["dielectric"] / cable.A_innerins_FE_model)
-    set_internal_heat_generation(hg_map[(cid, "Screen")], losses["screen"] / cable.A_screen_FE_model)
+    losses = cable.calculate_losses(T_guess_C, T_guess_C, area_mode="fem")
+    set_internal_heat_generation(hg_map[(cid, "Core")], losses["core"] / cable._get_area("conductor", "fem"))
+    set_internal_heat_generation(hg_map[(cid, "InnerIns")], losses["dielectric"] / cable._get_area("innerins", "fem"))
+    set_internal_heat_generation(hg_map[(cid, "Screen")], losses["screen"] / cable._get_area("screen", "fem"))
 
 print("Initialised loads with T_guess = {0} C (Core+Screen readback seeds).".format(T_guess_C))
 
@@ -525,9 +525,9 @@ for it in range(1, max_iter + 1):
             theta_screen=T_avg_screen[cid]
         )
         try:
-            set_internal_heat_generation(hg_map[(cid, "Core")], losses["core"] / cable.A_cond_FE_model)
-            set_internal_heat_generation(hg_map[(cid, "InnerIns")], losses["dielectric"] / cable.A_innerins_FE_model)
-            set_internal_heat_generation(hg_map[(cid, "Screen")], losses["screen"] / cable.A_screen_FE_model)
+            set_internal_heat_generation(hg_map[(cid, "Core")], losses["core"] / cable._get_area("conductor", "fem"))
+            set_internal_heat_generation(hg_map[(cid, "InnerIns")], losses["dielectric"] / cable._get_area("innerins", "fem"))
+            set_internal_heat_generation(hg_map[(cid, "Screen")], losses["screen"] / cable._get_area("screen", "fem"))
         except Exception as exc:
             raise RuntimeError("Failed applying heat generation for {0}: {1}".format(cid, exc))
 

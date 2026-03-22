@@ -238,6 +238,7 @@ class Benchmark(object):
         theta_core_final_c,
         theta_screen_final_c,
         theta_oversheath_final_c,
+        theta_core_init_c,
         theta_screen_init_c,
         r_ac_90c_ohm_per_m,
         r_screen_80c_ohm_per_m,
@@ -276,6 +277,11 @@ class Benchmark(object):
         # even though the present analytical model solves only core and sheath nodes.
         self.theta_oversheath_final_c = theta_oversheath_final_c
 
+        # According to TB 880 pp. 66-68, I use the maximum operating temperature
+        # of 90 degC as the initial conductor temperature guess to seed the
+        # iterative loss calculation. Starting close to the expected solution
+        # reduces the number of Picard iterations needed for convergence.
+        self.theta_core_init_c = theta_core_init_c
         # According to TB 880 pp. 66-68, I use the initial screen temperature guess
         # of 80 degC to start the iterative benchmark workflow.
         self.theta_screen_init_c = theta_screen_init_c
@@ -524,6 +530,8 @@ TB880_CASE_0 = TB880Case0(
         theta_screen_final_c=78.7130,
         theta_oversheath_final_c=75.68,
 
+        # TB 880 pp. 66-68 starts the iterative process with a 90 degC core guess.
+        theta_core_init_c=90.0,
         # TB 880 pp. 66-68 starts the iterative process with an 80 degC screen guess.
         theta_screen_init_c=80.0,
         # TB 880 p. 74 publishes these intermediate electrical checkpoints.

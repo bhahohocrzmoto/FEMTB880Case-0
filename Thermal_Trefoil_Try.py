@@ -88,7 +88,12 @@ TEMP_REFERENCE_PARTS = ["Core", "Screen"]
 TEMP_READ_MODE_LOSSES = "average"
 TEMP_READ_MODE_LIMIT = "maximum"
 
-T_guess_C = CASE.installation.ambient_temp_c
+# I use the TB 880 pp. 66-68 initial temperature guesses to seed the first
+# FEM loss calculation. Starting at the expected operating temperatures
+# (90 degC core, 80 degC screen) rather than ambient gives losses close
+# to the converged solution, reducing the number of Picard iterations.
+T_core_init_C = CASE.benchmark.theta_core_init_c
+T_screen_init_C = CASE.benchmark.theta_screen_init_c
 max_iter = 20
 tol_dT = 1e-3
 
@@ -466,12 +471,14 @@ for cid in CABLE_IDS:
 # and the screen, then let the Picard loop progressively correct those source terms.
 for cid in CABLE_IDS:
     cable = cables[cid]
-    losses = cable.calculate_losses(T_guess_C, T_guess_C, area_mode="fem")
+    losses = cable.calculate_losses(T_core_init_C, T_screen_init_C, area_mode="fem")
     set_internal_heat_generation(hg_map[(cid, "Core")], losses["core"] / cable._get_area("conductor", "fem"))
     set_internal_heat_generation(hg_map[(cid, "InnerIns")], losses["dielectric"] / cable._get_area("innerins", "fem"))
     set_internal_heat_generation(hg_map[(cid, "Screen")], losses["screen"] / cable._get_area("screen", "fem"))
 
-print("Initialised loads with T_guess = {0} C (Core+Screen readback seeds).".format(T_guess_C))
+print("Initialised loads with T_core_init = {0} C, T_screen_init = {1} C.".format(
+    T_core_init_C, T_screen_init_C
+))
 
 
 def solve_and_eval():

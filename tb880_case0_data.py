@@ -494,6 +494,7 @@ TB880_CASE_0 = TB880Case0(
 
         # I retain the thermal resistivities used to produce the published TB 880
         # thermal resistances and temperature ladder for Case #0-1.
+        # IEC 60287-2-1:2023 Table1
         rho_semicon_k_m_per_w=2.5,
         rho_ins_k_m_per_w=3.5,
         rho_oversheath_k_m_per_w=3.5,

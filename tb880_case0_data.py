@@ -488,6 +488,7 @@ TB880_CASE_0 = TB880Case0(
         kp=1.0,
 
         # I use the standard IEC XLPE dielectric constants for Eq. (14) and Eq. (15).
+        # IEC 60287-1-1:2023 Table3 XLPE greater than 18/30 (36) kV cables (unfilled)
         eps_r=2.5,
         tan_delta=1.0e-3,
 

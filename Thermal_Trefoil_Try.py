@@ -48,7 +48,7 @@ for d in SCRIPT_DIRS:
         pass
 
 import cable_losses_tb880_case0 as loss_mod
-from tb880_case0_data import CASE
+import tb880_case0_data as case_mod
 
 
 def _reload_module(mod):
@@ -62,6 +62,8 @@ def _reload_module(mod):
 
 
 loss_mod = _reload_module(loss_mod)
+case_mod = _reload_module(case_mod)
+CASE = case_mod.CASE
 
 try:
     import temp_convergence_monitor as tmon

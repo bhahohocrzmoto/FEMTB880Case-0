@@ -1,17 +1,47 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:148.0) Gecko/20100101 Firefox/148.0" version="29.6.6">
   <diagram name="Page-1" id="obzoYhWDOyKoXCv8jc7Z">
-    <mxGraphModel dx="1375" dy="751" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="767" dy="882" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="n4f6-h8O4g4EJZnBXDk_-3" edge="1" parent="1" source="n4f6-h8O4g4EJZnBXDk_-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="n4f6-h8O4g4EJZnBXDk_-2" value="">
+        <mxCell id="_0RmD95m09_Q-Jy9QIpn-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#CCE5FF;" value="" vertex="1">
+          <mxGeometry height="440" width="540" x="140" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="_0RmD95m09_Q-Jy9QIpn-5" edge="1" parent="1" source="n4f6-h8O4g4EJZnBXDk_-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="n4f6-h8O4g4EJZnBXDk_-2" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="n4f6-h8O4g4EJZnBXDk_-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Start" vertex="1">
-          <mxGeometry height="60" width="120" x="350" y="20" as="geometry" />
+        <mxCell id="n4f6-h8O4g4EJZnBXDk_-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9C4EB;" value="Start" vertex="1">
+          <mxGeometry height="60" width="120" x="354" y="90" as="geometry" />
         </mxCell>
-        <mxCell id="n4f6-h8O4g4EJZnBXDk_-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Load pythonscripts" vertex="1">
-          <mxGeometry height="60" width="120" x="350" y="160" as="geometry" />
+        <mxCell id="_0RmD95m09_Q-Jy9QIpn-7" edge="1" parent="1" source="n4f6-h8O4g4EJZnBXDk_-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="_0RmD95m09_Q-Jy9QIpn-6" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n4f6-h8O4g4EJZnBXDk_-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9C4EB;" value="&lt;div&gt;Load modules &amp;amp; case data&lt;/div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;tb880_case0_data.py&amp;nbsp; cable_losses_tb880_case0.py&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="321" x="253.5" y="173" as="geometry" />
+        </mxCell>
+        <mxCell id="_0RmD95m09_Q-Jy9QIpn-4" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="INITIALISATION" vertex="1">
+          <mxGeometry height="30" width="60" x="160" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="_0RmD95m09_Q-Jy9QIpn-9" edge="1" parent="1" source="_0RmD95m09_Q-Jy9QIpn-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="_0RmD95m09_Q-Jy9QIpn-8" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_0RmD95m09_Q-Jy9QIpn-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9C4EB;" value="&lt;div&gt;Verify ANSYS Named Selections&lt;/div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;TB 880 geometry, material parameters&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="190" x="319" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="_0RmD95m09_Q-Jy9QIpn-11" edge="1" parent="1" source="_0RmD95m09_Q-Jy9QIpn-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="_0RmD95m09_Q-Jy9QIpn-10" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_0RmD95m09_Q-Jy9QIpn-8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9C4EB;" value="&lt;div&gt;Verify ANSYS Named Selections&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;NS_C0x_Core, NS_C0x_InnerIns, NS_C0x_Screen&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="251" x="288.5" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="_0RmD95m09_Q-Jy9QIpn-13" edge="1" parent="1" source="_0RmD95m09_Q-Jy9QIpn-10" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="_0RmD95m09_Q-Jy9QIpn-12" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_0RmD95m09_Q-Jy9QIpn-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9C4EB;" value="&lt;div&gt;Read FE body areas from ANSYS geometry&lt;/div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;A_cond, A_innerins, A_screen&amp;nbsp; [m²]&amp;nbsp; per cable stored on Cable objects&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="361.5" x="233.25" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="_0RmD95m09_Q-Jy9QIpn-12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCE9F;" value="&lt;div&gt;Read FE body areas from ANSYS geometry&lt;/div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;A_cond, A_innerins, A_screen&amp;nbsp; [m²]&amp;nbsp; per cable stored on Cable objects&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="361.5" x="233.25" y="530" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

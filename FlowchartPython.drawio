@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:148.0) Gecko/20100101 Firefox/148.0" version="29.6.6">
   <diagram name="Page-1" id="obzoYhWDOyKoXCv8jc7Z">
-    <mxGraphModel dx="931" dy="1071" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="869" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -44,7 +44,7 @@
           <mxGeometry height="60" width="426.75" x="200.63" y="540" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE599;" value="" vertex="1">
-          <mxGeometry height="440" width="540" x="144" y="640" as="geometry" />
+          <mxGeometry height="680" width="540" x="144" y="640" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Thermal Iteration" vertex="1">
           <mxGeometry height="30" width="150" x="144" y="640" as="geometry" />
@@ -58,8 +58,35 @@
         <mxCell id="7DeGLxfBP1eBuY8asOwS-6" edge="1" parent="1" source="_0RmD95m09_Q-Jy9QIpn-12" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="7DeGLxfBP1eBuY8asOwS-3" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
+        <mxCell id="7DeGLxfBP1eBuY8asOwS-11" edge="1" parent="1" source="7DeGLxfBP1eBuY8asOwS-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="7DeGLxfBP1eBuY8asOwS-10" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;" value="&lt;div&gt;Thermal FEM Solve&amp;nbsp; (ANSYS Mechanical)&lt;/div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;Steady state heat conduction — 2D cross section&lt;/font&gt;" vertex="1">
           <mxGeometry height="60" width="426.75" x="200.63" y="770" as="geometry" />
+        </mxCell>
+        <mxCell id="7DeGLxfBP1eBuY8asOwS-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;" value="&lt;div&gt;Read the conductor and sheath temperatures&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;T_C0x_Core (avg + max), T_C0x_Screen (avg + max)&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;avg → loss update, max → convergence criterion&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="426.75" x="200.63" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="7DeGLxfBP1eBuY8asOwS-14" edge="1" parent="1" source="7DeGLxfBP1eBuY8asOwS-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="7DeGLxfBP1eBuY8asOwS-13" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7DeGLxfBP1eBuY8asOwS-17" edge="1" parent="1" source="7DeGLxfBP1eBuY8asOwS-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="7DeGLxfBP1eBuY8asOwS-16" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7DeGLxfBP1eBuY8asOwS-12" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#A35D72;" value="max ΔT_core_max &amp;lt; 10⁻³ °C ?" vertex="1">
+          <mxGeometry height="110" width="196" x="316" y="950" as="geometry" />
+        </mxCell>
+        <mxCell id="7DeGLxfBP1eBuY8asOwS-13" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Final FEM Solve" vertex="1">
+          <mxGeometry height="60" width="120" x="740" y="975" as="geometry" />
+        </mxCell>
+        <mxCell id="7DeGLxfBP1eBuY8asOwS-15" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="YES" vertex="1">
+          <mxGeometry height="30" width="150" x="539.5" y="970" as="geometry" />
+        </mxCell>
+        <mxCell id="7DeGLxfBP1eBuY8asOwS-16" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#A35D72;" value="iter &amp;lt; max:iter (20) ?" vertex="1">
+          <mxGeometry height="110" width="196" x="316" y="1100" as="geometry" />
+        </mxCell>
+        <mxCell id="7DeGLxfBP1eBuY8asOwS-18" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="NO" vertex="1">
+          <mxGeometry height="30" width="150" x="370" y="1060" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

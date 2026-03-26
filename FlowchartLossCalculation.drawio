@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0" version="29.6.6">
   <diagram name="Loss-Calculation" id="loss_calc_flow">
-    <mxGraphModel dx="1573" dy="811" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="3200" math="0" shadow="0">
+    <mxGraphModel dx="612" dy="316" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="3200" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -28,7 +28,7 @@
         <mxCell id="n_rdc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" value="&lt;b&gt;def Rdc_at_temp(self, T_cond_C) — IEC 60287-1-1:2023 Section 5.1.2&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;R&lt;sub&gt;dc&lt;/sub&gt; = R&lt;sub&gt;dc&lt;/sub&gt;(20°C) · [1 + α₂₀ · (T&lt;sub&gt;core&lt;/sub&gt; - 20)]&lt;br&gt;R₀ = 2.83×10⁻⁵ Ω/m (IEC 60228, TB 880 primary input)&lt;br&gt;α₂₀ = 3.93×10⁻³ K⁻¹ (IEC 60287-1-1:2023 Table 1, copper)&lt;/font&gt;" vertex="1">
           <mxGeometry height="75" width="460" x="80" y="245" as="geometry" />
         </mxCell>
-        <mxCell id="n_xs" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" value="&lt;b&gt;x&lt;sub&gt;s&lt;/sub&gt;² — IEC 60287-1-1:2023 Section 5.1.3&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;x&lt;sub&gt;s&lt;/sub&gt;² = 8π f · 10⁻⁷ · k&lt;sub&gt;s&lt;/sub&gt; / R&apos;(θ)&lt;br&gt;k&lt;sub&gt;s&lt;/sub&gt; = 1.0 (IEC 60287-1-1:2023 Table 2, round stranded + extruded insulation)&lt;/font&gt;" vertex="1">
+        <mxCell id="n_xs" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" value="&lt;b&gt;x&lt;sub&gt;s&lt;/sub&gt;² — IEC 60287-1-1:2023 Section 5.1.3&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;x&lt;sub&gt;s&lt;/sub&gt;² = 8π f · 10⁻⁷ · k&lt;sub&gt;s&lt;/sub&gt; / R&#39;(θ)&lt;br&gt;k&lt;sub&gt;s&lt;/sub&gt; = 1.0 (IEC 60287-1-1:2023 Table 2, round stranded + extruded insulation)&lt;/font&gt;" vertex="1">
           <mxGeometry height="65" width="460" x="80" y="345" as="geometry" />
         </mxCell>
         <mxCell id="e_rdc_xs" edge="1" parent="1" source="n_rdc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_xs">
@@ -58,7 +58,7 @@
         <mxCell id="lbl_true1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=9;fontColor=#009900;" value="True" vertex="1">
           <mxGeometry height="15" width="40" x="310" y="615" as="geometry" />
         </mxCell>
-        <mxCell id="n_xp" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" value="&lt;b&gt;x&lt;sub&gt;p&lt;/sub&gt;² — IEC 60287-1-1:2023 Section 5.1.5.1&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;x&lt;sub&gt;p&lt;/sub&gt;² = 8π f · 10⁻⁷ · k&lt;sub&gt;p&lt;/sub&gt; / R&apos;(θ)&lt;br&gt;k&lt;sub&gt;p&lt;/sub&gt; = 1.0 (IEC 60287-1-1:2023 Table 2)&lt;/font&gt;" vertex="1">
+        <mxCell id="n_xp" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" value="&lt;b&gt;x&lt;sub&gt;p&lt;/sub&gt;² — IEC 60287-1-1:2023 Section 5.1.5.1&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;x&lt;sub&gt;p&lt;/sub&gt;² = 8π f · 10⁻⁷ · k&lt;sub&gt;p&lt;/sub&gt; / R&#39;(θ)&lt;br&gt;k&lt;sub&gt;p&lt;/sub&gt; = 1.0 (IEC 60287-1-1:2023 Table 2)&lt;/font&gt;" vertex="1">
           <mxGeometry height="55" width="460" x="80" y="645" as="geometry" />
         </mxCell>
         <mxCell id="e_skin_xp" edge="1" parent="1" source="n_skin_flag" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_xp">
@@ -86,7 +86,7 @@
           <mxGeometry height="15" width="40" x="180" y="830" as="geometry" />
         </mxCell>
         <mxCell id="lbl_true2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=9;fontColor=#009900;" value="True" vertex="1">
-          <mxGeometry height="15" width="40" x="310" y="895" as="geometry" />
+          <mxGeometry height="15" width="40" x="314" y="895" as="geometry" />
         </mxCell>
         <mxCell id="n_rac" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFD700;strokeColor=#D6B656;fontStyle=1;" value="def Rac_at_temp(self, T_cond_C)&lt;br&gt;R&lt;sub&gt;ac&lt;/sub&gt; = R&lt;sub&gt;dc&lt;/sub&gt;(θ) · (1 + y&lt;sub&gt;s&lt;/sub&gt; + y&lt;sub&gt;p&lt;/sub&gt;)&lt;br&gt;&lt;font size=&quot;1&quot;&gt;IEC 60287-1-1:2023 Formula (7), Section 5.1.1&lt;/font&gt;" vertex="1">
           <mxGeometry height="50" width="340" x="140" y="920" as="geometry" />
@@ -106,7 +106,7 @@
         <mxCell id="diel_label" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=12;" value="DIELECTRIC LOSSES — W_d" vertex="1">
           <mxGeometry height="25" width="300" x="640" y="205" as="geometry" />
         </mxCell>
-        <mxCell id="n_cap" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#82B366;" value="&lt;b&gt;Cable Capacitance — IEC 60287-1-1:2023 Section 5.2&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;C = 2π ε&lt;sub&gt;0&lt;/sub&gt; ε&lt;sub&gt;r&lt;/sub&gt; / ln(D&lt;sub&gt;i&lt;/sub&gt; / d&lt;sub&gt;c&lt;/sub&gt;)&lt;br&gt;d_c = d_inner_semicon = 33.3 mm (over conductor screen)&lt;br&gt;D_i = d_ins = 64.3 mm (over insulation)&lt;br&gt;ε_r = 2.5 (XLPE, IEC 60287-1-1 Table 3)&lt;/font&gt;" vertex="1">
+        <mxCell id="n_cap" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#82B366;" value="&lt;b&gt;Cable Capacitance — IEC 60287-1-1:2023 Section 5.2&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;C = 2π ε&lt;sub&gt;0&lt;/sub&gt; ε&lt;sub&gt;r&lt;/sub&gt; / ln(D&lt;sub&gt;i&lt;/sub&gt; / d&lt;sub&gt;c&lt;/sub&gt;)&lt;br&gt;d&lt;sub&gt;c&lt;/sub&gt; = d_inner_semicon = 33.3 mm (over conductor screen)&lt;br&gt;D&lt;sub&gt;i&lt;/sub&gt; = d_ins = 64.3 mm (over insulation)&lt;br&gt;ε_r = 2.5 (XLPE, IEC 60287-1-1 Table 3)&lt;/font&gt;" vertex="1">
           <mxGeometry height="95" width="350" x="625" y="245" as="geometry" />
         </mxCell>
         <mxCell id="n_u0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#82B366;" value="&lt;b&gt;Phase-to-earth voltage&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;U₀ = U_LL / √3 = 132 kV / √3 = 76.21 kV&lt;/font&gt;" vertex="1">
@@ -115,16 +115,16 @@
         <mxCell id="e_cap_u0" edge="1" parent="1" source="n_cap" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_u0">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="n_wd_calc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#82B366;" value="&lt;b&gt;W_d — IEC 60287-1-1:2023 Section 5.2&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;W_d = ω · C · U₀² · tan(δ)&lt;br&gt;tan(δ) = 1.0×10⁻³ (XLPE, IEC 60287-1-1 Table 3)&lt;br&gt;Note: W_d is independent of load current I&lt;/font&gt;" vertex="1">
-          <mxGeometry height="75" width="340" x="635" y="440" as="geometry" />
+        <mxCell id="n_wd_calc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#82B366;" value="&lt;b&gt;W&lt;sub&gt;d&lt;/sub&gt; — IEC 60287-1-1:2023 Section 5.2&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;W_d = ω · C · U₀² · tan(δ)&lt;br&gt;tan(δ) = 1.0×10⁻³ (XLPE, IEC 60287-1-1 Table 3)&lt;br&gt;Note: W_d is independent of load current I and temperature&lt;/font&gt;" vertex="1">
+          <mxGeometry height="75" width="340" x="630" y="435" as="geometry" />
         </mxCell>
-        <mxCell id="e_u0_wd" edge="1" parent="1" source="n_u0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_wd_calc">
+        <mxCell id="e_u0_wd" edge="1" parent="1" source="n_u0" style="rounded=0;" target="n_wd_calc">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="n_diel_flag" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;rounded=1;" value="include_dielectric&lt;br&gt;_losses ?&lt;br&gt;&lt;font size=&quot;1&quot;&gt;(TB 880 GP 7)&lt;/font&gt;" vertex="1">
-          <mxGeometry height="80" width="170" x="720" y="545" as="geometry" />
+          <mxGeometry height="80" width="170" x="715" y="545" as="geometry" />
         </mxCell>
-        <mxCell id="e_wd_flag" edge="1" parent="1" source="n_wd_calc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_diel_flag">
+        <mxCell id="e_wd_flag" edge="1" parent="1" source="n_wd_calc" style="rounded=0;" target="n_diel_flag">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="n_wd_zero" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" value="W&lt;sub&gt;d&lt;/sub&gt; = 0" vertex="1">
@@ -134,15 +134,15 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="lbl_false3" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=9;fontColor=#CC0000;" value="False" vertex="1">
-          <mxGeometry height="15" width="30" x="693" y="560" as="geometry" />
+          <mxGeometry height="15" width="30" x="700" y="555" as="geometry" />
         </mxCell>
         <mxCell id="lbl_true3" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=9;fontColor=#009900;" value="True" vertex="1">
-          <mxGeometry height="15" width="30" x="815" y="625" as="geometry" />
+          <mxGeometry height="15" width="30" x="815" y="630" as="geometry" />
         </mxCell>
-        <mxCell id="n_wd_out" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontStyle=1;" value="&lt;b&gt;W_d [W/m]&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;Dielectric loss (voltage-dependent, current-independent)&lt;/font&gt;" vertex="1">
-          <mxGeometry height="50" width="250" x="680" y="660" as="geometry" />
+        <mxCell id="n_wd_out" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontStyle=1;" value="&lt;b&gt;W&lt;sub&gt;d&lt;/sub&gt; [W/m]&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;Dielectric loss (voltage dependent, current&amp;amp;temperature independent)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="50" width="250" x="675" y="660" as="geometry" />
         </mxCell>
-        <mxCell id="e_diel_out" edge="1" parent="1" source="n_diel_flag" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_wd_out">
+        <mxCell id="e_diel_out" edge="1" parent="1" source="n_diel_flag" style="rounded=0;" target="n_wd_out">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="sheath_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C62828;opacity=40;" value="" vertex="1">

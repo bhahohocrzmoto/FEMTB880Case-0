@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0" version="29.6.6">
   <diagram name="Loss-Calculation" id="loss_calc_flow">
-    <mxGraphModel dx="957" dy="494" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="3200" math="0" shadow="0">
+    <mxGraphModel dx="1573" dy="811" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="3200" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -46,7 +46,7 @@
         <mxCell id="e_ys_flag" edge="1" parent="1" source="n_ys" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_skin_flag">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="n_ys_zero" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" value="y_s = 0" vertex="1">
+        <mxCell id="n_ys_zero" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" value="y&lt;sub&gt;s&lt;/sub&gt; = 0" vertex="1">
           <mxGeometry height="30" width="80" x="80" y="563" as="geometry" />
         </mxCell>
         <mxCell id="e_flag_zero" edge="1" parent="1" source="n_skin_flag" style="rounded=0;" target="n_ys_zero">
@@ -58,13 +58,13 @@
         <mxCell id="lbl_true1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=9;fontColor=#009900;" value="True" vertex="1">
           <mxGeometry height="15" width="40" x="310" y="615" as="geometry" />
         </mxCell>
-        <mxCell id="n_xp" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" value="&lt;b&gt;x_p² — IEC 60287-1-1&amp;nbsp;&lt;/b&gt;&lt;b&gt;Chapter 5.1.4&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;x_p² = 8π f · 10⁻⁷ · k_p / R_dc(θ)&lt;br&gt;k_p = 1.0 (IEC 60287-1-1 Table 2)&lt;/font&gt;" vertex="1">
+        <mxCell id="n_xp" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" value="&lt;b&gt;x&lt;sub&gt;p&lt;/sub&gt;² — IEC 60287-1-1&amp;nbsp;&lt;/b&gt;&lt;b&gt;Chapter 5.1.4&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;x&lt;sub&gt;p&lt;/sub&gt;² = 8π f · 10⁻⁷ · k&lt;sub&gt;p&lt;/sub&gt; / R&lt;sub&gt;dc&lt;/sub&gt;(θ)&lt;br&gt;k&lt;sub&gt;p&lt;/sub&gt; = 1.0 (IEC 60287-1-1 Table 2)&lt;/font&gt;" vertex="1">
           <mxGeometry height="55" width="460" x="80" y="645" as="geometry" />
         </mxCell>
         <mxCell id="e_skin_xp" edge="1" parent="1" source="n_skin_flag" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_xp">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="n_yp" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" value="&lt;b&gt;y_p — Proximity effect factor — IEC 60287-1-1&amp;nbsp;&lt;/b&gt;&lt;b&gt;Chapter 5.1.4&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;g = x_p⁴ / (192 + 0.8·x_p⁴)&lt;br&gt;y_p = g · (d_c/s)² · [0.312·(d_c/s)² + 1.18 / (g + 0.27)]&lt;br&gt;s = d_oversheath (touching trefoil), d_c = 30.3 mm&lt;/font&gt;" vertex="1">
+        <mxCell id="n_yp" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" value="&lt;b&gt;y&lt;sub&gt;p&lt;/sub&gt; — Proximity effect factor — IEC 60287-1-1&amp;nbsp;&lt;/b&gt;&lt;b&gt;Chapter 5.1.4&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;g = x&lt;sub&gt;p&lt;/sub&gt;⁴ / (192 + 0.8·x&lt;sub&gt;p&lt;/sub&gt;⁴)&lt;br&gt;y&lt;sub&gt;p&lt;/sub&gt; = g · (d&lt;sub&gt;c&lt;/sub&gt;/s)² · [0.312·(d&lt;sub&gt;c&lt;/sub&gt;/s)² + 1.18 / (g + 0.27)]&lt;br&gt;s = d&lt;sub&gt;oversheath&lt;/sub&gt;, d&lt;sub&gt;c&lt;/sub&gt; = 30.3 mm&lt;/font&gt;" vertex="1">
           <mxGeometry height="75" width="460" x="80" y="720" as="geometry" />
         </mxCell>
         <mxCell id="e_xp_yp" edge="1" parent="1" source="n_xp" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_yp">
@@ -88,13 +88,13 @@
         <mxCell id="lbl_true2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=9;fontColor=#009900;" value="True" vertex="1">
           <mxGeometry height="15" width="40" x="310" y="895" as="geometry" />
         </mxCell>
-        <mxCell id="n_rac" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFD700;strokeColor=#D6B656;fontStyle=1;" value="def Rac_at_temp(self, T_cond_C)&lt;br&gt;R_ac = R_dc(θ) · (1 + y_s + y_p)&lt;br&gt;&lt;font size=&quot;1&quot;&gt;IEC 60287-1-1 Chapter 5.1.1 (7)&lt;/font&gt;" vertex="1">
+        <mxCell id="n_rac" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFD700;strokeColor=#D6B656;fontStyle=1;" value="def Rac_at_temp(self, T_cond_C)&lt;br&gt;R&lt;sub&gt;ac&lt;/sub&gt; = R&lt;sub&gt;dc&lt;/sub&gt;(θ) · (1 + y&lt;sub&gt;s&lt;/sub&gt; + y&lt;sub&gt;p&lt;/sub&gt;)&lt;br&gt;&lt;font size=&quot;1&quot;&gt;IEC 60287-1-1 Chapter 5.1.1 (7)&lt;/font&gt;" vertex="1">
           <mxGeometry height="50" width="340" x="140" y="920" as="geometry" />
         </mxCell>
         <mxCell id="e_prox_rac" edge="1" parent="1" source="n_prox_flag" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_rac">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="n_wc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF8C00;strokeColor=#D6B656;fontColor=#FFFFFF;fontStyle=1;" value="&lt;b&gt;W_c = I² · R_ac&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;Conductor Joule loss [W/m]&lt;/font&gt;" vertex="1">
+        <mxCell id="n_wc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF8C00;strokeColor=#D6B656;fontColor=#FFFFFF;fontStyle=1;" value="&lt;b&gt;W&lt;sub&gt;c&lt;/sub&gt; = I² · R&lt;sub&gt;ac&lt;/sub&gt;&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;Conductor Joule loss [W/m]&lt;/font&gt;" vertex="1">
           <mxGeometry height="50" width="270" x="175" y="1000" as="geometry" />
         </mxCell>
         <mxCell id="e_rac_wc" edge="1" parent="1" source="n_rac" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_wc">

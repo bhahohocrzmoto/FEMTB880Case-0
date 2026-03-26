@@ -135,7 +135,7 @@ def main():
         if not (eddy_result["I_max_a"] < default_result["I_max_a"]):
             raise AssertionError("Combined sheath mode should produce lower current rating")
         # I verify that F < 1.0 when both circulating and eddy losses are active,
-        # confirming that the IEC 60287-1-1 Section 2.3.5 correction is applied
+        # confirming that the IEC 60287-1-1:2023, 5.3.6 / CIGRE TB 880 GP31 correction is applied
         # to reduce eddy losses in the presence of circulating currents.
         cable_combined_check = create_case0_cables(
             I_rms_A=CASE.benchmark.i_final_a

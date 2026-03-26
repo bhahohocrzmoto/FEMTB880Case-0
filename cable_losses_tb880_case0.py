@@ -181,7 +181,7 @@ class Cable(object):
         return self.Rs_at_temp(T_screen_C, area_mode=area_mode)
 
     def sheath_reactance_X(self):
-        # I use the IEC 60287-1-1 Section 2.3.1 trefoil reactance expression
+        # I use the IEC 60287-1-1:2023, 5.3.2 trefoil reactance expression
         # X = 2 * omega * 1e-7 * ln(2s/d), where s is centre spacing and d is the
         # mean sheath diameter, because circulating current losses depend on X.
         s = self.d_oversheath
@@ -192,7 +192,7 @@ class Cable(object):
         return 2.0 * omega * 1e-7 * math.log((2.0 * s) / d)
 
     def _lambda1_prime(self, Rs, Rac, X):
-        # I apply IEC 60287-1-1 Section 2.3.1 for the circulating-current
+        # I apply IEC 60287-1-1:2023, 5.3.2 for the circulating-current
         # sheath loss factor lambda1_prime in touching trefoil. This term
         # is included in the assembled lambda1 when the central flag
         # include_sheath_circulating_losses is True.
@@ -263,7 +263,7 @@ class Cable(object):
         # I assemble the base eddy-current loss factor before the F correction.
         lambda1pp = (Rs / Rac) * (gs * lambda0 * (1.0 + delta1 + delta2) + thickness_term)
 
-        # I apply the F factor from IEC 60287-1-1:2023 Section 2.3.5 when the
+        # I apply the F factor from IEC 60287-1-1:2023, 5.3.6 when the
         # caller requests it. TB 880 Guidance Point 31 extends F to all
         # conductor designs, not only Milliken. The physical reason is that
         # circulating sheath currents reduce the magnetic field that drives
@@ -357,7 +357,7 @@ class Cable(object):
         #    conductors, where eddy losses are either neglected entirely or
         #    computed without the F reduction.
         #
-        # Reference: IEC 60287-1-1:2023 Section 2.3.5 for the F factor formula.
+        # Reference: IEC 60287-1-1:2023, 5.3.6 for the F factor formula; extended per CIGRE TB 880 Guidance Point 31.
         # Reference: TB 880 Guidance Point 31 for extending F to all conductor types.
         apply_F = (
             CASE.assumptions.include_sheath_circulating_losses

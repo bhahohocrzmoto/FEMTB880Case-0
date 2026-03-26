@@ -82,7 +82,7 @@ class Geometry(object):
         # not the D_i used in the dielectric capacitance formula for this benchmark.
         self.d_outer_semicon_m = d_outer_semicon_m
         # I store the mean sheath diameter from TB 880 Figure 25 because IEC
-        # 60287-1-1 Section 2.3.1 uses the mean sheath diameter in reactance X.
+        # 60287-1-1:2023, 5.3.2 uses the mean sheath diameter in reactance X.
         self.d_screen_mean_m = d_screen_mean_m
         # I store the outer diameter of the metallic screen from TB 880 Figure 25
         # so that the sheath thickness can be recovered for FE area estimation.
@@ -191,8 +191,8 @@ class MaterialElectricalData(object):
         # I store insulation thermal resistivity for the same reason, namely to
         # preserve the T1 benchmark lineage from TB 880 pp. 70-71.
         self.rho_ins_k_m_per_w = rho_ins_k_m_per_w
-        # I store oversheath thermal resistivity because IEC 60287-2-1 Section 2.3
-        # and TB 880 pp. 70-71 use it in T3 with the trefoil correction.
+        # I store oversheath thermal resistivity because IEC 60287-2-1:2023, 4.1.5
+        # and TB 880 pp. 70-71 use it in T3 with the trefoil correction (x1.6 per 4.2.4.3.2).
         self.rho_oversheath_k_m_per_w = rho_oversheath_k_m_per_w
 
 
@@ -250,8 +250,8 @@ class Benchmark(object):
         # I store T2 for completeness even though it is zero in this benchmark,
         # which reflects the absence of a separate bedding layer in the model.
         self.t2_k_m_per_w = t2_k_m_per_w
-        # I store T3 from TB 880 pp. 70-71 because it includes the IEC 60287-2-1
-        # Section 2.3 oversheath resistance with the 1.6 trefoil correction.
+        # I store T3 from TB 880 pp. 70-71 because it includes the IEC 60287-2-1:2023
+        # 4.1.5 oversheath resistance with the x1.6 trefoil correction of 4.2.4.3.2.
         self.t3_k_m_per_w = t3_k_m_per_w
         # I store T4 from TB 880 pp. 71-72 because it represents the external soil
         # thermal resistance used in the final buried-trefoil benchmark equation.
@@ -292,7 +292,7 @@ class Benchmark(object):
         # it is the key first-iteration input for the sheath loss calculation.
         self.r_screen_80c_ohm_per_m = r_screen_80c_ohm_per_m
         # I store the first-iteration circulating loss factor from TB 880 p. 74 so
-        # that the Section 2.3.1 implementation can be regression checked directly.
+        # that the IEC 60287-1-1:2023, 5.3.2 implementation can be regression checked directly.
         self.lambda1_circulating_first_iter = lambda1_circulating_first_iter
 
 
@@ -389,7 +389,7 @@ class ModelAssumptions(object):
         self.include_sheath_eddy_losses = include_sheath_eddy_losses
 
         # I centralize the switch that controls whether the F factor from
-        # IEC 60287-1-1:2023 Section 2.3.5 is applied to reduce lambda1''
+        # IEC 60287-1-1:2023, 5.3.6 is applied to reduce lambda1''
         # when circulating currents are also present. TB 880 Guidance Point 31
         # recommends applying F for all conductor designs, not only Milliken.
         # The physical reason is that circulating sheath currents suppress

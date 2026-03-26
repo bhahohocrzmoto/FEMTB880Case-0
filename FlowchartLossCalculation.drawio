@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0" version="29.6.6">
   <diagram name="Loss-Calculation" id="loss_calc_flow">
-    <mxGraphModel dx="496" dy="281" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="3200" math="0" shadow="0">
+    <mxGraphModel dx="1267" dy="718" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="3200" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -214,7 +214,7 @@
         <mxCell id="e_d_beta" edge="1" parent="1" source="n_delta" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_beta">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="n_l1pp_raw" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;" value="&lt;b&gt;λ₁&#39;&#39; (raw) — IEC 60287-1-1 Sec 5.3.7.1&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;λ₁&#39;&#39; = (R_s/R_ac) · [C_gs · λ₀ · (1+Δ₁+Δ₂) + thickness]&lt;/font&gt;" vertex="1">
+        <mxCell id="n_l1pp_raw" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;" value="&lt;b&gt;λ₁&#39;&#39; (raw) — IEC 60287-1-1 Sec 5.3.7.1&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;λ₁&#39;&#39; = (R&lt;sub&gt;s&lt;/sub&gt;/R&lt;sub&gt;ac&lt;/sub&gt;) · [C&lt;sub&gt;gs&lt;/sub&gt; · λ₀ · (1+Δ₁+Δ₂) + thickness]&lt;/font&gt;" vertex="1">
           <mxGeometry height="55" width="220" x="1325" y="820" as="geometry" />
         </mxCell>
         <mxCell id="e_beta_l1pp" edge="1" parent="1" source="n_beta" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_l1pp_raw">
@@ -227,7 +227,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="n_F_calc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;" value="&lt;b&gt;F factor — IEC 60287-1-1:2023 Section 5.3.6&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;M = R_s/X (trefoil: M=N)&lt;br&gt;F = (4M⁴ + (2M)²) / (4(M²+1)²)&lt;br&gt;λ₁&#39;&#39; = λ₁&#39;&#39; · F&lt;br&gt;(TB 880 GP 31: apply to all conductors)&lt;/font&gt;" vertex="1">
-          <mxGeometry height="80" width="220" x="1325" y="1010" as="geometry" />
+          <mxGeometry height="90" width="220" x="1325" y="1000" as="geometry" />
         </mxCell>
         <mxCell id="e_F_calc" edge="1" parent="1" source="n_F_flag" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_F_calc">
           <mxGeometry relative="1" as="geometry" />

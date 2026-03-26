@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0" version="29.6.6">
   <diagram name="Loss-Calculation" id="loss_calc_flow">
-    <mxGraphModel dx="3146" dy="1623" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="3200" math="0" shadow="0">
+    <mxGraphModel dx="734" dy="379" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="3200" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -23,7 +23,7 @@
           <mxGeometry height="900" width="540" x="40" y="200" as="geometry" />
         </mxCell>
         <mxCell id="cond_label" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=12;" value="CONDUCTOR LOSSES — W_c = I² · R_ac" vertex="1">
-          <mxGeometry height="25" width="350" x="50" y="205" as="geometry" />
+          <mxGeometry height="25" width="350" x="84" y="205" as="geometry" />
         </mxCell>
         <mxCell id="n_rdc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" value="&lt;b&gt;R_dc(θ) — IEC 60287-1-1 Eq. (1)&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;R_dc = R_dc(20°C) · [1 + α₂₀ · (T_core - 20)]&lt;br&gt;R_dc(20°C) = 2.83×10⁻⁵ Ω/m (IEC 60228, TB 880 primary input)&lt;br&gt;α₂₀ = 3.93×10⁻³ K⁻¹ (IEC 60287-1-1 Table 1, copper)&lt;/font&gt;" vertex="1">
           <mxGeometry height="75" width="460" x="80" y="245" as="geometry" />

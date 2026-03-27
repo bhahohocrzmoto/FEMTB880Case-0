@@ -40,7 +40,7 @@
           <mxGeometry height="60" width="496.75" x="165.64" y="370" as="geometry" />
         </mxCell>
         <mxCell id="_0RmD95m09_Q-Jy9QIpn-12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=light-dark(#FFCE9F,#C76305);" value="&lt;b&gt;Compute initial IEC 60287 losses (pre-iteration seed)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;T_core_init = 90 °C | T_screen_init = 80 °C (CASE.benchmark — TB 880 pp. 66–68)&lt;br&gt;calculate_losses(T_core_init, T_screen_init, area_mode=&#39;fem&#39;) → W_c, W_d, W_s [W/m]&lt;br&gt;Apply as initial HG loads: q = W / A_FE_model [W/m³]&lt;/font&gt;" vertex="1">
-          <mxGeometry height="60" width="650.69" x="88" y="540" as="geometry" />
+          <mxGeometry height="60" width="650.69" x="88" y="552" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE599;opacity=40;" value="" vertex="1">
           <mxGeometry height="790" width="610" x="90" y="640" as="geometry" />

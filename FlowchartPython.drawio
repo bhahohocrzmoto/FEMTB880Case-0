@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0" version="29.6.6">
   <diagram name="Page-1" id="obzoYhWDOyKoXCv8jc7Z">
-    <mxGraphModel dx="2565" dy="911" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2022" dy="626" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -178,6 +178,9 @@
         </mxCell>
         <mxCell id="CX87FR81FFPXq6G6xFob-7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;" value="&lt;b&gt;Convert W/m → W/m³ and apply updated heat generation loads&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;q = W [W/m] / A_FE_model [m²] (if LENGTH_UNIT = mm: ÷ 1×10⁹ additional factor)&lt;br&gt;HG_C0x_Core | HG_C0x_InnerIns | HG_C0x_Screen → updated on all 3 cables&lt;/font&gt;" vertex="1">
           <mxGeometry height="60" width="426.75" x="200.63" y="965" as="geometry" />
+        </mxCell>
+        <mxCell id="CX87FR81FFPXq6G6xFob-14" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFDE7;strokeColor=#F9A825;dashed=1;fontSize=9;" value="T_prev_max_core = T_max_core&lt;br&gt;&lt;i&gt;(updated at end of each iteration)&lt;/i&gt;" vertex="1">
+          <mxGeometry height="40" width="220" x="99" y="1370" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

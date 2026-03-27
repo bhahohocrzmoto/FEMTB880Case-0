@@ -118,7 +118,7 @@
         <mxCell id="e_cap_u0" edge="1" parent="1" source="n_cap" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_u0">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="n_wd_calc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#82B366;" value="&lt;b&gt;W&lt;sub&gt;d&lt;/sub&gt; — IEC 60287-1-1:2023 Section 5.2&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;W_d = ω · C · U₀² · tan(δ)&lt;br&gt;tan(δ) = 1.0×10⁻³ (XLPE, IEC 60287-1-1 Table 3)&lt;br&gt;Note: W_d is independent of load current I and temperature&lt;/font&gt;" vertex="1">
+        <mxCell id="n_wd_calc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#82B366;" value="&lt;b&gt;W&lt;sub&gt;d&lt;/sub&gt; — IEC 60287-1-1:2023 Section 5.2&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;W&lt;sub&gt;d&lt;/sub&gt; = ω · C · U₀² · tan(δ)&lt;br&gt;tan(δ) = 1.0×10⁻³ (XLPE, IEC 60287-1-1 : 2023 Table 3)&lt;br&gt;Note: W&lt;sub&gt;d&lt;/sub&gt; is independent of load current I and temperature&lt;/font&gt;" vertex="1">
           <mxGeometry height="75" width="340" x="630" y="505" as="geometry" />
         </mxCell>
         <mxCell id="e_u0_wd" edge="1" parent="1" source="n_u0" style="rounded=0;" target="n_wd_calc">

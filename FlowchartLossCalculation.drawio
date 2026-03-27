@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0" version="29.6.6">
   <diagram name="Loss-Calculation" id="loss_calc_flow">
-    <mxGraphModel dx="956" dy="501" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="3200" math="0" shadow="0">
+    <mxGraphModel dx="659" dy="346" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="3200" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -192,7 +192,7 @@
           <mxGeometry height="20" width="60" x="1260" y="770" as="geometry" />
         </mxCell>
         <mxCell id="eddy_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#EF9A9A;opacity=50;" value="" vertex="1">
-          <mxGeometry height="650" width="290" x="1370" y="560" as="geometry" />
+          <mxGeometry height="670" width="290" x="1370" y="560" as="geometry" />
         </mxCell>
         <mxCell id="eddy_label" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=10;" value="EDDY CURRENT" vertex="1">
           <mxGeometry height="20" width="120" x="1511" y="562.5" as="geometry" />
@@ -227,14 +227,17 @@
         <mxCell id="e_beta_l1pp" edge="1" parent="1" source="n_beta" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_l1pp_raw">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="n_F_flag" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;rounded=1;fontSize=9;" value="if apply_F ?&lt;br&gt;&lt;font size=&quot;1&quot;&gt;(circ AND eddy AND&lt;br&gt;F_flag all True)&lt;/font&gt;" vertex="1">
-          <mxGeometry height="80" width="180" x="1425" y="1000" as="geometry" />
+        <mxCell id="uLm3pNycmma_iMPy-b1W-12" edge="1" parent="1" source="n_F_flag" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="uLm3pNycmma_iMPy-b1W-6" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n_F_flag" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;rounded=1;fontSize=9;" value="if apply_F ?&lt;br&gt;&lt;font size=&quot;1&quot;&gt;(circ AND eddy AND F_flag all True)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="225" x="1402.5" y="1000" as="geometry" />
         </mxCell>
         <mxCell id="e_l1pp_F" edge="1" parent="1" source="n_l1pp_raw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_F_flag">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="n_F_calc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;" value="&lt;b&gt;F factor — IEC 60287-1-1:2023 Section 5.3.6&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;M = R&lt;sub&gt;s&lt;/sub&gt;/X (trefoil: M=N)&lt;br&gt;F = (4M⁴ + (2M)²) / (4(M²+1)²)&lt;br&gt;λ₁&#39;&#39; = λ₁&#39;&#39; · F&lt;br&gt;(TB 880 GP 31: apply to all conductors)&lt;/font&gt;" vertex="1">
-          <mxGeometry height="90" width="265" x="1382.5" y="1100" as="geometry" />
+          <mxGeometry height="90" width="265" x="1382.5" y="1120" as="geometry" />
         </mxCell>
         <mxCell id="e_F_calc" edge="1" parent="1" source="n_F_flag" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_F_calc">
           <mxGeometry relative="1" as="geometry" />
@@ -243,7 +246,7 @@
           <mxGeometry height="15" width="30" x="1520" y="1080" as="geometry" />
         </mxCell>
         <mxCell id="n_eddy_flag" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;rounded=1;fontSize=9;" value="include_sheath_eddy_losses ?" vertex="1">
-          <mxGeometry height="70" width="160" x="1435" y="1220" as="geometry" />
+          <mxGeometry height="70" width="160" x="1435" y="1270" as="geometry" />
         </mxCell>
         <mxCell id="e_Fcalc_eddy" edge="1" parent="1" source="n_F_calc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_eddy_flag">
           <mxGeometry relative="1" as="geometry" />
@@ -300,31 +303,25 @@
           <mxGeometry height="22" width="100" x="50" y="1395" as="geometry" />
         </mxCell>
         <mxCell id="drbGY0nWKPqiwz4GYgaL-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=9;fontColor=#CC0000;" value="False" vertex="1">
-          <mxGeometry height="15" width="30" x="1395" y="1020" as="geometry" />
-        </mxCell>
-        <mxCell id="drbGY0nWKPqiwz4GYgaL-3" edge="1" parent="1" source="n_F_flag" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="uLm3pNycmma_iMPy-b1W-6" value="">
-          <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="1350" y="1070" as="sourcePoint" />
-            <mxPoint x="1411.25" y="1065" as="targetPoint" />
-          </mxGeometry>
+          <mxGeometry height="15" width="30" x="1372.5" y="1020" as="geometry" />
         </mxCell>
         <mxCell id="drbGY0nWKPqiwz4GYgaL-4" edge="1" parent="1" source="n_eddy_flag" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="1370" y="1285" as="sourcePoint" />
-            <mxPoint x="1390" y="1300" as="targetPoint" />
+            <mxPoint x="1370" y="1335" as="sourcePoint" />
+            <mxPoint x="1390" y="1350" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="drbGY0nWKPqiwz4GYgaL-5" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=9;fontColor=#009900;" value="True" vertex="1">
-          <mxGeometry height="25" width="30" x="1390" y="1230" as="geometry" />
+          <mxGeometry height="25" width="30" x="1390" y="1280" as="geometry" />
         </mxCell>
         <mxCell id="drbGY0nWKPqiwz4GYgaL-6" edge="1" parent="1" source="n_eddy_flag" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="1670" y="1255" as="sourcePoint" />
-            <mxPoint x="1625" y="1300" as="targetPoint" />
+            <mxPoint x="1670" y="1305" as="sourcePoint" />
+            <mxPoint x="1625" y="1350" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="drbGY0nWKPqiwz4GYgaL-7" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=9;fontColor=#CC0000;" value="False" vertex="1">
-          <mxGeometry height="15" width="30" x="1601" y="1230" as="geometry" />
+          <mxGeometry height="15" width="30" x="1601" y="1280" as="geometry" />
         </mxCell>
         <mxCell id="uLm3pNycmma_iMPy-b1W-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#999999;dashed=1;fontSize=10;" value="&lt;b&gt;Repository default flags (CASE.assumptions — TB 880 Case 0-1 base path):&lt;/b&gt;&lt;br&gt;include_skin_effect = True | include_proximity_effect = True | include_dielectric_losses = True&lt;br&gt;include_sheath_circulating_losses = True | include_sheath_eddy_losses = &lt;b&gt;False&lt;/b&gt; | include_F_factor = True" vertex="1">
           <mxGeometry height="55" width="1000" x="170" y="90" as="geometry" />
@@ -350,13 +347,23 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="uLm3pNycmma_iMPy-b1W-6" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=light-dark(#000000,#E71D1B);fillColor=none;fontSize=9;fontColor=#CC0000;dashed=1;align=center;" value="F = 1" vertex="1">
-          <mxGeometry height="20" width="60" x="1382.5" y="1070" as="geometry" />
+          <mxGeometry height="20" width="60" x="1306" y="1030" as="geometry" />
         </mxCell>
         <mxCell id="uLm3pNycmma_iMPy-b1W-7" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=light-dark(#000000,#5CCB3A);fillColor=none;fontSize=9;fontColor=#009900;dashed=1;align=center;" value="&lt;span style=&quot;text-align: left;&quot;&gt;λ₁ = λ₁&#39;+λ₁&#39;&#39;&lt;/span&gt;" vertex="1">
-          <mxGeometry height="20" width="100" x="1342.5" y="1300" as="geometry" />
+          <mxGeometry height="20" width="100" x="1342.5" y="1350" as="geometry" />
         </mxCell>
         <mxCell id="uLm3pNycmma_iMPy-b1W-9" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=light-dark(#000000,#E71D1B);fillColor=none;fontSize=9;fontColor=#CC0000;dashed=1;align=center;" value="&lt;span style=&quot;color: rgb(255, 163, 150); text-align: left;&quot;&gt;λ₁ = λ₁&#39;&lt;/span&gt;" vertex="1">
-          <mxGeometry height="20" width="60" x="1587.5" y="1300" as="geometry" />
+          <mxGeometry height="20" width="60" x="1587.5" y="1350" as="geometry" />
+        </mxCell>
+        <mxCell id="uLm3pNycmma_iMPy-b1W-10" edge="1" parent="1" source="uLm3pNycmma_iMPy-b1W-6" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="n_eddy_flag" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <Array as="points">
+              <mxPoint x="1336" y="1240" />
+              <mxPoint x="1515" y="1240" />
+            </Array>
+            <mxPoint x="1370" y="1140" as="sourcePoint" />
+            <mxPoint x="1420" y="1090" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>

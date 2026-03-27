@@ -97,8 +97,8 @@
         <mxCell id="e_prox_rac" edge="1" parent="1" source="n_prox_flag" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_rac">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="n_wc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF8C00;strokeColor=#D6B656;fontColor=#FFFFFF;fontStyle=1;" value="&lt;b&gt;W&lt;sub&gt;c&lt;/sub&gt; = I² · R&lt;sub&gt;ac&lt;/sub&gt;&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;Conductor Joule loss [W/m]&lt;/font&gt;" vertex="1">
-          <mxGeometry height="50" width="270" x="175" y="1070" as="geometry" />
+        <mxCell id="n_wc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF8C00;strokeColor=#D6B656;fontColor=#FFFFFF;fontStyle=1;" value="&lt;b&gt;W&lt;sub&gt;c&lt;/sub&gt; = I² · R&lt;sub&gt;ac&lt;/sub&gt;&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;Conductor Joule loss [W/m] -&amp;nbsp;&lt;/font&gt;&lt;span style=&quot;font-size: x-small;&quot;&gt;IEC 60287-1-1:2023 Section 5.1.1&lt;/span&gt;" vertex="1">
+          <mxGeometry height="50" width="325" x="147.5" y="1070" as="geometry" />
         </mxCell>
         <mxCell id="e_rac_wc" edge="1" parent="1" source="n_rac" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_wc">
           <mxGeometry relative="1" as="geometry" />

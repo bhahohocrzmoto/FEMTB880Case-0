@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0" version="29.6.6">
   <diagram name="Loss-Calculation" id="loss_calc_flow">
-    <mxGraphModel dx="765" dy="401" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="3200" math="0" shadow="0">
+    <mxGraphModel dx="659" dy="346" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="3200" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -149,109 +149,113 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="sheath_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C62828;opacity=40;" value="" vertex="1">
-          <mxGeometry height="1130" width="590" x="1010" y="270" as="geometry" />
+          <mxGeometry height="1130" width="650" x="1030" y="270" as="geometry" />
         </mxCell>
         <mxCell id="sheath_label" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=12;" value="SHEATH LOSSES — W&lt;sub&gt;s&lt;/sub&gt; = λ₁ · W&lt;sub&gt;c&lt;/sub&gt;" vertex="1">
-          <mxGeometry height="25" width="350" x="1081" y="275" as="geometry" />
+          <mxGeometry height="25" width="350" x="1161" y="275" as="geometry" />
         </mxCell>
         <mxCell id="n_rs" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;" value="&lt;b&gt;R&lt;sub&gt;s&lt;/sub&gt;(θ) — Sheath DC resistance&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;R&lt;sub&gt;s&lt;/sub&gt; = ρ&lt;sub&gt;screen&lt;/sub&gt;(20°C) · [1 + α&lt;sub&gt;screen&lt;/sub&gt; · (T&lt;sub&gt;screen&lt;/sub&gt; - 20)] / A&lt;/font&gt;&lt;span style=&quot;font-size: 8.33333px;&quot;&gt;screen&lt;/span&gt;&lt;font size=&quot;1&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;span style=&quot;font-size: x-small;&quot;&gt;ρ&lt;/span&gt;&lt;sub&gt;screen&lt;/sub&gt;&lt;font size=&quot;1&quot;&gt;(20°C) = 2.84×10⁻⁸ Ωm (IEC 60287-1-1:2023 Table 1, aluminium)&lt;br&gt;&lt;/font&gt;&lt;span style=&quot;font-size: x-small;&quot;&gt;α&lt;/span&gt;&lt;sub&gt;screen&lt;/sub&gt;&lt;span style=&quot;font-size: x-small;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;font size=&quot;1&quot;&gt;= 4.03×10⁻³ K⁻¹&lt;br&gt;&lt;/font&gt;&lt;font size=&quot;1&quot;&gt;A&lt;/font&gt;&lt;span style=&quot;font-size: 8.33333px;&quot;&gt;&lt;sub&gt;screen&lt;/sub&gt;&lt;/span&gt;&lt;font size=&quot;1&quot;&gt;= A_screen_elec (analytical) or A_screen_FE_model (fem)&lt;/font&gt;" vertex="1">
-          <mxGeometry height="90" width="520" x="1040" y="315" as="geometry" />
+          <mxGeometry height="90" width="520" x="1120" y="315" as="geometry" />
         </mxCell>
         <mxCell id="n_X" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;" value="&lt;b&gt;X — Sheath reactance — IEC 60287-1-1:2023 Section 5.3.2&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;X = 2ω · 10⁻⁷ · ln(2s / d_screen_mean)&lt;br&gt;s = d_oversheath = 75.5 mm (touching trefoil)&lt;br&gt;d_screen_mean = 67.7 mm&lt;/font&gt;&lt;div&gt;&lt;span style=&quot;font-size: x-small;&quot;&gt;Note: X is used for λ₁′ and the F factor —&amp;nbsp;&lt;/span&gt;&lt;b style=&quot;font-size: x-small;&quot;&gt;not&lt;/b&gt;&lt;span style=&quot;font-size: x-small;&quot;&gt;&amp;nbsp;for computing m (eddy)&lt;/span&gt;&lt;font size=&quot;1&quot;&gt;&lt;/font&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="75" width="480" x="1060" y="430" as="geometry" />
+          <mxGeometry height="75" width="480" x="1140" y="430" as="geometry" />
         </mxCell>
         <mxCell id="e_rs_x" edge="1" parent="1" source="n_rs" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_X">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="circ_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#EF9A9A;opacity=50;" value="" vertex="1">
-          <mxGeometry height="250" width="250" x="1030" y="560" as="geometry" />
+          <mxGeometry height="250" width="300" x="1060" y="560" as="geometry" />
         </mxCell>
         <mxCell id="circ_label" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=10;" value="CIRCULATING" vertex="1">
-          <mxGeometry height="20" width="120" x="1040" y="560" as="geometry" />
+          <mxGeometry height="20" width="120" x="1080" y="560" as="geometry" />
         </mxCell>
-        <mxCell id="n_l1p" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;" value="&lt;b&gt;λ₁&#39; — IEC 60287-1-1:2023 Section 5.3.2&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;λ₁&#39; = (R&lt;sub&gt;s&lt;/sub&gt;/R&lt;sub&gt;ac&lt;/sub&gt;) · 1/(1 + (R&lt;sub&gt;s&lt;/sub&gt;/X)²)&lt;br&gt;Touching trefoil formula&lt;/font&gt;" vertex="1">
-          <mxGeometry height="65" width="225" x="1040" y="590" as="geometry" />
+        <mxCell id="n_l1p" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;" value="&lt;b&gt;λ₁&#39; — IEC 60287-1-1:2023 Section 5.3.2&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;λ₁&#39; = (R&lt;sub&gt;s&lt;/sub&gt;/R&lt;sub&gt;ac&lt;/sub&gt;) · 1/(1 + (R&lt;sub&gt;s&lt;/sub&gt;/X)²)&lt;br&gt;Touching trefoil formula |&amp;nbsp;&lt;/font&gt;&lt;span style=&quot;font-size: x-small;&quot;&gt;uses X from sheath reactance node&lt;/span&gt;" vertex="1">
+          <mxGeometry height="65" width="285" x="1070" y="590" as="geometry" />
         </mxCell>
-        <mxCell id="e_x_l1p" edge="1" parent="1" source="n_X" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_l1p">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="e_x_l1p" edge="1" parent="1" source="n_X" style="edgeStyle=orthogonalEdgeStyle;rounded=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1212.428571428572" y="589.9999999999998" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
-        <mxCell id="n_circ_flag" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;rounded=1;fontSize=9;" value="include_sheath&lt;br&gt;_circulating&lt;br&gt;_losses ?" vertex="1">
-          <mxGeometry height="80" width="150" x="1080" y="680" as="geometry" />
+        <mxCell id="n_circ_flag" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;rounded=1;fontSize=9;" value="include_sheath_circulating_losses ?" vertex="1">
+          <mxGeometry height="80" width="177.5" x="1123.75" y="680" as="geometry" />
         </mxCell>
-        <mxCell id="e_l1p_flag" edge="1" parent="1" source="n_l1p" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_circ_flag">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="e_l1p_flag" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_circ_flag">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1212.428571428572" y="655" as="sourcePoint" />
+          </mxGeometry>
         </mxCell>
-        <mxCell id="circ_true" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=9;fontColor=#009900;" value="True: add λ₁&#39; to λ₁" vertex="1">
-          <mxGeometry height="30" width="100" x="1055" y="760" as="geometry" />
+        <mxCell id="circ_true" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=light-dark(#000000,#5CCB3A);fillColor=none;fontSize=9;fontColor=#009900;dashed=1;align=center;" value="True: add λ₁&#39; to λ₁" vertex="1">
+          <mxGeometry height="20" width="100" x="1091" y="770" as="geometry" />
         </mxCell>
-        <mxCell id="circ_false" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=9;fontColor=#CC0000;" value="False: skip" vertex="1">
-          <mxGeometry height="20" width="60" x="1190" y="760" as="geometry" />
+        <mxCell id="circ_false" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=light-dark(#000000,#E71D1B);fillColor=none;fontSize=9;fontColor=#CC0000;dashed=1;align=center;" value="False: skip" vertex="1">
+          <mxGeometry height="20" width="60" x="1260" y="770" as="geometry" />
         </mxCell>
         <mxCell id="eddy_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#EF9A9A;opacity=50;" value="" vertex="1">
-          <mxGeometry height="650" width="290" x="1290" y="560" as="geometry" />
+          <mxGeometry height="650" width="290" x="1370" y="560" as="geometry" />
         </mxCell>
         <mxCell id="eddy_label" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=10;" value="EDDY CURRENT" vertex="1">
-          <mxGeometry height="20" width="120" x="1431" y="562.5" as="geometry" />
+          <mxGeometry height="20" width="120" x="1511" y="562.5" as="geometry" />
         </mxCell>
         <mxCell id="n_m" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;" value="&lt;b&gt;m = ω · 10⁻⁷ / R&lt;sub&gt;s&lt;/sub&gt;&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;IEC 60287-1-1:2023 Section 5.3.7.1&lt;/font&gt;" vertex="1">
-          <mxGeometry height="45" width="220" x="1325" y="590" as="geometry" />
+          <mxGeometry height="45" width="220" x="1405" y="590" as="geometry" />
         </mxCell>
         <mxCell id="e_x_m" edge="1" parent="1" source="n_X" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_m">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="n_l0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;" value="&lt;b&gt;λ₀ — Base eddy coupling (trefoil)&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;λ₀ = 3 · [m²/(1+m²)] · (d/(2s))²&lt;br&gt;C&lt;sub&gt;C0&lt;/sub&gt; = 3 for trefoil&lt;/font&gt;" vertex="1">
-          <mxGeometry height="60" width="220" x="1325" y="655" as="geometry" />
+          <mxGeometry height="60" width="220" x="1405" y="655" as="geometry" />
         </mxCell>
         <mxCell id="e_m_l0" edge="1" parent="1" source="n_m" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_l0">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="n_delta" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;" value="&lt;b&gt;Δ₁, Δ₂ — Correction terms&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;Δ₁ = (1.14·m&lt;sup&gt;2.45 &lt;/sup&gt;+ 0.33) · (d/2s)&lt;sup&gt;(0.92m+1.66)&lt;/sup&gt;&lt;br&gt;Δ₂ = 0 (trefoil formation)&lt;/font&gt;" vertex="1">
-          <mxGeometry height="65" width="220" x="1325" y="735" as="geometry" />
+          <mxGeometry height="65" width="220" x="1405" y="735" as="geometry" />
         </mxCell>
         <mxCell id="e_l0_d" edge="1" parent="1" source="n_l0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_delta">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="n_beta" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;" value="&lt;b&gt;β₁, C&lt;sub&gt;gs&lt;/sub&gt;, thickness term&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;β₁ = √(4πω / (ρ&lt;sub&gt;s&lt;/sub&gt; · 10⁷))&lt;br&gt;C&lt;sub&gt;gs&lt;/sub&gt; = 1 + (t&lt;sub&gt;s&lt;/sub&gt;/D&lt;sub&gt;s&lt;/sub&gt;)&lt;sup&gt;1.74&lt;/sup&gt; · (β₁·D&lt;sub&gt;s&lt;/sub&gt;·10⁻³ - 1.6)&lt;br&gt;thickness = (β₁·t&lt;sub&gt;s&lt;/sub&gt;)⁴ / (12·10¹²)&lt;/font&gt;" vertex="1">
-          <mxGeometry height="75" width="220" x="1325" y="820" as="geometry" />
+          <mxGeometry height="75" width="220" x="1405" y="820" as="geometry" />
         </mxCell>
         <mxCell id="e_d_beta" edge="1" parent="1" source="n_delta" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_beta">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="n_l1pp_raw" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;" value="&lt;b&gt;λ₁&#39;&#39; (raw) — IEC 60287-1-1 Sec 5.3.7.1&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;λ₁&#39;&#39; = (R&lt;sub&gt;s&lt;/sub&gt;/R&lt;sub&gt;ac&lt;/sub&gt;) · [C&lt;sub&gt;gs&lt;/sub&gt; · λ₀ · (1+Δ₁+Δ₂) + thickness]&lt;/font&gt;" vertex="1">
-          <mxGeometry height="55" width="220" x="1325" y="920" as="geometry" />
+          <mxGeometry height="55" width="220" x="1405" y="920" as="geometry" />
         </mxCell>
         <mxCell id="e_beta_l1pp" edge="1" parent="1" source="n_beta" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_l1pp_raw">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="n_F_flag" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;rounded=1;fontSize=9;" value="if apply_F ?&lt;br&gt;&lt;font size=&quot;1&quot;&gt;(circ AND eddy AND&lt;br&gt;F_flag all True)&lt;/font&gt;" vertex="1">
-          <mxGeometry height="80" width="180" x="1345" y="1000" as="geometry" />
+          <mxGeometry height="80" width="180" x="1425" y="1000" as="geometry" />
         </mxCell>
         <mxCell id="e_l1pp_F" edge="1" parent="1" source="n_l1pp_raw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_F_flag">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="n_F_calc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;" value="&lt;b&gt;F factor — IEC 60287-1-1:2023 Section 5.3.6&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;M = R&lt;sub&gt;s&lt;/sub&gt;/X (trefoil: M=N)&lt;br&gt;F = (4M⁴ + (2M)²) / (4(M²+1)²)&lt;br&gt;λ₁&#39;&#39; = λ₁&#39;&#39; · F&lt;br&gt;(TB 880 GP 31: apply to all conductors)&lt;/font&gt;" vertex="1">
-          <mxGeometry height="90" width="265" x="1302.5" y="1100" as="geometry" />
+          <mxGeometry height="90" width="265" x="1382.5" y="1100" as="geometry" />
         </mxCell>
         <mxCell id="e_F_calc" edge="1" parent="1" source="n_F_flag" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_F_calc">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="F_true" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=9;fontColor=#009900;" value="True" vertex="1">
-          <mxGeometry height="15" width="30" x="1440" y="1080" as="geometry" />
+          <mxGeometry height="15" width="30" x="1520" y="1080" as="geometry" />
         </mxCell>
         <mxCell id="F_false" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=9;fontColor=#CC0000;" value="F=1" vertex="1">
-          <mxGeometry height="15" width="25" x="1325" y="1065" as="geometry" />
+          <mxGeometry height="15" width="25" x="1405" y="1065" as="geometry" />
         </mxCell>
         <mxCell id="n_eddy_flag" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;rounded=1;fontSize=9;" value="include_sheath_eddy_losses ?" vertex="1">
-          <mxGeometry height="70" width="160" x="1355" y="1220" as="geometry" />
+          <mxGeometry height="70" width="160" x="1435" y="1220" as="geometry" />
         </mxCell>
         <mxCell id="e_Fcalc_eddy" edge="1" parent="1" source="n_F_calc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_eddy_flag">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="eddy_true" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=9;fontColor=#009900;" value="λ₁ = λ₁&#39;+λ₁&#39;&#39;" vertex="1">
-          <mxGeometry height="20" width="80" x="1290" y="1300" as="geometry" />
+          <mxGeometry height="20" width="80" x="1370" y="1300" as="geometry" />
         </mxCell>
         <mxCell id="eddy_false" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=9;fontColor=#CC0000;" value="&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(255, 163, 150), rgb(255, 163, 150));&quot;&gt;λ₁ = λ₁&#39;+λ₁&#39;&#39;&lt;/font&gt;&lt;/span&gt;" vertex="1">
-          <mxGeometry height="20" width="60" x="1520" y="1300" as="geometry" />
+          <mxGeometry height="20" width="60" x="1600" y="1300" as="geometry" />
         </mxCell>
         <mxCell id="assy_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;opacity=40;" value="" vertex="1">
           <mxGeometry height="400" width="780" x="180" y="1200" as="geometry" />
@@ -305,31 +309,31 @@
           <mxGeometry height="22" width="100" x="50" y="1395" as="geometry" />
         </mxCell>
         <mxCell id="drbGY0nWKPqiwz4GYgaL-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=9;fontColor=#CC0000;" value="False" vertex="1">
-          <mxGeometry height="15" width="30" x="1315" y="1020" as="geometry" />
+          <mxGeometry height="15" width="30" x="1395" y="1020" as="geometry" />
         </mxCell>
         <mxCell id="drbGY0nWKPqiwz4GYgaL-3" edge="1" parent="1" source="n_F_flag" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="F_false" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="1270" y="1070" as="sourcePoint" />
-            <mxPoint x="1320" y="1020" as="targetPoint" />
+            <mxPoint x="1350" y="1070" as="sourcePoint" />
+            <mxPoint x="1400" y="1020" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="drbGY0nWKPqiwz4GYgaL-4" edge="1" parent="1" source="n_eddy_flag" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="eddy_true" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="1290" y="1285" as="sourcePoint" />
-            <mxPoint x="1340" y="1235" as="targetPoint" />
+            <mxPoint x="1370" y="1285" as="sourcePoint" />
+            <mxPoint x="1420" y="1235" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="drbGY0nWKPqiwz4GYgaL-5" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=9;fontColor=#009900;" value="True" vertex="1">
-          <mxGeometry height="25" width="30" x="1310" y="1230" as="geometry" />
+          <mxGeometry height="25" width="30" x="1390" y="1230" as="geometry" />
         </mxCell>
         <mxCell id="drbGY0nWKPqiwz4GYgaL-6" edge="1" parent="1" source="n_eddy_flag" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="1590" y="1255" as="sourcePoint" />
-            <mxPoint x="1545" y="1300" as="targetPoint" />
+            <mxPoint x="1670" y="1255" as="sourcePoint" />
+            <mxPoint x="1625" y="1300" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="drbGY0nWKPqiwz4GYgaL-7" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=9;fontColor=#CC0000;" value="False" vertex="1">
-          <mxGeometry height="15" width="30" x="1521" y="1230" as="geometry" />
+          <mxGeometry height="15" width="30" x="1601" y="1230" as="geometry" />
         </mxCell>
         <mxCell id="uLm3pNycmma_iMPy-b1W-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#999999;dashed=1;fontSize=10;" value="&lt;b&gt;Repository default flags (CASE.assumptions — TB 880 Case 0-1 base path):&lt;/b&gt;&lt;br&gt;include_skin_effect = True | include_proximity_effect = True | include_dielectric_losses = True&lt;br&gt;include_sheath_circulating_losses = True | include_sheath_eddy_losses = &lt;b&gt;False&lt;/b&gt; | include_F_factor = True" vertex="1">
           <mxGeometry height="55" width="1000" x="170" y="90" as="geometry" />

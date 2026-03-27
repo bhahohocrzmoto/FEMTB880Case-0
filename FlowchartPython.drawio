@@ -1,11 +1,11 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0" version="29.6.6">
   <diagram name="Page-1" id="obzoYhWDOyKoXCv8jc7Z">
-    <mxGraphModel dx="2022" dy="626" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="3217" dy="1253" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="RhaE547YgdEq_OVcXlj2-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;opacity=40;" value="" vertex="1">
-          <mxGeometry height="420" width="660" x="930" y="900" as="geometry" />
+          <mxGeometry height="420" width="660" x="1480" y="900" as="geometry" />
         </mxCell>
         <mxCell id="_0RmD95m09_Q-Jy9QIpn-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#CCE5FF;opacity=40;" value="" vertex="1">
           <mxGeometry height="440" width="540" x="140" y="80" as="geometry" />
@@ -47,7 +47,7 @@
           <mxGeometry height="60" width="650.69" x="88" y="540" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE599;opacity=40;" value="" vertex="1">
-          <mxGeometry height="790" width="594" x="90" y="640" as="geometry" />
+          <mxGeometry height="790" width="610" x="90" y="640" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;span style=&quot;font-weight: 700; text-align: left;&quot;&gt;THERMAL ITERATION (TB 963 Picard coupling)&lt;/span&gt;" vertex="1">
           <mxGeometry height="30" width="296" x="99" y="640" as="geometry" />
@@ -73,12 +73,6 @@
         <mxCell id="7DeGLxfBP1eBuY8asOwS-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;" value="&lt;b&gt;Compute max ΔT_core_max&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;max |T_max_core[cid] − T_prev_max_core[cid]| over all 3 cables&lt;br&gt;&lt;i&gt;Iteration 1: no previous value → ΔT not evaluated; loop continues unconditionally&lt;/i&gt;&lt;/font&gt;" vertex="1">
           <mxGeometry height="60" width="426.75" x="200.63" y="1064" as="geometry" />
         </mxCell>
-        <mxCell id="7DeGLxfBP1eBuY8asOwS-14" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" value="">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="720" y="1540" as="sourcePoint" />
-            <mxPoint x="1008.0000000000005" y="1360" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-17" edge="1" parent="1" source="7DeGLxfBP1eBuY8asOwS-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="7DeGLxfBP1eBuY8asOwS-16" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
@@ -89,13 +83,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-13" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#67AB9F;" value="&lt;div&gt;Final FEM Solve&lt;/div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;converged loads&lt;/font&gt;" vertex="1">
-          <mxGeometry height="60" width="120" x="740" y="975" as="geometry" />
-        </mxCell>
-        <mxCell id="7DeGLxfBP1eBuY8asOwS-21" edge="1" parent="1" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="668.69016520138" y="1501.0750927150602" as="sourcePoint" />
-            <mxPoint x="949.12" y="1320" as="targetPoint" />
-          </mxGeometry>
+          <mxGeometry height="60" width="120" x="1240" y="975.25" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-16" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#A35D72;rounded=1;" value="iter &amp;lt; max:iter (20) ?" vertex="1">
           <mxGeometry height="110" width="196" x="316" y="1310" as="geometry" />
@@ -107,7 +95,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-19" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF0000;" value="&lt;div&gt;Final FEM Solve&lt;/div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;max_iter reached&lt;/font&gt;" vertex="1">
-          <mxGeometry height="60" width="120" x="740" y="1124.5" as="geometry" />
+          <mxGeometry height="60" width="120" x="1240" y="1124.75" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-24" edge="1" parent="1" source="7DeGLxfBP1eBuY8asOwS-16" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="7DeGLxfBP1eBuY8asOwS-3" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
@@ -123,10 +111,10 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-26" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fa6800;fontColor=#000000;strokeColor=#C73500;" value="&lt;b&gt;Read final temperatures&lt;br&gt;&amp;amp; report convergence status&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;T_final_avg/max for core &amp;amp; screen per cable&lt;br&gt;Log to convergence monitor (CSV + optional plot)&lt;/font&gt;" vertex="1">
-          <mxGeometry height="220" width="230" x="960" y="970" as="geometry" />
+          <mxGeometry height="220" width="230" x="1510" y="970" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-29" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;" value="&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(255, 255, 255), rgb(18, 18, 18));&quot;&gt;⚠&lt;/span&gt;Warning message&lt;/div&gt;&lt;div&gt;FEM didnt converged&lt;/div&gt;" vertex="1">
-          <mxGeometry height="60" width="120" x="740" y="1220" as="geometry" />
+          <mxGeometry height="60" width="120" x="1240" y="1260" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-38" edge="1" parent="1" source="7DeGLxfBP1eBuY8asOwS-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="7DeGLxfBP1eBuY8asOwS-37" value="">
           <mxGeometry relative="1" as="geometry" />
@@ -135,31 +123,31 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-35" parent="1" style="rhombus;whiteSpace=wrap;html=1;rounded=1;fillColor=#fad7ac;strokeColor=#b46504;" value="if T_Core_max&amp;gt;90°C" vertex="1">
-          <mxGeometry height="110" width="135" x="1230" y="1025" as="geometry" />
+          <mxGeometry height="110" width="135" x="1780" y="1025" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-37" parent="1" style="whiteSpace=wrap;html=1;rounded=1;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;" value="⚠ Ampacity Limit Exceeded" vertex="1">
-          <mxGeometry height="60" width="120" x="1237.5" y="1240" as="geometry" />
+          <mxGeometry height="60" width="120" x="1787.5" y="1240" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-39" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="YES" vertex="1">
-          <mxGeometry height="30" width="150" x="1241" y="1169" as="geometry" />
+          <mxGeometry height="30" width="150" x="1791" y="1169" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-40" parent="1" style="whiteSpace=wrap;html=1;rounded=1;fillColor=#6d8764;fontColor=#ffffff;strokeColor=#3A5431;" value="End" vertex="1">
-          <mxGeometry height="60" width="120" x="1452.5" y="1050" as="geometry" />
+          <mxGeometry height="60" width="120" x="2002.5" y="1050" as="geometry" />
         </mxCell>
         <mxCell id="RhaE547YgdEq_OVcXlj2-1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontColor=#009900;" value="YES" vertex="1">
           <mxGeometry height="20" width="50" x="253.50000000000006" y="1330" as="geometry" />
         </mxCell>
         <mxCell id="RhaE547YgdEq_OVcXlj2-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontColor=#CC0000;" value="YES" vertex="1">
-          <mxGeometry height="20" width="50" x="850" y="850" as="geometry" />
+          <mxGeometry height="20" width="50" x="910" y="1355" as="geometry" />
         </mxCell>
         <mxCell id="RhaE547YgdEq_OVcXlj2-3" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontColor=#CC0000;" value="NO" vertex="1">
-          <mxGeometry height="20" width="50" x="424" y="1270" as="geometry" />
+          <mxGeometry height="20" width="50" x="364" y="1280" as="geometry" />
         </mxCell>
         <mxCell id="RhaE547YgdEq_OVcXlj2-5" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=12;" value="POST-PROCESSING &amp; REPORTING" vertex="1">
-          <mxGeometry height="25" width="300" x="940" y="905" as="geometry" />
+          <mxGeometry height="25" width="300" x="1490" y="905" as="geometry" />
         </mxCell>
         <mxCell id="RhaE547YgdEq_OVcXlj2-6" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontColor=#009900;" value="NO" vertex="1">
-          <mxGeometry height="20" width="40" x="1385" y="1055" as="geometry" />
+          <mxGeometry height="20" width="40" x="1935" y="1055" as="geometry" />
         </mxCell>
         <mxCell id="CX87FR81FFPXq6G6xFob-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=15;" value="Thermal_Trefoil_Try.py — ANSYS Mechanical IronPython Driver (TB 963 Picard Coupling)" vertex="1">
           <mxGeometry height="35" width="1000" x="-40" y="10" as="geometry" />
@@ -181,6 +169,36 @@
         </mxCell>
         <mxCell id="CX87FR81FFPXq6G6xFob-14" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFDE7;strokeColor=#F9A825;dashed=1;fontSize=9;" value="T_prev_max_core = T_max_core&lt;br&gt;&lt;i&gt;(updated at end of each iteration)&lt;/i&gt;" vertex="1">
           <mxGeometry height="40" width="220" x="99" y="1370" as="geometry" />
+        </mxCell>
+        <mxCell id="CX87FR81FFPXq6G6xFob-15" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#67AB9F;fontColor=#FFFFFF;strokeColor=#3A5431;" value="&lt;b&gt;Final FEM Solve (converged)&lt;/b&gt;&lt;br&gt;&lt;font size=&#39;1&#39;&gt;One additional solve with the &lt;b&gt;just-updated&lt;/b&gt; HG loads&lt;br&gt;(loads were updated in B4 before convergence was detected)&lt;br&gt;Reads T_final_avg/max for core &amp; screen per cable&lt;/font&gt;" vertex="1">
+          <mxGeometry height="75" width="300" x="435" y="1485" as="geometry" />
+        </mxCell>
+        <mxCell id="CX87FR81FFPXq6G6xFob-20" edge="1" parent="1" source="CX87FR81FFPXq6G6xFob-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="CX87FR81FFPXq6G6xFob-17" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="CX87FR81FFPXq6G6xFob-16" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A20025;fontColor=#FFFFFF;strokeColor=#6F0000;dashed=1;" value="⚠ Warning: max_iter reached without convergence&lt;br&gt;&lt;font size=&#39;1&#39;&gt;Flagged as non-converged in output&lt;/font&gt;" vertex="1">
+          <mxGeometry height="50" width="320" x="90" y="1490" as="geometry" />
+        </mxCell>
+        <mxCell id="CX87FR81FFPXq6G6xFob-17" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E51400;fontColor=#FFFFFF;strokeColor=#B20000;" value="&lt;b&gt;Final FEM Solve (non-converged)&lt;/b&gt;&lt;br&gt;&lt;font size=&#39;1&#39;&gt;Solve with last-updated HG loads&lt;br&gt;Read T_final_avg/max for core &amp; screen per cable&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="320" x="87" y="1580" as="geometry" />
+        </mxCell>
+        <mxCell id="CX87FR81FFPXq6G6xFob-18" edge="1" parent="1" source="7DeGLxfBP1eBuY8asOwS-12" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="CX87FR81FFPXq6G6xFob-15" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="840" y="1400" as="sourcePoint" />
+            <mxPoint x="1085" y="1154.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CX87FR81FFPXq6G6xFob-19" edge="1" parent="1" source="7DeGLxfBP1eBuY8asOwS-16" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="CX87FR81FFPXq6G6xFob-16" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="750" y="1610" as="sourcePoint" />
+            <mxPoint x="800" y="1560" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CX87FR81FFPXq6G6xFob-21" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontColor=#009900;" value="YES" vertex="1">
+          <mxGeometry height="20" width="50" x="577.38" y="1240" as="geometry" />
+        </mxCell>
+        <mxCell id="CX87FR81FFPXq6G6xFob-23" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontColor=#CC0000;" value="NO" vertex="1">
+          <mxGeometry height="20" width="50" x="380" y="1310" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

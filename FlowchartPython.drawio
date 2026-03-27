@@ -138,10 +138,10 @@
           <mxGeometry height="20" width="40" x="1935" y="1055" as="geometry" />
         </mxCell>
         <mxCell id="CX87FR81FFPXq6G6xFob-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=15;" value="Thermal_Trefoil_Try.py — ANSYS Mechanical IronPython Driver (TB 963 Picard Coupling)" vertex="1">
-          <mxGeometry height="35" width="1000" x="-40" y="10" as="geometry" />
+          <mxGeometry height="35" width="1000" x="-85.99000000000001" y="10" as="geometry" />
         </mxCell>
         <mxCell id="CX87FR81FFPXq6G6xFob-3" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;" value="Fixed-current thermal iteration. I = 821.776 A (TB 880 analytical ampacity result used as FEM input). The 90 °C check is a WARNING only — no current adjustment is performed." vertex="1">
-          <mxGeometry height="25" width="1000" x="-70.00000000000001" y="40" as="geometry" />
+          <mxGeometry height="25" width="1000" x="-85.99000000000001" y="45" as="geometry" />
         </mxCell>
         <mxCell id="CX87FR81FFPXq6G6xFob-8" edge="1" parent="1" source="CX87FR81FFPXq6G6xFob-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="CX87FR81FFPXq6G6xFob-7" value="">
           <mxGeometry relative="1" as="geometry" />

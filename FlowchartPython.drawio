@@ -1,20 +1,14 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0" version="29.6.6">
   <diagram name="Page-1" id="obzoYhWDOyKoXCv8jc7Z">
-    <mxGraphModel dx="2022" dy="626" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2565" dy="911" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="RhaE547YgdEq_OVcXlj2-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;opacity=40;" value="" vertex="1">
-          <mxGeometry height="420" width="610" x="100" y="1690" as="geometry" />
+          <mxGeometry height="430" width="610" x="100" y="1690" as="geometry" />
         </mxCell>
         <mxCell id="_0RmD95m09_Q-Jy9QIpn-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#CCE5FF;opacity=40;" value="" vertex="1">
           <mxGeometry height="440" width="540" x="140" y="80" as="geometry" />
-        </mxCell>
-        <mxCell id="_0RmD95m09_Q-Jy9QIpn-5" edge="1" parent="1" source="n4f6-h8O4g4EJZnBXDk_-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="n4f6-h8O4g4EJZnBXDk_-2" value="">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="n4f6-h8O4g4EJZnBXDk_-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9C4EB;" value="&lt;b&gt;Start&lt;/b&gt;" vertex="1">
-          <mxGeometry height="60" width="120" x="354" y="90" as="geometry" />
         </mxCell>
         <mxCell id="_0RmD95m09_Q-Jy9QIpn-7" edge="1" parent="1" source="n4f6-h8O4g4EJZnBXDk_-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="_0RmD95m09_Q-Jy9QIpn-6" value="">
           <mxGeometry relative="1" as="geometry" />
@@ -100,6 +94,9 @@
             <mxPoint x="180" y="1250" as="sourcePoint" />
             <mxPoint x="230" y="1200" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="CX87FR81FFPXq6G6xFob-28" edge="1" parent="1" source="7DeGLxfBP1eBuY8asOwS-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="CX87FR81FFPXq6G6xFob-27" value="">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-26" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fa6800;fontColor=#000000;strokeColor=#C73500;" value="&lt;span style=&quot;color: rgb(18, 18, 18); font-weight: 700;&quot;&gt;Read final temperatures &amp;amp; report status&lt;/span&gt;&lt;br style=&quot;color: rgb(18, 18, 18); font-weight: 700;&quot;&gt;&lt;font style=&quot;color: rgb(18, 18, 18); font-size: 9px;&quot;&gt;T_final_avg/max for core &amp;amp; screen per cable&lt;br&gt;convergence_status = CONVERGED | NOT_CONVERGED&lt;br&gt;Log to TempConvergenceMonitor: CSV + optional live plot&lt;br&gt;Save temp_history.png (if monitor active)&lt;/font&gt;" vertex="1">
           <mxGeometry height="96" width="361" x="249.5" y="1754" as="geometry" />
@@ -210,6 +207,29 @@
             <mxPoint x="460" y="1710" as="sourcePoint" />
             <mxPoint x="510" y="1660" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="CX87FR81FFPXq6G6xFob-27" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fad7ac;strokeColor=#b46504;rounded=1;fontSize=10;" value="T_final_max_core &gt; 90 °C&lt;br&gt;for any cable ?" vertex="1">
+          <mxGeometry height="90" width="210" x="325" y="1880" as="geometry" />
+        </mxCell>
+        <mxCell id="CX87FR81FFPXq6G6xFob-29" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=9;fontColor=#009900;fontStyle=1;" value="NO" vertex="1">
+          <mxGeometry height="20" width="40" x="760" y="1900" as="geometry" />
+        </mxCell>
+        <mxCell id="CX87FR81FFPXq6G6xFob-31" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=9;fontColor=#CC0000;fontStyle=1;" value="YES" vertex="1">
+          <mxGeometry height="20" width="40" x="760" y="1940" as="geometry" />
+        </mxCell>
+        <mxCell id="CX87FR81FFPXq6G6xFob-32" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E51400;fontColor=#FFFFFF;strokeColor=#B20000;" value="⚠ WARNING only&lt;br&gt;&lt;font size=&#39;1&#39;&gt;90 °C ampacity limit exceeded&lt;br&gt;&lt;i&gt;(no current adjustment — fixed-current run)&lt;/i&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="200" x="130" y="1970" as="geometry" />
+        </mxCell>
+        <mxCell id="CX87FR81FFPXq6G6xFob-33" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#6d8764;fontColor=#FFFFFF;strokeColor=#3A5431;fontStyle=1;fontSize=11;" value="End" vertex="1">
+          <mxGeometry height="50" width="100" x="380" y="2060" as="geometry" />
+        </mxCell>
+        <mxCell id="CX87FR81FFPXq6G6xFob-35" edge="1" parent="1" source="CX87FR81FFPXq6G6xFob-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="414" y="170" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CX87FR81FFPXq6G6xFob-34" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#A9C4EB;strokeColor=#5A88C8;fontStyle=1;fontSize=11;" value="Start" vertex="1">
+          <mxGeometry height="50" width="140" x="344.01" y="95" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

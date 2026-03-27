@@ -158,7 +158,7 @@
         <mxCell id="CX87FR81FFPXq6G6xFob-14" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFDE7;strokeColor=#F9A825;dashed=1;fontSize=9;" value="T_prev_max_core = T_max_core&lt;br&gt;&lt;i&gt;(updated at end of each iteration)&lt;/i&gt;" vertex="1">
           <mxGeometry height="40" width="220" x="99" y="1370" as="geometry" />
         </mxCell>
-        <mxCell id="CX87FR81FFPXq6G6xFob-15" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#67AB9F;fontColor=#FFFFFF;strokeColor=#3A5431;" value="&lt;b&gt;Final FEM Solve (converged)&lt;/b&gt;&lt;br&gt;&lt;font size=&#39;1&#39;&gt;One additional solve with the &lt;b&gt;just-updated&lt;/b&gt; HG loads&lt;br&gt;(loads were updated in B4 before convergence was detected)&lt;br&gt;Reads T_final_avg/max for core &amp; screen per cable&lt;/font&gt;" vertex="1">
+        <mxCell id="CX87FR81FFPXq6G6xFob-15" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#67AB9F;fontColor=#FFFFFF;strokeColor=#3A5431;" value="&lt;b&gt;Final FEM Solve (converged)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;One additional solve with the &lt;b&gt;just-updated&lt;/b&gt; HG loads&lt;br&gt;(loads were updated in B4 before convergence was detected)&lt;br&gt;Reads T_final_avg/max for core &amp;amp; screen per cable&lt;/font&gt;" vertex="1">
           <mxGeometry height="75" width="300" x="435" y="1485" as="geometry" />
         </mxCell>
         <mxCell id="CX87FR81FFPXq6G6xFob-20" edge="1" parent="1" source="CX87FR81FFPXq6G6xFob-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="CX87FR81FFPXq6G6xFob-17" value="">
@@ -167,7 +167,7 @@
         <mxCell id="CX87FR81FFPXq6G6xFob-16" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A20025;fontColor=#FFFFFF;strokeColor=#6F0000;dashed=1;" value="⚠ Warning: max_iter reached without convergence&lt;br&gt;&lt;font size=&#39;1&#39;&gt;Flagged as non-converged in output&lt;/font&gt;" vertex="1">
           <mxGeometry height="50" width="320" x="90" y="1490" as="geometry" />
         </mxCell>
-        <mxCell id="CX87FR81FFPXq6G6xFob-17" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E51400;fontColor=#FFFFFF;strokeColor=#B20000;" value="&lt;b&gt;Final FEM Solve (non-converged)&lt;/b&gt;&lt;br&gt;&lt;font size=&#39;1&#39;&gt;Solve with last-updated HG loads&lt;br&gt;Read T_final_avg/max for core &amp; screen per cable&lt;/font&gt;" vertex="1">
+        <mxCell id="CX87FR81FFPXq6G6xFob-17" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E51400;fontColor=#FFFFFF;strokeColor=#B20000;" value="&lt;b&gt;Final FEM Solve (non-converged)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;Solve with last-updated HG loads&lt;br&gt;Read T_final_avg/max for core &amp;amp; screen per cable&lt;/font&gt;" vertex="1">
           <mxGeometry height="60" width="320" x="90" y="1580" as="geometry" />
         </mxCell>
         <mxCell id="CX87FR81FFPXq6G6xFob-18" edge="1" parent="1" source="7DeGLxfBP1eBuY8asOwS-12" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="CX87FR81FFPXq6G6xFob-15" value="">
@@ -220,7 +220,7 @@
         <mxCell id="CX87FR81FFPXq6G6xFob-31" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=9;fontColor=#CC0000;fontStyle=1;" value="YES" vertex="1">
           <mxGeometry height="20" width="40" x="263.5" y="1900" as="geometry" />
         </mxCell>
-        <mxCell id="CX87FR81FFPXq6G6xFob-32" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E51400;fontColor=#FFFFFF;strokeColor=#B20000;" value="⚠ WARNING only&lt;br&gt;&lt;font size=&#39;1&#39;&gt;90 °C ampacity limit exceeded&lt;br&gt;&lt;i&gt;(no current adjustment — fixed-current run)&lt;/i&gt;&lt;/font&gt;" vertex="1">
+        <mxCell id="CX87FR81FFPXq6G6xFob-32" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E51400;fontColor=#FFFFFF;strokeColor=#B20000;" value="&lt;b&gt;⚠ WARNING only&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;90 °C ampacity limit exceeded&lt;br&gt;&lt;i&gt;(no current adjustment — fixed-current run)&lt;/i&gt;&lt;/font&gt;" vertex="1">
           <mxGeometry height="60" width="200" x="130" y="1970" as="geometry" />
         </mxCell>
         <mxCell id="CX87FR81FFPXq6G6xFob-33" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#6d8764;fontColor=#FFFFFF;strokeColor=#3A5431;fontStyle=1;fontSize=11;" value="End" vertex="1">

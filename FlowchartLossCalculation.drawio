@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0" version="29.6.6">
   <diagram name="Loss-Calculation" id="loss_calc_flow">
-    <mxGraphModel dx="735" dy="385" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="3200" math="0" shadow="0">
+    <mxGraphModel dx="683" dy="358" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="3200" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -106,10 +106,10 @@
         <mxCell id="diel_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#82B366;opacity=40;" value="" vertex="1">
           <mxGeometry height="530" width="380" x="610" y="270" as="geometry" />
         </mxCell>
-        <mxCell id="diel_label" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=12;" value="DIELECTRIC LOSSES — W_d" vertex="1">
+        <mxCell id="diel_label" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=12;" value="DIELECTRIC LOSSES — W&lt;sub&gt;d&lt;/sub&gt;" vertex="1">
           <mxGeometry height="25" width="300" x="640" y="275" as="geometry" />
         </mxCell>
-        <mxCell id="n_cap" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#82B366;" value="&lt;b&gt;Cable Capacitance — IEC 60287-1-1:2023 Section 5.2&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;C = 2π ε&lt;sub&gt;0&lt;/sub&gt; ε&lt;sub&gt;r&lt;/sub&gt; / ln(D&lt;sub&gt;i&lt;/sub&gt; / d&lt;sub&gt;c&lt;/sub&gt;)&lt;br&gt;d&lt;sub&gt;c&lt;/sub&gt; = d_inner_semicon = 33.3 mm (over conductor screen)&lt;br&gt;D&lt;sub&gt;i&lt;/sub&gt; = d_ins = 64.3 mm (over insulation)&lt;br&gt;ε_r = 2.5 (XLPE, IEC 60287-1-1 Table 3)&lt;/font&gt;" vertex="1">
+        <mxCell id="n_cap" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#82B366;" value="&lt;b&gt;Cable Capacitance — IEC 60287-1-1:2023 Section 5.2&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;C = 2π ε&lt;sub&gt;0&lt;/sub&gt; ε&lt;sub&gt;r&lt;/sub&gt; / ln(D&lt;sub&gt;i&lt;/sub&gt; / d&lt;sub&gt;c&lt;/sub&gt;)&lt;br&gt;d&lt;sub&gt;c&lt;/sub&gt; = d_inner_semicon = 33.3 mm (over conductor screen)&lt;br&gt;D&lt;sub&gt;i&lt;/sub&gt; = d_ins = 64.3 mm (over insulation)&lt;br&gt;ε&lt;sub&gt;r&lt;/sub&gt; = 2.5 (XLPE, IEC 60287-1-1 :&amp;nbsp;&lt;/font&gt;&lt;span style=&quot;font-size: x-small;&quot;&gt;2023&amp;nbsp;&lt;/span&gt;&lt;font size=&quot;1&quot;&gt;&amp;nbsp;Table 3)&lt;/font&gt;" vertex="1">
           <mxGeometry height="95" width="350" x="625" y="315" as="geometry" />
         </mxCell>
         <mxCell id="n_u0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#82B366;" value="&lt;b&gt;Phase-to-earth voltage&lt;/b&gt;&lt;br&gt;&lt;font size=&quot;1&quot;&gt;U₀ = U_LL / √3 = 132 kV / √3 = 76.21 kV&lt;/font&gt;" vertex="1">

@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0" version="29.6.6">
   <diagram name="Page-1" id="obzoYhWDOyKoXCv8jc7Z">
-    <mxGraphModel dx="1498" dy="380" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1783" dy="501" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -43,7 +43,7 @@
         <mxCell id="_0RmD95m09_Q-Jy9QIpn-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9C4EB;" value="&lt;b&gt;Read FE body areas from ANSYS geometry&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;A_cond_FE_model, A_innerins_FE_model, A_screen_FE_model [m²] stored on each Cable object&lt;br&gt;Geometry-reference area (A_FE_geom) vs model-read area printed for thesis traceability&lt;br&gt;Overwrites Cable.A_*_FE_model fields used in all downstream W/m → W/m³ conversions&lt;/font&gt;" vertex="1">
           <mxGeometry height="60" width="496.75" x="165.63" y="440" as="geometry" />
         </mxCell>
-        <mxCell id="_0RmD95m09_Q-Jy9QIpn-12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCE9F;" value="&lt;b&gt;Compute initial IEC 60287 losses (pre-iteration seed)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;T_core_init = 90 °C | T_screen_init = 80 °C (CASE.benchmark — TB 880 pp. 66–68)&lt;br&gt;calculate_losses(T_core_init, T_screen_init, area_mode=&#39;fem&#39;) → W_c, W_d, W_s [W/m]&lt;br&gt;Apply as initial HG loads: q = W / A_FE_model [W/m³]&lt;/font&gt;" vertex="1">
+        <mxCell id="_0RmD95m09_Q-Jy9QIpn-12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=light-dark(#FFCE9F,#C76305);" value="&lt;b&gt;Compute initial IEC 60287 losses (pre-iteration seed)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;T_core_init = 90 °C | T_screen_init = 80 °C (CASE.benchmark — TB 880 pp. 66–68)&lt;br&gt;calculate_losses(T_core_init, T_screen_init, area_mode=&#39;fem&#39;) → W_c, W_d, W_s [W/m]&lt;br&gt;Apply as initial HG loads: q = W / A_FE_model [W/m³]&lt;/font&gt;" vertex="1">
           <mxGeometry height="60" width="650.69" x="88" y="540" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE599;opacity=40;" value="" vertex="1">
@@ -55,23 +55,23 @@
         <mxCell id="7DeGLxfBP1eBuY8asOwS-9" edge="1" parent="1" source="7DeGLxfBP1eBuY8asOwS-3" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="7DeGLxfBP1eBuY8asOwS-8" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="7DeGLxfBP1eBuY8asOwS-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;" value="&lt;div&gt;Convert W/m → W/m³ , Apply heat generation loads&lt;/div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;HG_C0x_Core, HG_C0x_InnerIns, HG_C0x_Screen&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;q [W/m³] = W [W/m] / A_FE [m²]&lt;/font&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="7DeGLxfBP1eBuY8asOwS-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;" value="&lt;b&gt;Thermal FEM Solve&lt;/b&gt;&amp;nbsp;(ANSYS Mechanical)&lt;br&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;Steady-state heat conduction — 2D cross-section&lt;br&gt;solution.Solve(True) + EvaluateAllResults()&lt;/font&gt;" vertex="1">
           <mxGeometry height="60" width="426.75" x="200.63" y="674" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-6" edge="1" parent="1" source="_0RmD95m09_Q-Jy9QIpn-12" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="7DeGLxfBP1eBuY8asOwS-3" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="7DeGLxfBP1eBuY8asOwS-11" edge="1" parent="1" source="7DeGLxfBP1eBuY8asOwS-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="7DeGLxfBP1eBuY8asOwS-10" value="">
+        <mxCell id="CX87FR81FFPXq6G6xFob-6" edge="1" parent="1" source="7DeGLxfBP1eBuY8asOwS-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="CX87FR81FFPXq6G6xFob-5" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="7DeGLxfBP1eBuY8asOwS-8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;" value="&lt;div&gt;Thermal FEM Solve&amp;nbsp; (ANSYS Mechanical)&lt;/div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;Steady state heat conduction — 2D cross section&lt;/font&gt;" vertex="1">
+        <mxCell id="7DeGLxfBP1eBuY8asOwS-8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;" value="&lt;b&gt;Read temperatures from FEM solution&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;T_avg_core, T_max_core, T_avg_screen, T_max_screen per cable [°C]&lt;br&gt;⚠ Unit conversion: if result is in K, subtract 273.15; abort if unsupported unit string&lt;br&gt;T_avg → used to update IEC losses | T_max → used for convergence criterion&lt;/font&gt;" vertex="1">
           <mxGeometry height="60" width="426.75" x="200.63" y="770" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-43" edge="1" parent="1" source="7DeGLxfBP1eBuY8asOwS-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="7DeGLxfBP1eBuY8asOwS-12" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;" value="&lt;div&gt;Read the conductor and sheath temperatures&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;T_C0x_Core (avg + max), T_C0x_Screen (avg + max)&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;avg → loss update&lt;/font&gt;&lt;span style=&quot;font-size: x-small; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-size: x-small; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;|&lt;/span&gt;&lt;span style=&quot;font-size: x-small; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-size: 9px; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;max → convergence criterion&lt;/span&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="60" width="426.75" x="200.63" y="870" as="geometry" />
+          <mxGeometry height="60" width="426.75" x="200.63" y="950" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-14" edge="1" parent="1" source="7DeGLxfBP1eBuY8asOwS-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="7DeGLxfBP1eBuY8asOwS-13" value="">
           <mxGeometry relative="1" as="geometry" />
@@ -80,7 +80,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-12" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#A35D72;rounded=1;" value="max ΔT_core_max &amp;lt; 10⁻³ °C ?" vertex="1">
-          <mxGeometry height="110" width="196" x="316" y="950" as="geometry" />
+          <mxGeometry height="110" width="196" x="316" y="1075" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-31" edge="1" parent="1" source="7DeGLxfBP1eBuY8asOwS-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="7DeGLxfBP1eBuY8asOwS-26" value="">
           <mxGeometry relative="1" as="geometry" />
@@ -95,7 +95,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-16" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#A35D72;rounded=1;" value="iter &amp;lt; max:iter (20) ?" vertex="1">
-          <mxGeometry height="110" width="196" x="316" y="1100" as="geometry" />
+          <mxGeometry height="110" width="196" x="316" y="1225" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-30" edge="1" parent="1" source="7DeGLxfBP1eBuY8asOwS-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="7DeGLxfBP1eBuY8asOwS-29" value="">
           <mxGeometry relative="1" as="geometry" />
@@ -107,13 +107,14 @@
           <mxGeometry height="60" width="120" x="740" y="1124.5" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-22" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCE9F;" value="&lt;div&gt;Recompute IEC 60287-1-1 losses&lt;/div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;W_core, W_ins, W_screen&amp;nbsp; [W/m]&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;Using T_avg_core, T_avg_screen from FEM readback&lt;/font&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="60" width="300.69" x="263.65999999999997" y="1240" as="geometry" />
+          <mxGeometry height="60" width="300.69" x="263.65999999999997" y="1365" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-24" edge="1" parent="1" source="7DeGLxfBP1eBuY8asOwS-22" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="7DeGLxfBP1eBuY8asOwS-3" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
             <Array as="points">
-              <mxPoint x="170" y="1270" />
-              <mxPoint x="170" y="704" />
+              <mxPoint x="264" y="1270" />
+              <mxPoint x="130" y="1270" />
+              <mxPoint x="130" y="704" />
             </Array>
             <mxPoint x="180" y="1250" as="sourcePoint" />
             <mxPoint x="230" y="1200" as="targetPoint" />
@@ -166,6 +167,9 @@
         </mxCell>
         <mxCell id="CX87FR81FFPXq6G6xFob-3" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;" value="Fixed-current thermal iteration. I = 821.776 A (TB 880 analytical ampacity result used as FEM input). The 90 °C check is a WARNING only — no current adjustment is performed." vertex="1">
           <mxGeometry height="25" width="1000" x="-70.00000000000001" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="CX87FR81FFPXq6G6xFob-5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=light-dark(#F8CECC,#C76305);" value="&lt;b&gt;Recompute IEC 60287-1-1 losses with readback temperatures&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;calculate_losses(T_avg_core, T_avg_screen,&amp;nbsp;&lt;b&gt;area_mode=&#39;fem&#39;&lt;/b&gt;) → W_c, W_d, W_s [W/m]&lt;br&gt;area_mode=&#39;fem&#39; affects R_s (sheath resistance) and therefore λ₁′, λ₁″, β₁ — not only the W/m³ conversion&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="509.37" x="159.32" y="860" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

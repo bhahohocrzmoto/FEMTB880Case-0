@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0" version="29.6.6">
   <diagram name="Page-1" id="obzoYhWDOyKoXCv8jc7Z">
-    <mxGraphModel dx="2753" dy="1670" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1498" dy="380" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -160,6 +160,12 @@
         </mxCell>
         <mxCell id="RhaE547YgdEq_OVcXlj2-6" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontColor=#009900;" value="NO" vertex="1">
           <mxGeometry height="20" width="40" x="1385" y="1055" as="geometry" />
+        </mxCell>
+        <mxCell id="CX87FR81FFPXq6G6xFob-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=15;" value="Thermal_Trefoil_Try.py — ANSYS Mechanical IronPython Driver (TB 963 Picard Coupling)" vertex="1">
+          <mxGeometry height="35" width="1000" x="-40" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="CX87FR81FFPXq6G6xFob-3" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;" value="Fixed-current thermal iteration. I = 821.776 A (TB 880 analytical ampacity result used as FEM input). The 90 °C check is a WARNING only — no current adjustment is performed." vertex="1">
+          <mxGeometry height="25" width="1000" x="-70.00000000000001" y="40" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

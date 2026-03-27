@@ -1,23 +1,23 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0" version="29.6.6">
   <diagram name="Loss-Calculation" id="loss_calc_flow">
-    <mxGraphModel dx="1366" dy="716" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="3200" math="0" shadow="0">
+    <mxGraphModel dx="1912" dy="1002" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="3200" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="title" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=16;" value="IEC 60287 Loss Calculation Chain | cable_losses_tb880_case0.py |&amp;nbsp;&amp;nbsp;&lt;span style=&quot;font-size: 15px;&quot;&gt;Cable.calculate_losses()&lt;/span&gt;" vertex="1">
-          <mxGeometry height="40" width="900" x="200" y="20" as="geometry" />
+          <mxGeometry height="40" width="900" x="372.5" y="20" as="geometry" />
         </mxCell>
         <mxCell id="subtitle" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;" value="Single call to Cable.calculate_losses(T_core_C, T_screen_C, area_mode) — used by both the analytical solver and the ANSYS FEM driver" vertex="1">
-          <mxGeometry height="25" width="900" x="200" y="55" as="geometry" />
+          <mxGeometry height="25" width="900" x="372.5" y="55" as="geometry" />
         </mxCell>
         <mxCell id="input_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F0FF;strokeColor=#6C8EBF;opacity=50;" value="" vertex="1">
-          <mxGeometry height="80" width="740" x="280" y="160" as="geometry" />
+          <mxGeometry height="80" width="740" x="451" y="160" as="geometry" />
         </mxCell>
         <mxCell id="input_label" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;fontStyle=1;fontSize=11;" value="INPUTS" vertex="1">
-          <mxGeometry height="20" width="60" x="290" y="163" as="geometry" />
+          <mxGeometry height="20" width="60" x="462.5" y="163" as="geometry" />
         </mxCell>
         <mxCell id="n_input" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;T_core_C&lt;/b&gt; (conductor temperature °C)&lt;br&gt;&lt;b&gt;T_screen_C&lt;/b&gt; (sheath temperature °C)&lt;br&gt;&lt;b&gt;area_mode&lt;/b&gt; = &quot;analytical&quot; | &quot;fem&quot;&amp;nbsp;← affects R&lt;sub&gt;s&lt;/sub&gt;, β₁, λ₁″ (not only the final W/m³ conversion)" vertex="1">
-          <mxGeometry height="60" width="520" x="410" y="170" as="geometry" />
+          <mxGeometry height="60" width="520" x="582.5" y="170" as="geometry" />
         </mxCell>
         <mxCell id="cond_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;opacity=40;" value="" vertex="1">
           <mxGeometry height="900" width="540" x="40" y="270" as="geometry" />
@@ -324,7 +324,7 @@
           <mxGeometry height="15" width="30" x="1601" y="1280" as="geometry" />
         </mxCell>
         <mxCell id="uLm3pNycmma_iMPy-b1W-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#999999;dashed=1;fontSize=10;" value="&lt;b&gt;Repository default flags (CASE.assumptions — TB 880 Case 0-1 base path):&lt;/b&gt;&lt;br&gt;include_skin_effect = True | include_proximity_effect = True | include_dielectric_losses = True&lt;br&gt;include_sheath_circulating_losses = True | include_sheath_eddy_losses = &lt;b&gt;False&lt;/b&gt; | include_F_factor = True" vertex="1">
-          <mxGeometry height="55" width="1000" x="170" y="90" as="geometry" />
+          <mxGeometry height="55" width="1000" x="342.5" y="90" as="geometry" />
         </mxCell>
         <mxCell id="uLm3pNycmma_iMPy-b1W-4" edge="1" parent="1" source="n_circ_flag" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;exitX=0.975;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="circ_false" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">

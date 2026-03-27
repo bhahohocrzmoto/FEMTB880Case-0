@@ -91,7 +91,7 @@
         <mxCell id="lbl_true2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=9;fontColor=#009900;" value="True" vertex="1">
           <mxGeometry height="15" width="40" x="314" y="965" as="geometry" />
         </mxCell>
-        <mxCell id="n_rac" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFD700;strokeColor=#D6B656;fontStyle=1;" value="def Rac_at_temp(self, T_cond_C)&lt;br&gt;R&lt;sub&gt;ac&lt;/sub&gt; = R&lt;sub&gt;dc&lt;/sub&gt;(θ) · (1 + y&lt;sub&gt;s&lt;/sub&gt; + y&lt;sub&gt;p&lt;/sub&gt;)&lt;br&gt;&lt;font size=&quot;1&quot;&gt;IEC 60287-1-1:2023 Formula (7), Section 5.1.1&lt;/font&gt;" vertex="1">
+        <mxCell id="n_rac" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFD700;strokeColor=#D6B656;fontStyle=1;" value="def Rac_at_temp(self, T_cond_C)&lt;br&gt;R&lt;sub&gt;ac&lt;/sub&gt; = R&lt;sub&gt;dc&lt;/sub&gt;(θ) · (1 + y&lt;sub&gt;s&lt;/sub&gt; + y&lt;sub&gt;p&lt;/sub&gt;)&lt;br&gt;&lt;font size=&quot;1&quot;&gt;IEC 60287-1-1:2023, Section 5.1.1&lt;/font&gt;" vertex="1">
           <mxGeometry height="50" width="340" x="140" y="990" as="geometry" />
         </mxCell>
         <mxCell id="e_prox_rac" edge="1" parent="1" source="n_prox_flag" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" target="n_rac">

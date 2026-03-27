@@ -13,13 +13,13 @@
         <mxCell id="_0RmD95m09_Q-Jy9QIpn-5" edge="1" parent="1" source="n4f6-h8O4g4EJZnBXDk_-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="n4f6-h8O4g4EJZnBXDk_-2" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="n4f6-h8O4g4EJZnBXDk_-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9C4EB;" value="Start" vertex="1">
+        <mxCell id="n4f6-h8O4g4EJZnBXDk_-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9C4EB;" value="&lt;b&gt;Start&lt;/b&gt;" vertex="1">
           <mxGeometry height="60" width="120" x="354" y="90" as="geometry" />
         </mxCell>
         <mxCell id="_0RmD95m09_Q-Jy9QIpn-7" edge="1" parent="1" source="n4f6-h8O4g4EJZnBXDk_-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="_0RmD95m09_Q-Jy9QIpn-6" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="n4f6-h8O4g4EJZnBXDk_-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9C4EB;" value="&lt;div&gt;Load modules &amp;amp; case data&lt;/div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;tb880_case0_data.py&amp;nbsp; cable_losses_tb880_case0.py&lt;/font&gt;" vertex="1">
+        <mxCell id="n4f6-h8O4g4EJZnBXDk_-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9C4EB;" value="&lt;div&gt;&lt;b&gt;Load modules &amp;amp; case data&lt;/b&gt;&lt;/div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;tb880_case0_data.py&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;cable_losses_tb880_case0.py&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;&lt;span style=&quot;font-size: x-small;&quot;&gt;temp_convergence_monitor.py&amp;nbsp;&lt;/span&gt;&lt;i style=&quot;font-size: x-small;&quot;&gt;(optional — loaded in try/except)&lt;/i&gt;&lt;/font&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="60" width="321" x="253.5" y="173" as="geometry" />
         </mxCell>
         <mxCell id="_0RmD95m09_Q-Jy9QIpn-4" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="INITIALISATION" vertex="1">
@@ -28,22 +28,22 @@
         <mxCell id="_0RmD95m09_Q-Jy9QIpn-9" edge="1" parent="1" source="_0RmD95m09_Q-Jy9QIpn-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="_0RmD95m09_Q-Jy9QIpn-8" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="_0RmD95m09_Q-Jy9QIpn-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9C4EB;" value="&lt;div&gt;Build Cable objects&amp;nbsp; (C01, C02, C03)&lt;/div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;TB 880 geometry, material parameters,&lt;/font&gt;&lt;font style=&quot;font-size: 8px;&quot;&gt;&lt;font style=&quot;&quot;&gt;&amp;nbsp;&lt;/font&gt;I = 821.78 A&lt;/font&gt;" vertex="1">
-          <mxGeometry height="60" width="221" x="303.51" y="260" as="geometry" />
+        <mxCell id="_0RmD95m09_Q-Jy9QIpn-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9C4EB;" value="&lt;div&gt;&lt;font&gt;&lt;b style=&quot;&quot;&gt;Build Cable objects&amp;nbsp; (C01, C02, C03)&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;TB 880 geometry + material parameters (from CASE)&lt;br style=&quot;&quot;&gt;&lt;b style=&quot;&quot;&gt;I = 821.776 A&lt;/b&gt;&amp;nbsp;— analytical ampacity result used as fixed FEM input current&lt;br style=&quot;&quot;&gt;(TB 880 reference benchmark ≈ 886 A; difference is a thesis finding)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="406.49" x="210.76" y="260" as="geometry" />
         </mxCell>
         <mxCell id="_0RmD95m09_Q-Jy9QIpn-11" edge="1" parent="1" source="_0RmD95m09_Q-Jy9QIpn-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="_0RmD95m09_Q-Jy9QIpn-10" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="_0RmD95m09_Q-Jy9QIpn-8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9C4EB;" value="&lt;div&gt;Verify ANSYS Named Selections&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;NS_C0x_Core, NS_C0x_InnerIns, NS_C0x_Screen&lt;/font&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="_0RmD95m09_Q-Jy9QIpn-8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9C4EB;" value="&lt;b&gt;Verify ANSYS Named Selections&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;NS_C0x_Core | NS_C0x_InnerIns | NS_C0x_Screen&lt;br&gt;Raises exception listing all missing NS if any are absent&lt;/font&gt;" vertex="1">
           <mxGeometry height="60" width="251" x="288.5" y="350" as="geometry" />
         </mxCell>
         <mxCell id="_0RmD95m09_Q-Jy9QIpn-13" edge="1" parent="1" source="_0RmD95m09_Q-Jy9QIpn-10" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="_0RmD95m09_Q-Jy9QIpn-12" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="_0RmD95m09_Q-Jy9QIpn-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9C4EB;" value="&lt;div&gt;Read FE body areas from ANSYS geometry&lt;/div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;A_cond, A_innerins, A_screen&amp;nbsp; [m²]&amp;nbsp; per cable stored on Cable objects&lt;/font&gt;" vertex="1">
-          <mxGeometry height="60" width="361.5" x="233.25" y="440" as="geometry" />
+        <mxCell id="_0RmD95m09_Q-Jy9QIpn-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9C4EB;" value="&lt;b&gt;Read FE body areas from ANSYS geometry&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;A_cond_FE_model, A_innerins_FE_model, A_screen_FE_model [m²] stored on each Cable object&lt;br&gt;Geometry-reference area (A_FE_geom) vs model-read area printed for thesis traceability&lt;br&gt;Overwrites Cable.A_*_FE_model fields used in all downstream W/m → W/m³ conversions&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="496.75" x="165.63" y="440" as="geometry" />
         </mxCell>
-        <mxCell id="_0RmD95m09_Q-Jy9QIpn-12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCE9F;" value="&lt;div&gt;Compute the initial losses in accordance with IEC 60287 using estimated conductor temperatures&lt;/div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;T_core = 90 °C, T_screen = 80 °C →&amp;nbsp; W_core, W_ins, W_screen&amp;nbsp; [W/m]&amp;nbsp;&lt;/font&gt;&lt;span style=&quot;font-size: x-small;&quot;&gt;via calculate_losses(area_mode=&quot;fem&quot;)&lt;/span&gt;" vertex="1">
+        <mxCell id="_0RmD95m09_Q-Jy9QIpn-12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCE9F;" value="&lt;b&gt;Compute initial IEC 60287 losses (pre-iteration seed)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;T_core_init = 90 °C | T_screen_init = 80 °C (CASE.benchmark — TB 880 pp. 66–68)&lt;br&gt;calculate_losses(T_core_init, T_screen_init, area_mode=&#39;fem&#39;) → W_c, W_d, W_s [W/m]&lt;br&gt;Apply as initial HG loads: q = W / A_FE_model [W/m³]&lt;/font&gt;" vertex="1">
           <mxGeometry height="60" width="650.69" x="88" y="540" as="geometry" />
         </mxCell>
         <mxCell id="7DeGLxfBP1eBuY8asOwS-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE599;opacity=40;" value="" vertex="1">
